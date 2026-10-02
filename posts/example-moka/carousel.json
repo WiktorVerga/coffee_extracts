@@ -1,0 +1,68 @@
+{
+  "series": "How-to",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "How-to",
+      "title": "Fill a moka pot the right way",
+      "subtitle": "Four small moves that change your morning coffee."
+    },
+    {
+      "type": "myth",
+      "myth": "You should tamp the coffee down hard.",
+      "truth": "Not in a moka pot: just level it. Packed coffee makes it hard for water to pass, and the result tastes bitter and burnt.",
+      "verdict": "false"
+    },
+    {
+      "type": "steps",
+      "title": "Filling it, in order",
+      "steps": [
+        "Water in the bottom chamber, just below the valve.",
+        "Coffee in the filter basket, no tamping.",
+        "Level it and wipe stray grounds off the rim.",
+        "Screw it shut firmly, without forcing it."
+      ]
+    },
+    {
+      "type": "text",
+      "title": "Why the valve matters",
+      "body": "It releases pressure if something gets blocked. If the water covers it, it can't do its job.",
+      "highlight": "Keep the water below the valve."
+    },
+    {
+      "type": "compare",
+      "title": "Grind: moka vs espresso",
+      "left": {
+        "label": "Moka",
+        "points": [
+          "Medium, slightly gritty",
+          "Like fine table salt"
+        ]
+      },
+      "right": {
+        "label": "Espresso",
+        "points": [
+          "Fine, almost powder",
+          "Sticks to your fingers"
+        ]
+      }
+    },
+    {
+      "type": "number",
+      "number": "1.5",
+      "unit": "bar",
+      "caption": "Roughly the pressure inside a moka pot. Espresso uses around 9: that's why they're two different coffees."
+    },
+    {
+      "type": "tip",
+      "label": "The tip",
+      "body": "Low heat, and never let the flame reach past the sides of the base."
+    },
+    {
+      "type": "closing",
+      "title": "Save it for tomorrow morning",
+      "body": "Four moves, no extra gear. The moka does the rest.",
+      "cta": "Save and try it"
+    }
+  ]
+}

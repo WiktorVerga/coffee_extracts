@@ -1,0 +1,4 @@
+template/.render-temp.html
+__pycache__/
+*.pyc
+.env
