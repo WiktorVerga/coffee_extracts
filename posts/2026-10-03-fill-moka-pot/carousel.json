@@ -1,0 +1,43 @@
+{
+  "series": "How-to",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "Moka basics",
+      "title": "Three moves for a better stovetop moka",
+      "subtitle": "Water, coffee, flame. One rule is the opposite of espresso."
+    },
+    {
+      "type": "myth",
+      "myth": "Press the coffee down firmly, like you would for espresso.",
+      "verdict": "false",
+      "truth": "Move 1: fill the basket generously, but don't press. Water needs an easy path through the grounds. Just level the top."
+    },
+    {
+      "type": "text",
+      "title": "Move 2: stop below the valve",
+      "body": "Pour cold water up to the safety valve's lower edge, not above it. The valve is a safety feature, so keep it uncovered.",
+      "highlight": "Water stops below the valve."
+    },
+    {
+      "type": "tip",
+      "label": "Move 3",
+      "body": "Set the flame to low and give it time. Great moka coffee is worth the wait."
+    },
+    {
+      "type": "steps",
+      "title": "The whole routine",
+      "steps": [
+        "Cold water up to the valve's lower edge.",
+        "Coffee in generously, level it, don't press.",
+        "Close the pot firmly. Flame on low."
+      ]
+    },
+    {
+      "type": "closing",
+      "title": "Water, coffee, flame, in that order",
+      "body": "Three moves, no extra gear.",
+      "cta": "Save it for tomorrow"
+    }
+  ]
+}
