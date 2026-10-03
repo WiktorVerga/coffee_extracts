@@ -1,13 +1,13 @@
 {
-  "handle": "@yourpage",
+  "handle": "@coffee_extracts",
   "mode": "preview",
   "google_sheet_id": "1Osn--FyHY-qSU6iafApyH9PRawN3fmOYrlK0VaShaEE",
-  "github_repo": "YOUR-USERNAME/coffee-autopost",
+  "github_repo": "WiktorVerga/coffee_extracts",
   "branch": "main",
   "instagram": {
     "api_host": "https://graph.instagram.com",
     "api_version": "v24.0",
     "user_id": "me"
   },
-  "token_refreshed_on": "TO FILL IN (YYYY-MM-DD)"
+  "token_refreshed_on": "2026-10-03"
 }
