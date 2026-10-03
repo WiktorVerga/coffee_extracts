@@ -31,6 +31,9 @@ Cost: nothing beyond the Claude Pro subscription. Each run uses part of the plan
 | `ROUTINE-PROMPT.txt` | The text to paste into the routine. |
 | `setup-environment.sh` | The script to paste into the cloud environment. |
 | `config.json` | Handle, mode (`preview` / `publish`), sheet ID, repo. |
+| `highlights/highlights.json` | Text of the evergreen highlight stories (Start, Moka, Espresso, Gear, Q&A). |
+| `template/story.html`, `template/highlight-cover.html` | Design of the stories (1080×1920) and of the highlight covers. |
+| `scripts/render_highlights.py` | Turns `highlights.json` into PNG stories and covers in `highlights/out/`. |
 
 **Ideas sheet:** [Autopost Caffè – Idee](https://docs.google.com/spreadsheets/d/1Osn--FyHY-qSU6iafApyH9PRawN3fmOYrlK0VaShaEE/edit). It already has 10 test ideas, in Italian.
 Columns: `ID` (unique number, never reused), `Idea`, `Note e fonti` (optional notes and sources, they override what Claude "knows"), `Rubrica` (optional series, Italian names are mapped in the guide), `Stato` (empty = to do, `salta` = skip it).
@@ -132,8 +135,44 @@ To publish a specific idea right away: **Run now** with the text `ID: 5`.
 
 ---
 
+## Highlights (stories and covers, uploaded by hand)
+
+The highlights are a fixed, evergreen set: you create them once and update them when something changes. They are **not** part of the routine and are **not** published automatically, so you can add Instagram stickers (link, poll, question) when you upload them.
+
+**Make the images**
+```powershell
+python scripts/render_highlights.py            # every group
+python scripts/render_highlights.py qa         # only one group (covers are always rebuilt)
+```
+Output in `highlights/out/`:
+- `covers/01-start.png` … `05-qa.png`: one cover per group
+- `01-start/story-01.png` …: the stories of each group, in order
+
+**Edit the text** in `highlights/highlights.json` (US English, same rules as the guide). Each group has `id`, `name`, `icon` and a list of `frames`. Frame types and limits:
+
+| Type | Fields | Limits |
+|---|---|---|
+| `cover` | kicker, title, subtitle | 4 / 8 / 14 words |
+| `text` | title, body, source (optional) | 7 / 40 words |
+| `number` | number, unit, body, source | number ≤ 6 characters, body 25 words |
+| `list` | title, items (label + note), source (optional) | title 6 words, 2–5 items, label 4 / note 8 words |
+| `steps` | title, steps | title 6 words, 3–5 steps of 12 words |
+| `qa` | question, answer | 16 / 35 words |
+| `tip` | body (label optional) | 25 words |
+| `sticker` | title, body | 7 / 16 words, leaves an empty area for a sticker |
+| `closing` | title, body, cta | 8 / 20 / 5 words |
+
+To answer a new question, add a `qa` frame to the `qa` group and re-render only that group.
+To change colors, fonts or icons, edit `template/story.html` and `template/highlight-cover.html` (open them in a browser to preview: the dashed lines show the areas Instagram covers and where the sticker goes; they don't appear in the images).
+
+**Upload them (Instagram app)**
+1. Post the stories of one group, in order. On the `sticker` frames, add the sticker in the empty area (poll, question or link).
+2. Once posted, open your profile → **New** (the + under the bio) → select that group's stories → name it (Start, Moka, Espresso, Gear, Q&A) → **Edit cover** → pick the matching image from `covers/`.
+3. Repeat for each group. To add stories to an existing highlight later: open the story → **Highlight** → pick the group.
+
 ## Limits and things to watch
 - Routines are in *research preview*: behavior and limits may change.
 - Rendering needs Chromium. If the download in the setup script fails, the script tries a system Chrome; if that fails too, the run stops with a clear error.
 - If the sheet gets very long, the connector might read only part of it: the procedure checks for this and downloads the full CSV in that case. Moving old ideas to another tab now and then helps.
+- Highlights can't be created or edited through the Instagram API: that part is always manual.
 - No human review in `publish` mode: that's why the guide bans invented facts, health claims, brands and stereotypes.

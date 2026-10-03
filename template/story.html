@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en" data-mode="preview">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story template</title>
+<!--
+  INSTAGRAM STORY TEMPLATE (1080 × 1920, 9:16 format)
+  ------------------------------------------------------------------
+  Used for the evergreen stories that go into the highlights.
+  How to edit it by hand:
+  1. Colors, fonts and sizes: change the variables in ":root" below
+     (same palette and fonts as template/carousel.html).
+  2. Look of one frame type: find its block ("/* ── type: ... */").
+  3. Preview: open this file in a browser. You'll see the example frames,
+     with dashed guides showing:
+       - the top and bottom bands Instagram covers with its own buttons
+       - the empty area left free for a sticker (link, poll, question)
+     The guides are NOT in the exported images.
+  4. Content is NOT written here: it comes from highlights/highlights.json.
+-->
+<style>
+@font-face {
+  font-family: "Archivo Black";
+  src: url("fonts/ArchivoBlack-Regular.ttf") format("truetype");
+  font-display: block;
+}
+@font-face {
+  font-family: "Archivo Narrow";
+  src: url("fonts/ArchivoNarrow-VariableFont_wght.ttf") format("truetype");
+  font-display: block;
+}
+
+:root {
+  /* ── Palette (same as the carousel) ─────────────────────── */
+  --espresso:   #413125;  /* dark background, main text          */
+  --roast:      #684f36;  /* secondary text on light background  */
+  --crema:      #b39977;  /* accent                              */
+  --hazel:      #EFD6B4;  /* light background                    */
+  --hazel-2:    #E4C49B;  /* light background, darker variant    */
+  --porcelain:  #F7F1E8;  /* rim of the cup                      */
+
+  /* ── Type ───────────────────────────────────────────────── */
+  --font-titles: "Archivo Black", "Helvetica Neue", Arial, sans-serif;
+  --font-body:   "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --t-cover:     140px;   /* cover title                         */
+  --t-title:      92px;   /* frame titles                        */
+  --t-number:    420px;   /* giant number                        */
+  --t-body:       64px;   /* body text                           */
+  --t-small:      34px;   /* labels, sources                     */
+  --tracking:     .05em;
+
+  /* ── Safe zones ─────────────────────────────────────────── */
+  --safe-top:    290px;   /* Instagram's progress bar and name   */
+  --safe-bottom: 400px;   /* reply bar and buttons               */
+  --side:         96px;   /* left and right margin               */
+  --sticker-h:   560px;   /* empty area left for a sticker       */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #1a0f0a; }
+body {
+  font-family: var(--font-body); letter-spacing: var(--tracking);
+  -webkit-font-smoothing: antialiased;
+}
+.title, .number, .unit, .t-steps li::before, .t-list .item-label,
+.t-qa .question, .mark { font-family: var(--font-titles); }
+
+html[data-mode="preview"] body { display: flex; flex-wrap: wrap; gap: 24px; padding: 24px; }
+html[data-mode="preview"] .story { zoom: .3; }
+
+/* ── Shared frame structure ────────────────────────────────── */
+.story {
+  position: relative; width: 1080px; height: 1920px; overflow: hidden;
+  background: var(--hazel); color: var(--espresso);
+}
+.story.dark { background: var(--espresso); color: var(--hazel); }
+
+.content {
+  position: absolute;
+  top: var(--safe-top); bottom: var(--safe-bottom);
+  left: var(--side); right: var(--side);
+  display: flex; flex-direction: column;
+}
+.content > .push { margin-top: auto; }
+
+.label {
+  font-size: var(--t-small); font-weight: 600; color: var(--roast);
+  margin-bottom: 36px;
+}
+.dark .label { color: var(--crema); }
+.title {
+  font-size: var(--t-title); line-height: 1.02; letter-spacing: -.01em;
+  margin-bottom: 52px;
+}
+.body { font-size: var(--t-body); line-height: 1.32; max-width: 32ch; }
+.dark .body { color: var(--hazel-2); }
+.source {
+  margin-top: auto; padding-top: 40px;
+  font-size: var(--t-small); line-height: 1.3; color: var(--roast);
+}
+.dark .source { color: var(--crema); }
+
+/* Preview-only guides */
+.guide { display: none; }
+html[data-mode="preview"] .guide {
+  display: block; position: absolute; left: 0; right: 0;
+  border: 4px dashed rgba(200, 60, 60, .7); pointer-events: none;
+}
+html[data-mode="preview"] .guide.top { top: 0; height: var(--safe-top); border-top: 0; border-left: 0; border-right: 0; }
+html[data-mode="preview"] .guide.bottom { bottom: 0; height: var(--safe-bottom); border-bottom: 0; border-left: 0; border-right: 0; }
+
+/* The cup seen from above (shared signature graphic) */
+.cup { position: absolute; border-radius: 50%; background: var(--porcelain); }
+.cup::before { content: ""; position: absolute; inset: 7%; border-radius: 50%; background: #1d0f08; }
+.cup::after {
+  content: ""; position: absolute; inset: 9.5%; border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 38%, #f0c48c 0%, rgba(240,196,140,0) 34%),
+    radial-gradient(circle at 50% 50%, #c98a4f 0%, #b06f37 48%, #7c4421 82%, #4a2412 100%);
+}
+
+/* ── type: cover ───────────────────────────────────────────── */
+.t-cover .cup { width: 920px; height: 920px; right: -360px; top: -280px; }
+.t-cover .content { top: 720px; }
+.t-cover .title {
+  font-size: var(--t-cover); line-height: .94; letter-spacing: -.02em; margin-bottom: 44px;
+}
+.t-cover .subtitle { font-size: 54px; line-height: 1.25; color: var(--hazel-2); max-width: 20ch; }
+
+/* ── type: text ────────────────────────────────────────────── */
+.t-text .body + .body { margin-top: 32px; }
+
+/* ── type: number ──────────────────────────────────────────── */
+.t-number .number {
+  font-size: var(--t-number); line-height: .85; letter-spacing: -.02em; white-space: nowrap;
+}
+.t-number .unit { font-size: 140px; color: var(--roast); margin-left: 20px; }
+.t-number .body { margin-top: 64px; }
+
+/* ── type: list ────────────────────────────────────────────── */
+.t-list ul { list-style: none; }
+.t-list li { padding: 44px 0; }
+.t-list li + li { border-top: 3px solid var(--hazel-2); }
+.t-list .item-label { display: block; font-size: 68px; line-height: 1.05; margin-bottom: 12px; }
+.t-list .item-note { display: block; font-size: 54px; line-height: 1.25; color: var(--roast); }
+
+/* ── type: steps ───────────────────────────────────────────── */
+.t-steps ol { list-style: none; counter-reset: step; }
+.t-steps li {
+  counter-increment: step; display: grid; grid-template-columns: 100px 1fr;
+  align-items: baseline; font-size: 60px; line-height: 1.22; padding: 36px 0;
+}
+.t-steps li + li { border-top: 3px solid var(--hazel-2); }
+.t-steps li::before { content: counter(step); font-size: 78px; color: var(--crema); line-height: 1; }
+
+/* ── type: qa ──────────────────────────────────────────────── */
+.t-qa .mark { font-size: 120px; line-height: 1; color: var(--crema); margin-bottom: 20px; }
+.t-qa .question { font-size: 88px; line-height: 1.06; margin-bottom: 90px; }
+.t-qa .answer-mark { margin-top: auto; }
+
+/* ── type: tip ─────────────────────────────────────────────── */
+.t-tip .cup { width: 300px; height: 300px; top: var(--safe-top); right: var(--side); }
+.t-tip .body {
+  font-family: var(--font-titles); font-size: 78px; line-height: 1.1;
+  letter-spacing: -.005em; color: var(--hazel); max-width: 20ch;
+}
+
+/* ── type: sticker (leaves room for a link/poll/question sticker) */
+.t-sticker .sticker-zone { height: var(--sticker-h); margin-top: auto; position: relative; }
+html[data-mode="preview"] .t-sticker .sticker-zone {
+  border: 4px dashed rgba(200, 60, 60, .7);
+}
+html[data-mode="preview"] .t-sticker .sticker-zone::after {
+  content: "Sticker here"; position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 48px; color: rgba(200, 60, 60, .9);
+}
+
+/* ── type: closing ─────────────────────────────────────────── */
+.t-closing .cup { width: 760px; height: 760px; left: 50%; top: -260px; transform: translateX(-40%); }
+.t-closing .title { font-size: 120px; line-height: .96; letter-spacing: -.015em; }
+.t-closing .cta {
+  margin-top: 56px; align-self: flex-start; font-size: 52px; font-weight: 700;
+  color: var(--espresso); background: var(--crema); padding: 24px 44px 26px;
+}
+</style>
+</head>
+<body>
+
+<!-- EXAMPLE DATA. The render script replaces this block with one group from highlights/highlights.json. -->
+<script id="data" type="application/json">
+{
+  "handle": "@coffee_extracts",
+  "frames": [
+    { "type": "cover", "kicker": "Moka", "title": "The moka pot, explained", "subtitle": "The stovetop pot that starts the day in Italy." },
+    { "type": "text", "title": "What a moka is", "body": "A stovetop pot in three parts. Water goes in the bottom, ground coffee in the basket, and the coffee rises into the top chamber." },
+    { "type": "number", "number": "9", "unit": "bar", "body": "The pressure in the Italian Espresso Institute's definition of espresso, give or take 1 bar.", "source": "Source: Istituto Nazionale Espresso Italiano" },
+    { "type": "list", "title": "For the moka", "items": [
+      { "label": "A moka pot", "note": "sized for the cups you drink" },
+      { "label": "Medium-ground coffee", "note": "pre-ground is fine to start" }
+    ] },
+    { "type": "steps", "title": "Brew it in four moves", "steps": ["Water just below the valve.", "Coffee in the basket, no pressing.", "Low heat, lid open.", "Off the heat when it gurgles."] },
+    { "type": "qa", "question": "Why does my moka coffee taste burnt?", "answer": "Usually the heat is too high. Use low heat and take it off as soon as it gurgles." },
+    { "type": "tip", "body": "Change one thing at a time, then taste." },
+    { "type": "sticker", "title": "Moka or machine?", "body": "Tell me what you use at home." },
+    { "type": "closing", "title": "More in the feed", "body": "Every carousel stays on the grid.", "cta": "See the posts" }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById("data").textContent);
+  const DARK = new Set(["cover", "tip", "sticker", "closing"]);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const src = s => s.source ? `<p class="source">${esc(s.source)}</p>` : "";
+
+  const types = {
+    cover: s => `
+      <div class="cup"></div>
+      <div class="content">
+        <p class="label push">${esc(s.kicker)}</p>
+        <h1 class="title" data-fit>${esc(s.title)}</h1>
+        ${s.subtitle ? `<p class="subtitle">${esc(s.subtitle)}</p>` : ""}
+      </div>`,
+    text: s => `
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        ${[].concat(s.body || []).map(p => `<p class="body">${esc(p)}</p>`).join("")}
+        ${src(s)}
+      </div>`,
+    number: s => `
+      <div class="content">
+        ${s.title ? `<h2 class="title" data-fit>${esc(s.title)}</h2>` : ""}
+        <p class="number push" data-fit-w>${esc(s.number)}${s.unit ? `<span class="unit">${esc(s.unit)}</span>` : ""}</p>
+        <p class="body">${esc(s.body)}</p>
+        ${src(s)}
+      </div>`,
+    list: s => `
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        <ul>${(s.items || []).map(it => `<li><span class="item-label">${esc(it.label)}</span><span class="item-note">${esc(it.note)}</span></li>`).join("")}</ul>
+        ${src(s)}
+      </div>`,
+    steps: s => `
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        <ol>${(s.steps || []).map(p => `<li><span>${esc(p)}</span></li>`).join("")}</ol>
+        ${src(s)}
+      </div>`,
+    qa: s => `
+      <div class="content">
+        <p class="mark">Q</p>
+        <p class="question" data-fit>${esc(s.question)}</p>
+        <p class="mark answer-mark">A</p>
+        <p class="body">${esc(s.answer)}</p>
+        ${src(s)}
+      </div>`,
+    tip: s => `
+      <div class="cup"></div>
+      <div class="content">
+        <p class="label push">${esc(s.label || "The tip")}</p>
+        <p class="body" data-fit>${esc(s.body)}</p>
+      </div>`,
+    sticker: s => `
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        ${s.body ? `<p class="body">${esc(s.body)}</p>` : ""}
+        <div class="sticker-zone"></div>
+      </div>`,
+    closing: s => `
+      <div class="cup"></div>
+      <div class="content">
+        <h2 class="title push" data-fit>${esc(s.title)}</h2>
+        ${s.body ? `<p class="body">${esc(s.body)}</p>` : ""}
+        ${s.cta ? `<p class="cta">${esc(s.cta)}</p>` : ""}
+      </div>`
+  };
+
+  const problems = [];
+  data.frames.forEach((s, i) => {
+    const make = types[s.type];
+    if (!make) { problems.push(`Frame ${i + 1}: unknown type "${s.type}"`); return; }
+    const el = document.createElement("section");
+    el.className = `story t-${s.type}` + (DARK.has(s.type) ? " dark" : "");
+    el.dataset.index = i + 1;
+    el.innerHTML = make(s) + `<div class="guide top"></div><div class="guide bottom"></div>`;
+    document.body.appendChild(el);
+  });
+
+  function overflowPx(box) {
+    const r = box.getBoundingClientRect();
+    let over = 0;
+    for (const c of box.children) {
+      const cr = c.getBoundingClientRect();
+      over = Math.max(over, cr.bottom - r.bottom, r.top - cr.top);
+    }
+    return Math.round(over);
+  }
+
+  function fit() {
+    document.querySelectorAll(".story").forEach(story => {
+      const box = story.querySelector(".content");
+      const n = story.dataset.index;
+      story.querySelectorAll("[data-fit-w]").forEach(el => {
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        let size = base;
+        while (el.scrollWidth > box.clientWidth + 1 && size > base * 0.4) { size -= 4; el.style.fontSize = size + "px"; }
+      });
+      story.querySelectorAll("[data-fit]").forEach(el => {
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        let size = base;
+        while ((overflowPx(box) > 4 || el.scrollWidth > el.clientWidth + 1) && size > base * 0.72) {
+          size -= 2; el.style.fontSize = size + "px";
+        }
+      });
+      if (overflowPx(box) > 4) problems.push(`Frame ${n}: text doesn't fit (overflows by ${overflowPx(box)}px). Shorten the text.`);
+      story.querySelectorAll(".content *").forEach(el => {
+        if (el.children.length === 0 && el.scrollWidth > box.clientWidth + 2) {
+          problems.push(`Frame ${n}: a word spills past the margin ("${el.textContent.slice(0, 40)}").`);
+        }
+      });
+    });
+    window.__REPORT = { ok: problems.length === 0, frames: data.frames.length, problems };
+    document.documentElement.dataset.ready = "1";
+  }
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
+})();
+</script>
+</body>
+</html>

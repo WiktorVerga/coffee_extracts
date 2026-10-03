@@ -13,6 +13,7 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | `scripts/*.py` | render, publish, log | **No** |
 | `log.json` | history of used ideas | Only through `scripts/log.py` |
 | `posts/YYYY-MM-DD-slug/` | one post: `carousel.json`, `caption.txt`, `slide-XX.jpg` | Yes, this is your output |
+| `highlights/`, `template/story.html`, `template/highlight-cover.html`, `scripts/render_highlights.py` | evergreen highlight stories, made and uploaded by hand by the owner | **No: the routine never touches them** |
 
 Full example of a valid post: `posts/example-moka/`.
 

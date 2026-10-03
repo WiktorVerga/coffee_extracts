@@ -1,0 +1,95 @@
+{
+  "_readme": "Evergreen stories for the profile highlights. Edit the text here, then run: python scripts/render_highlights.py. Frame types and word limits: see README, section 'Highlights'. Images are NOT published automatically: upload them by hand from the Instagram app.",
+  "groups": [
+    {
+      "id": "start",
+      "name": "Start",
+      "icon": "start",
+      "frames": [
+        { "type": "cover", "kicker": "Start here", "title": "Italian coffee, made at home", "subtitle": "Who's behind this page, and what you'll find here." },
+        { "type": "text", "title": "Welcome", "body": "I live in Italy, and I explain the moka pot and home espresso in plain English. One idea at a time, so you can try it the next morning." },
+        { "type": "list", "title": "What you'll find", "items": [
+          { "label": "Moka", "note": "the classic Italian stovetop pot" },
+          { "label": "Espresso", "note": "home espresso, without the jargon" },
+          { "label": "Gear", "note": "only what actually makes a difference" },
+          { "label": "Q&A", "note": "your questions, answered" }
+        ] },
+        { "type": "text", "title": "How it works", "body": "A new carousel every Monday, Wednesday and Friday. Each one is a single idea you can test in your own kitchen." },
+        { "type": "sticker", "title": "What should I explain next?", "body": "Ask below. I read every answer." },
+        { "type": "closing", "title": "Grab a cup and start swiping", "cta": "Follow @coffee_extracts" }
+      ]
+    },
+    {
+      "id": "moka",
+      "name": "Moka",
+      "icon": "moka",
+      "frames": [
+        { "type": "cover", "kicker": "Moka", "title": "The moka pot, explained", "subtitle": "The stovetop pot behind so many Italian mornings." },
+        { "type": "text", "title": "What a moka is", "body": "A stovetop pot in three parts. Water goes in the bottom chamber, ground coffee in the basket, and steam pressure pushes the coffee up into the top chamber." },
+        { "type": "steps", "title": "Brew it in five moves", "steps": [
+          "Water in the bottom, just below the valve.",
+          "Medium-ground coffee in the basket. Don't press it.",
+          "Level it, wipe the rim, screw it shut.",
+          "Low heat, lid open so you can watch.",
+          "Off the heat as soon as it gurgles."
+        ] },
+        { "type": "tip", "body": "Rinse it with hot water, and check your pot's manual before using soap or the dishwasher." },
+        { "type": "sticker", "title": "Moka or espresso machine?", "body": "Tell me what you use at home." },
+        { "type": "closing", "title": "More moka in the feed", "body": "Every moka carousel stays on the grid.", "cta": "See the posts" }
+      ]
+    },
+    {
+      "id": "espresso",
+      "name": "Espresso",
+      "icon": "espresso",
+      "frames": [
+        { "type": "cover", "kicker": "Espresso", "title": "What makes an espresso an espresso", "subtitle": "The numbers behind the Italian standard." },
+        { "type": "text", "title": "Small, strong, fast", "body": "Espresso is made by pushing hot water through finely ground coffee under pressure. A shot takes less than half a minute and fits in a tiny cup." },
+        { "type": "number", "number": "9", "unit": "bar", "body": "The brewing pressure in the Italian Espresso Institute's definition, give or take 1 bar.", "source": "Source: Istituto Nazionale Espresso Italiano" },
+        { "type": "list", "title": "The rest of the standard", "items": [
+          { "label": "7 g", "note": "of ground coffee, give or take 0.5 g" },
+          { "label": "190°F (88°C)", "note": "water temperature, give or take 4°F (2°C)" },
+          { "label": "25 seconds", "note": "of extraction, give or take 2.5" },
+          { "label": "25 ml", "note": "in the cup (0.85 fl oz), crema included" }
+        ], "source": "Source: Istituto Nazionale Espresso Italiano" },
+        { "type": "tip", "body": "Dialing in at home? Change one thing at a time: grind, dose or time. Then taste." },
+        { "type": "sticker", "title": "What's your espresso question?", "body": "Ask below. The best ones end up in Q&A." },
+        { "type": "closing", "title": "More espresso in the feed", "body": "Every espresso carousel stays on the grid.", "cta": "See the posts" }
+      ]
+    },
+    {
+      "id": "gear",
+      "name": "Gear",
+      "icon": "gear",
+      "frames": [
+        { "type": "cover", "kicker": "Gear", "title": "The gear that actually matters", "subtitle": "A short list." },
+        { "type": "list", "title": "For the moka", "items": [
+          { "label": "A moka pot", "note": "sized for the cups you drink" },
+          { "label": "Medium-ground coffee", "note": "pre-ground is fine to start" },
+          { "label": "An induction stove?", "note": "you need a steel pot or an adapter" }
+        ] },
+        { "type": "list", "title": "For home espresso", "items": [
+          { "label": "The machine", "note": "steady temperature and pressure" },
+          { "label": "A grinder", "note": "made for espresso, fine and even" },
+          { "label": "A scale", "note": "coffee in, espresso out, in grams" },
+          { "label": "A tamper", "note": "of course that fits your basket" }
+        ] },
+        { "type": "text", "title": "If you upgrade one thing", "body": "Make it the grinder. Espresso needs a fine, even grind, and that is the hardest job for a cheap grinder." },
+        { "type": "tip", "body": "Skip the gadgets until the basics taste right." },
+        { "type": "sticker", "title": "What's on your counter?", "body": "Show me your setup." }
+      ]
+    },
+    {
+      "id": "qa",
+      "name": "Q&A",
+      "icon": "qa",
+      "frames": [
+        { "type": "cover", "kicker": "Q&A", "title": "Your questions, answered", "subtitle": "Anything about the moka pot and home espresso." },
+        { "type": "qa", "question": "Why does my moka coffee taste bitter or burnt?", "answer": "Usually the heat is too high, or the pot stays on too long. Use low heat and take it off as soon as it starts to gurgle." },
+        { "type": "qa", "question": "Is moka coffee the same as espresso?", "answer": "No. A moka brews at much lower pressure, so the coffee is strong but lighter in body, with little or no crema (the golden foam on top)." },
+        { "type": "qa", "question": "Do I need an expensive machine for good espresso?", "answer": "Not to start. An even grind and fresh coffee change the cup more than the price of the machine." },
+        { "type": "sticker", "title": "Ask me anything", "body": "Use the box below. I answer here and in the feed." }
+      ]
+    }
+  ]
+}
