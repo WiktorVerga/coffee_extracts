@@ -1,0 +1,44 @@
+{
+  "series": "How-to",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "Moka basics",
+      "title": "Fill your moka pot without the guesswork",
+      "subtitle": "Water, coffee, flame: three habits for your stovetop moka."
+    },
+    {
+      "type": "myth",
+      "myth": "Press the coffee down firmly, like you would for espresso.",
+      "verdict": "false",
+      "truth": "Fill the basket generously, but don't press. Water needs an easy path through the grounds. Just level the top with your finger."
+    },
+    {
+      "type": "steps",
+      "title": "Fill it in this order",
+      "steps": [
+        "Pour cold water up to the safety valve's lower edge.",
+        "Fill the basket generously with ground coffee. Don't press.",
+        "Level the top with a finger and wipe the rim.",
+        "Close the pot firmly and set it on low heat."
+      ]
+    },
+    {
+      "type": "text",
+      "title": "Why stop below the valve",
+      "body": "The valve is there for safety. Keep the water at its lower edge so the valve stays free to do its job.",
+      "highlight": "Water stops below the valve."
+    },
+    {
+      "type": "tip",
+      "label": "The tip",
+      "body": "Set the flame to low and give it time. Great moka coffee is worth the wait."
+    },
+    {
+      "type": "closing",
+      "title": "Water, coffee, flame: in that order",
+      "body": "Three habits, no extra gear. Your moka does the rest.",
+      "cta": "Save it for tomorrow"
+    }
+  ]
+}
