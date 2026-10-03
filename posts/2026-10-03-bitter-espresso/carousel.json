@@ -1,0 +1,12 @@
+{
+  "series": "Inside the cup",
+  "slides": [
+    { "type": "cover", "kicker": "Inside the cup", "title": "Why your espresso tastes bitter", "subtitle": "It's rarely the beans. Three causes, and the one fix to try first." },
+    { "type": "text", "title": "Bitter means too much extracted", "body": "Hot water pulls flavor out of coffee in stages. Fruity, sweet notes come first. Bitter, harsh ones come last. Bitter espresso is called over-extracted: the water took too much.", "highlight": "Bitterness is a sign of going too far." },
+    { "type": "steps", "title": "Three common causes", "steps": ["The grind is too fine.", "The shot runs too long.", "The water is too hot."] },
+    { "type": "text", "title": "The usual suspect: grind", "body": "Finer grounds slow the water down. It stays in contact with the coffee longer and drags out the bitter parts. A shot that drips slowly is the classic sign." },
+    { "type": "number", "number": "25-30", "unit": "sec", "caption": "A typical espresso shot time. Much longer, and bitterness often creeps in." },
+    { "type": "tip", "label": "The fix", "body": "Grind one step coarser, pull a shot, taste. Change one thing at a time, then adjust again." },
+    { "type": "closing", "title": "Bitter? Go a little coarser", "body": "Bitter means over-extracted. Coarser grind, shorter shot, taste, repeat.", "cta": "Save it for your next shot" }
+  ]
+}
