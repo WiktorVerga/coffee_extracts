@@ -1,0 +1,37 @@
+{
+  "id": 2,
+  "sheet_row": {
+    "link": "https://youtu.be/at7d-_qsp7Y",
+    "start": "02:00",
+    "end": "03:00",
+    "notes": ""
+  },
+  "video": {
+    "youtube_id": "at7d-_qsp7Y",
+    "title": "Moka Pot Coffee ASMR |  The Brewing Without Distractions",
+    "channel": "How Cooks",
+    "channel_url": "https://www.youtube.com/channel/UCIiN0fX8kdjvCOzatNaiDmA",
+    "url": "https://www.youtube.com/watch?v=at7d-_qsp7Y",
+    "license": "Creative Commons Attribution license (reuse allowed)",
+    "duration": 220,
+    "upload_date": "20250127"
+  },
+  "clip": {
+    "start": "02:00",
+    "end": "03:00",
+    "duration": 60.0,
+    "size_mb": 17.41,
+    "video_kbps": 2205,
+    "layout": "4:3 on blurred background"
+  },
+  "attribution": "Clip from \"Moka Pot Coffee ASMR |  The Brewing Without Distractions\" by How Cooks (youtube.com/watch?v=at7d-_qsp7Y), licensed under CC BY 3.0. Trimmed and reframed.",
+  "speech": false,
+  "language": null,
+  "language_probability": 0.515,
+  "whisper": {
+    "model": "large-v3-turbo",
+    "device": "cuda"
+  },
+  "transcript": "",
+  "prepared_at": "2026-10-05 00:11"
+}
