@@ -2,7 +2,7 @@
 
 This file is for the **reels routine** (Tuesday and Thursday). The carousel routine follows `CLAUDE.md` and never touches `reels/` or `reels-log.json`.
 
-The reels are **clips of other creators' YouTube videos**, licensed **CC BY** (Creative Commons Attribution). The owner picks the moments in the "Idee Reel" sheet tab; his PC (`scripts/prepare_reels.py`) checks the license, cuts the clip, adds subtitles and a credit, and pushes `reels/<ID>-<slug>/` to GitHub. **Your job:** pick the next ready reel, check it, write the caption with the attribution, and publish it.
+The reels are **clips of other creators' YouTube videos**, licensed **CC BY** (Creative Commons Attribution). The owner picks the moments in the "Idee Reel" sheet tab; his PC (`scripts/prepare_reels.py`) checks the license, cuts the clip, adds subtitles when someone speaks (there is no credit on screen), and pushes `reels/<ID>-<slug>/` to GitHub. **Your job:** pick the next ready reel, check it, write the caption with the attribution, and publish it.
 
 Every run produces **at most one reel**.
 
@@ -15,7 +15,7 @@ Every run produces **at most one reel**.
 | `config.json` | `reels.mode` (`preview` or `publish`), repo | **No** |
 | `scripts/*.py` | `reels_log.py`, `publish_reel.py` | **No** |
 | `reels-log.json` | history of used reels | Only through `scripts/reels_log.py` |
-| `reels/<ID>-<slug>/clip.mp4`, `source.json`, `transcript.txt`, `subtitles.srt`, `frame-1..3.jpg` | made on the owner's PC | **No: never edit or re-encode the video** |
+| `reels/<ID>-<slug>/clip.mp4`, `source.json`, `transcript.txt`, `subtitles.srt` (only if there is speech), `frame-1..3.jpg` | made on the owner's PC | **No: never edit or re-encode the video** |
 | `reels/<ID>-<slug>/caption.txt` | the caption | Yes, this is your output |
 
 ## Instagram skills
@@ -44,6 +44,8 @@ Read `source.json`, `transcript.txt` and look at `frame-1.jpg`, `frame-2.jpg`, `
 - it doesn't make sense on its own (starts or ends mid-thought, refers to "what I showed you earlier")
 - the frames show something unrelated to coffee, or anything you wouldn't put on the page
 
+**Clips without speech** (`source.json` → `"speech": false`): visual clips (an extraction, a moka pot coming up, latte art) with no subtitles and no transcript. Judge them only from the three frames and the owner's notes (`source.json` → `sheet_row.notes`). Skip them if the frames don't show clearly what the clip is about.
+
 To skip: `python3 scripts/reels_log.py add --id <ID> --title "<video title>" --folder <folder> --status skipped --reason "<why>"`, then go back to step 1 with the next ready reel (at most 3 attempts per run).
 
 ### 3. Write the caption
@@ -51,9 +53,11 @@ Use **`ig-caption-writer`** (draft only) to write `caption.txt` in the reel fold
 
 1. **Hook** (first line, ≤ 125 characters): makes sense on its own, says what the viewer will get from the clip. It must not misquote the creator.
 2. **Body:** 1–3 short sentences that add context for someone making coffee at home (why it matters, how it relates to the moka pot or home espresso, an Italian angle if it's real). Don't repeat the subtitles.
+   For a clip **without speech**, the caption is the only explanation: say what the viewer is watching, based only on the frames and the owner's notes. Any fact beyond what is visible needs a source (point 5); if you aren't sure what the clip shows, don't guess: skip the reel.
 3. **One closing question**, specific to the topic (no "what do you think?", no engagement bait).
-4. A blank line, then the **attribution line**, mandatory (license CC BY), taken from `source.json`:
+4. A blank line, then the **attribution line**, mandatory (license CC BY): it is the **only** credit, the video has none on screen. Take it from `source.json`:
    `Clip: "<video.title>" by <video.channel> (youtube.com/watch?v=<video.youtube_id>), CC BY 3.0. Trimmed, reframed and subtitled.`
+   (for a clip without speech the last sentence is "Trimmed and reframed.", as in `source.json` → `attribution`)
 5. Only if the hook or the body adds a fact that is **not** in the clip: a `Sources:` line as in the guide, section 7 (find it as in `CLAUDE.md` step 3b; if you can't, remove the fact).
 6. A blank line, then the hashtags (step 4).
 
@@ -66,8 +70,8 @@ Rules:
 Use **`ig-hashtag-strategist`** (draft only) on the finished caption: 3–5 hashtags, 2 from the guide's base list plus 1–3 specific ones, sized for a small account, at most one broad tag, all describing the actual clip. Don't repeat the specific tags of the last 3 `caption.txt` files in `reels/`. Add them as the last line.
 
 ### 5. Quality gate
-- *Clip:* checked in step 2, the subtitles in `subtitles.srt` match what is said (if they are badly wrong, skip the reel with the reason "subtitles wrong").
-- *Caption:* the hook stands alone in 125 characters; one idea; one specific question; no engagement bait; attribution line present and complete (title, channel, link with the video ID, CC BY 3.0, "Trimmed, reframed and subtitled").
+- *Clip:* checked in step 2; if the clip has speech, the subtitles in `subtitles.srt` match what is said (if they are badly wrong, skip the reel with the reason "subtitles wrong"). Clips without speech have no `subtitles.srt`: that's expected.
+- *Caption:* the hook stands alone in 125 characters; one idea; one specific question; no engagement bait; attribution line present and complete (title, channel, link with the video ID, CC BY 3.0, the changes made, as in `source.json` → `attribution`).
 - *Hashtags:* 3–5, on-topic, at most one broad, different from the last 3 reels.
 Fix anything that fails before going on.
 

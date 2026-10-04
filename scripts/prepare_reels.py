@@ -10,7 +10,8 @@ For every new row of the sheet:
   2. downloads only the requested segment (yt-dlp)
   3. transcribes it with Whisper on the GPU (English only, otherwise the row is rejected)
   4. builds a 1080x1920 video: the clip cropped to 4:3 on a blurred background,
-     highlighted subtitles (espresso text on a hazel box) and a credit line
+     with highlighted subtitles (espresso text on a hazel box) when someone speaks.
+     No text on screen otherwise: the CC BY attribution goes in the caption
   5. saves everything in reels/<ID>-<slug>/ and, at the end, commits and pushes
 
 The cloud routine (REELS.md) then writes the caption and publishes.
@@ -263,9 +264,8 @@ def check_license_and_language(info):
     lic = (info.get("license") or "").strip()
     if "creative commons" not in lic.lower():
         raise Reject(f"license is '{lic or 'standard YouTube license'}', not Creative Commons Attribution")
-    lang = (info.get("language") or "").lower()
-    if lang and not lang.startswith("en"):
-        raise Reject(f"video language is '{lang}', not English")
+    # the spoken language is checked later by Whisper, on the clip itself:
+    # clips without speech are fine whatever the video's language
     return lic
 
 
@@ -324,8 +324,23 @@ def load_whisper(model_name, device):
                         download_root=str(WORK / "models"))
 
 
+def load_audio(path, sr=16000):
+    """Decodes the audio with ffmpeg into 16 kHz mono float32. faster-whisper's own
+    decoder calls PyAV with an option recent PyAV versions removed (the only ones
+    available for Python 3.14), so we hand Whisper the samples directly."""
+    import numpy as np
+    r = subprocess.run([ffmpeg_exe(), "-nostdin", "-hide_banner", "-loglevel", "error", "-i", str(path),
+                        "-vn", "-ac", "1", "-ar", str(sr), "-f", "s16le", "-"], capture_output=True)
+    if r.returncode != 0:
+        raise RuntimeError("audio decode failed: " + r.stderr.decode(errors="replace").strip()[-300:])
+    return np.frombuffer(r.stdout, dtype=np.int16).astype(np.float32) / 32768.0
+
+
 def transcribe(path, model):
-    segments, info = model.transcribe(str(path), word_timestamps=True, beam_size=5,
+    audio = load_audio(path)
+    if audio.size < 16000:
+        raise Reject("the clip has no audio track")
+    segments, info = model.transcribe(audio, word_timestamps=True, beam_size=5,
                                       vad_filter=True, condition_on_previous_text=False)
     words, text = [], []
     for seg in segments:
@@ -336,6 +351,16 @@ def transcribe(path, model):
                 words.append({"start": float(w.start), "end": float(w.end), "text": t})
     return {"language": info.language, "probability": round(float(info.language_probability), 3),
             "words": words, "text": " ".join(text).strip()}
+
+
+def has_speech(tr, min_words=6, min_probability=0.6):
+    """Whisper can 'hear' a few words in music or ambient noise: a handful of
+    words, or a language guessed with low confidence, means no real speech."""
+    if len(tr["words"]) < min_words:
+        return False
+    if tr["language"] != "en" and tr["probability"] < min_probability:
+        return False
+    return True
 
 
 # ---------------------------------------------------------------- subtitles
@@ -406,7 +431,6 @@ W, H = 1080, 1920
 ESPRESSO = "#413125"
 HAZEL = "#EFD6B4"
 SIDE_MARGIN = 120          # keeps text clear of Instagram's right-side buttons
-CREDIT_CENTER_Y = 250      # below Instagram's top bar
 WINDOW_CENTER_Y = 800      # centre of the 4:3 video window
 SAFE_BOTTOM = 1480         # Instagram's caption and buttons start below this
 
@@ -481,12 +505,6 @@ def highlight_png(text, path, size=72, single_min=58, pad_x=28, pad_y=16, radius
     return img.size
 
 
-def credit_png(channel, label, path):
-    channel = channel if len(channel) <= 24 else channel[:23].rstrip() + "…"
-    return highlight_png(f"CLIP: {channel.upper()} ON YOUTUBE · {label.upper()}", path,
-                         size=28, single_min=22, pad_x=18, pad_y=9, radius=16, max_lines=1)
-
-
 # ---------------------------------------------------------------- video
 
 def layout(src_w, src_h):
@@ -509,14 +527,13 @@ def layout(src_w, src_h):
             "win_h": win_h, "top": top}
 
 
-def build_video(src, chunks, channel, label, out_path, work, max_mb, log):
+def build_video(src, chunks, out_path, work, max_mb, log):
     info = probe(src)
     lay = layout(info["width"], info["height"])
     pngs = work / "png"
     pngs.mkdir(exist_ok=True)
 
-    cw, chh = credit_png(channel, label, pngs / "credit.png")
-    inputs = ["-i", str(src), "-i", str(pngs / "credit.png")]
+    inputs = ["-i", str(src)]
 
     if lay["full"]:
         graph = [f"[0:v]fps=30,scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1[v0]"]
@@ -533,14 +550,13 @@ def build_video(src, chunks, channel, label, out_path, work, max_mb, log):
         below = lay["top"] + lay["win_h"] + 48
         sub_center_y = below + 80 if below + 200 <= SAFE_BOTTOM else lay["top"] + lay["win_h"] - 140
 
-    graph.append(f"[v0][1:v]overlay={(W - cw) // 2}:{CREDIT_CENTER_Y - chh // 2}[v1]")
-    last = "v1"
+    last = "v0"
     for i, c in enumerate(chunks):
         p = pngs / f"sub_{i:03d}.png"
         sw, sh = highlight_png(c["text"], p)
         inputs += ["-i", str(p)]
-        nxt = f"v{i + 2}"
-        graph.append(f"[{last}][{i + 2}:v]overlay={(W - sw) // 2}:{sub_center_y - sh // 2}:"
+        nxt = f"v{i + 1}"
+        graph.append(f"[{last}][{i + 1}:v]overlay={(W - sw) // 2}:{sub_center_y - sh // 2}:"
                      f"enable='between(t,{c['start']:.3f},{c['end']:.3f})'[{nxt}]")
         last = nxt
     graph.append(f"[{last}]format=yuv420p[vout]")
@@ -624,12 +640,14 @@ def process_row(row, cfg, model_getter, args, log):
         model, device = model_getter()
         tr = transcribe(src, model)
         tr["device"] = device
-    if tr["language"] != "en":
+    speech = has_speech(tr)
+    if speech and tr["language"] != "en":
         raise Reject(f"Whisper hears '{tr['language']}' (p={tr['probability']}), not English")
-    if len(tr["words"]) < 3:
-        raise Reject("no speech found in the clip")
-
-    chunks = make_chunks(tr["words"])
+    if speech:
+        chunks = make_chunks(tr["words"])
+    else:
+        log("    no speech: the reel will have no subtitles")
+        chunks, tr["text"] = [], ""
     title = info.get("title") or "clip"
     channel = info.get("channel") or info.get("uploader") or "Unknown"
     folder = REELS_DIR / f"{rid:03d}-{slugify(title)}"
@@ -637,10 +655,13 @@ def process_row(row, cfg, model_getter, args, log):
 
     log("    editing video…")
     clip = folder / "clip.mp4"
-    meta = build_video(src, chunks, channel, rcfg["license_label"], clip, work, rcfg["max_mb"], log)
+    meta = build_video(src, chunks, clip, work, rcfg["max_mb"], log)
     save_frames(clip, folder, meta["duration"])
-    write_srt(chunks, folder / "subtitles.srt")
-    (folder / "transcript.txt").write_text(tr["text"] + "\n", encoding="utf-8")
+    if speech:
+        write_srt(chunks, folder / "subtitles.srt")
+        (folder / "transcript.txt").write_text(tr["text"] + "\n", encoding="utf-8")
+    else:
+        (folder / "transcript.txt").write_text("(no speech: visual clip without subtitles)\n", encoding="utf-8")
 
     url = info.get("webpage_url") or row.get("link", "")
     source = {
@@ -658,8 +679,10 @@ def process_row(row, cfg, model_getter, args, log):
         },
         "clip": {"start": fmt_time(start), "end": fmt_time(end), **meta},
         "attribution": (f'Clip from "{title}" by {channel} ({url.replace("https://", "").replace("www.", "")}), '
-                        f"licensed under {rcfg['license_label']}. Trimmed, reframed and subtitled."),
-        "language": tr["language"],
+                        f"licensed under {rcfg['license_label']}. "
+                        + ("Trimmed, reframed and subtitled." if speech else "Trimmed and reframed.")),
+        "speech": speech,
+        "language": tr["language"] if speech else None,
         "language_probability": tr["probability"],
         "whisper": {"model": rcfg["whisper_model"], "device": tr.get("device", "test")},
         "transcript": tr["text"],
@@ -734,15 +757,9 @@ def check_setup(cfg):
 
 
 def gpu_probe(cfg):
-    import wave
+    import numpy as np
     model = load_whisper(cfg["reels"]["whisper_model"], "cuda")
-    silence = WORK / "tmp" / "probe.wav"
-    with wave.open(str(silence), "wb") as w:
-        w.setnchannels(1)
-        w.setsampwidth(2)
-        w.setframerate(16000)
-        w.writeframes(b"\x00\x00" * 16000)
-    list(model.transcribe(str(silence))[0])
+    list(model.transcribe(np.zeros(16000, dtype=np.float32))[0])
     print("gpu ok")
 
 

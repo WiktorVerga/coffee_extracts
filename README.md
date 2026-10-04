@@ -203,7 +203,7 @@ Why the PC: YouTube blocks cloud servers, and Whisper needs your GPU. The cloud 
 4. Create a second routine on claude.ai/code/routines: prompt = `ROUTINE-REELS-PROMPT.txt`, environment `autopost`, schedule Tuesday and Thursday at 6:37 PM (cron `37 18 * * 2,4`).
 
 ### Every week
-1. Add rows to **Idee Reel** (one row per clip; a long video can have several rows). 5–90 seconds per clip, English only.
+1. Add rows to **Idee Reel** (one row per clip; a long video can have several rows). 5–90 seconds per clip. Clips with speech must be in English (they get subtitles); clips without speech get no subtitles: write in the notes what they show, the routine uses it for the caption.
 2. Double-click `run-reels.bat`. Rejected rows are listed with the reason (not CC BY, not English, wrong times…).
 3. The routine publishes the ready reels, lowest ID first. `reels.mode` in `config.json` starts as `preview`: switch it to `publish` when the previews look right.
 
