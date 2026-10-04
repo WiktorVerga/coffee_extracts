@@ -3,6 +3,8 @@
 This repository publishes Instagram carousels about Italian coffee, in US English, automatically.
 Every routine run follows the procedure below **exactly** and produces **at most one post**.
 
+> **Reels:** the reels routine (Tuesday and Thursday) follows `REELS.md` instead of this procedure. The carousel routine described here never touches `reels/`, `reels-log.json` or the reels scripts.
+
 ## Files to know
 
 | File | Purpose | Can it change during a run? |
@@ -14,12 +16,14 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | `log.json` | history of used ideas | Only through `scripts/log.py` |
 | `posts/YYYY-MM-DD-slug/` | one post: `carousel.json`, `caption.txt`, `slide-XX.jpg` | Yes, this is your output |
 | `highlights/`, `template/story.html`, `template/highlight-cover.html`, `scripts/render_highlights.py` | evergreen highlight stories, made and uploaded by hand by the owner | **No: the routine never touches them** |
+| `REELS.md`, `reels/`, `reels-log.json`, `scripts/prepare_reels.py`, `scripts/publish_reel.py`, `scripts/reels_log.py`, `*.bat` | reels (clips from YouTube), handled by the reels routine and the owner's PC | **No: the carousel routine never touches them** |
 
 Full example of a valid post: `posts/example-moka/`.
 
 ## The ideas sheet is in Italian
 
 The owner writes ideas **in Italian**. Columns: `ID`, `Idea`, `Note e fonti (facoltative)` (notes and sources, optional), `Rubrica (facoltativa)` (series, optional, Italian names mapped in the guide, section 6), `Stato` (status: empty = to do, `salta` = skip it).
+The sheet has two tabs: use **only "Idee Post"**. Ignore "Idee Reel" (it belongs to the reels routine); if the connector returns both tables, read the one whose columns are the ones above.
 Read the idea and notes as a brief, then write the post in **US English** following the guide. Never translate word for word.
 
 ## Instagram skills (used in steps 3, 3c, 3d and 5)

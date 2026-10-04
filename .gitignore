@@ -3,3 +3,6 @@ template/.render-*.html
 __pycache__/
 *.pyc
 .env
+# reels: local environment, caches, models and temp files (never committed)
+.venv/
+.reels/

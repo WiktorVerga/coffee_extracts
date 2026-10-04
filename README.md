@@ -170,6 +170,47 @@ To change colors, fonts or icons, edit `template/story.html` and `template/highl
 2. Once posted, open your profile → **New** (the + under the bio) → select that group's stories → name it (Start, Moka, Espresso, Gear, Q&A) → **Edit cover** → pick the matching image from `covers/`.
 3. Repeat for each group. To add stories to an existing highlight later: open the story → **Highlight** → pick the group.
 
+## Reels (clips from YouTube, CC BY)
+
+Short clips of other creators' YouTube videos, only with a **Creative Commons Attribution** license, always credited. Published on **Tuesday and Thursday** by a second routine.
+
+```
+"Idee Reel" sheet tab ──► run-reels.bat on your PC ──► reels/<ID>-<slug>/ on GitHub
+ (link + start + end)      license check, download,         │
+                           Whisper subtitles, 9:16 video     ▼
+                                              Reels routine (Tue · Thu, evening)
+                                              caption + attribution ──► Instagram
+```
+
+Why the PC: YouTube blocks cloud servers, and Whisper needs your GPU. The cloud routine never downloads anything.
+
+| File | What it is |
+|---|---|
+| `REELS.md` | The reels routine procedure (like `CLAUDE.md` for carousels). |
+| `scripts/prepare_reels.py` | Runs on your PC: sheet → license check → clip → subtitles → `reels/`. |
+| `scripts/publish_reel.py` | Publishes one reel (used by the routine). |
+| `scripts/reels_log.py` / `reels-log.json` | Which reels were used (separate from the carousel log). |
+| `setup-reels.bat` | One-time setup of the tools in `.venv\` (about 3 GB). |
+| `run-reels.bat` | Double-click after adding rows to the sheet. |
+| `ROUTINE-REELS-PROMPT.txt` | The text to paste into the reels routine. |
+
+**Disk:** everything stays in the project folder. Python packages (ffmpeg, Deno, Whisper, NVIDIA libraries) go in `.venv\`; temp files, caches and the Whisper model (~1.6 GB) in `.reels\`. Both are ignored by git. The bat files redirect TEMP, APPDATA and every cache, and the script refuses to run if the project is on C:.
+
+### Setup (once)
+1. In the Google Sheet, add a tab **Idee Reel** with columns `ID | Link YouTube | Inizio (mm:ss) | Fine (mm:ss) | Note (facoltative) | Stato`. Set columns C and D to **Format → Number → Plain text**.
+2. Share the sheet: **Share → General access → Anyone with the link → Viewer** (the script reads it without logging in).
+3. Double-click `setup-reels.bat`. At the end it runs a check: every line should say `[ok]`.
+4. Create a second routine on claude.ai/code/routines: prompt = `ROUTINE-REELS-PROMPT.txt`, environment `autopost`, schedule Tuesday and Thursday at 6:37 PM (cron `37 18 * * 2,4`).
+
+### Every week
+1. Add rows to **Idee Reel** (one row per clip; a long video can have several rows). 5–90 seconds per clip, English only.
+2. Double-click `run-reels.bat`. Rejected rows are listed with the reason (not CC BY, not English, wrong times…).
+3. The routine publishes the ready reels, lowest ID first. `reels.mode` in `config.json` starts as `preview`: switch it to `publish` when the previews look right.
+
+Options: `run-reels.bat --dry-run` (no push), `--only 3`, `--retry` (retry rejected rows), `--check`.
+
+**Watch out:** if the original video has music, Instagram may mute or block the reel even with a CC BY license. Prefer clips with speech only. Downloading from YouTube with external tools is against YouTube's terms of service (a contractual rule, not copyright).
+
 ## Limits and things to watch
 - Routines are in *research preview*: behavior and limits may change.
 - Rendering needs Chromium. If the download in the setup script fails, the script tries a system Chrome; if that fails too, the run stops with a clear error.

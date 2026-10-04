@@ -9,5 +9,15 @@
     "api_version": "v24.0",
     "user_id": "me"
   },
-  "token_refreshed_on": "2026-10-03"
+  "token_refreshed_on": "2026-10-03",
+  "reels": {
+    "mode": "preview",
+    "sheet_name": "Idee Reel",
+    "sheet_gid": "",
+    "min_seconds": 5,
+    "max_seconds": 90,
+    "max_mb": 18,
+    "whisper_model": "large-v3-turbo",
+    "license_label": "CC BY 3.0"
+  }
 }
