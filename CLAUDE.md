@@ -147,6 +147,7 @@ git push origin HEAD:main
   then commit and push `log.json`. Done.
 - **`publish` mode**:
   1. `SHA=$(git rev-parse HEAD)` (the commit with the images, already pushed)
+  1b. Warm the image cache: request every `slide-XX.jpg` once at `https://cdn.jsdelivr.net/gh/<github_repo>@$SHA/posts/<folder>/slide-XX.jpg` (e.g. with `curl`) and check each returns 200. Instagram often fails to fetch images that jsDelivr has not served yet.
   2. `python3 scripts/publish.py posts/<folder> --sha $SHA --id <ID> --idea "<text>" --series "<series>"`
      (the script updates `log.json` itself)
   3. Commit and push `log.json` and `posts/<folder>/publication.json`, even if it failed.
