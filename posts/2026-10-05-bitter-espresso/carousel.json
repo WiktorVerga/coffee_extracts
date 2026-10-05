@@ -1,0 +1,12 @@
+{
+  "series": "Inside the cup",
+  "slides": [
+    { "type": "cover", "kicker": "Inside the cup", "title": "Why your espresso tastes bitter", "subtitle": "It's not the coffee. It's what the water kept taking." },
+    { "type": "text", "title": "Water takes flavor in order", "body": "Brewing is dissolving. Acids and sweetness come out first. Bitter compounds come out later. Stop too early and it tastes sour. Run too long and it turns bitter.", "highlight": "Bitter usually means too much extraction." },
+    { "type": "text", "title": "Cause one: the grind is too fine", "body": "Finer grounds expose more surface and slow the water down. More contact time means more extraction, and past a point, more bitterness." },
+    { "type": "text", "title": "Cause two: water finds a shortcut", "body": "Water can crack through the puck, the packed coffee in the basket. This is called channeling. The cracks get over-extracted while the rest is barely touched." },
+    { "type": "number", "number": "25-30s", "unit": "", "caption": "A common starting range for a shot. It depends on your coffee: taste and adjust." },
+    { "type": "tip", "label": "The tip", "body": "Shot running slow and bitter? Grind a little coarser. Change one thing at a time, then taste." },
+    { "type": "closing", "title": "Bitter means the water stayed too long", "body": "Grind a bit coarser, keep the puck even, and taste.", "cta": "Save this for your next shot" }
+  ]
+}
