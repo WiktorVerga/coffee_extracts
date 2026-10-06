@@ -6,7 +6,8 @@ Requirements:
   - the folder contains clip.mp4 (made by prepare_reels.py on the owner's PC),
     source.json and caption.txt (written by the reels routine)
   - the folder is already committed and pushed to GitHub (PUBLIC repo):
-    Instagram downloads the video from jsDelivr, which serves files up to 20 MB
+    Instagram downloads the video from jsDelivr (files up to 20 MB), with
+    raw.githubusercontent.com as fallback. See scripts/media_host.py
 
 Usage:
     python scripts/publish_reel.py reels/003-pull-a-shot --sha <commit>
@@ -22,11 +23,10 @@ import argparse
 import json
 import sys
 import time
-import urllib.error
-import urllib.request
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import media_host  # noqa: E402
 import reels_log  # noqa: E402
 from publish import CONFIG, USER, APIError, call  # noqa: E402  (same API helpers as the carousels)
 
@@ -34,24 +34,24 @@ ROOT = Path(__file__).resolve().parent.parent
 MAX_MB = 20  # jsDelivr limit for files served from GitHub
 
 
-def file_url(repo, sha, rel_file):
-    return f"https://cdn.jsdelivr.net/gh/{repo}@{sha}/{rel_file}"
+def video_retryable(err):
+    """A video container that fails to download or ends in ERROR is only a draft:
+    creating it again is safe."""
+    return media_host.is_download_error(err) or "in state ERROR" in str(err)
 
 
-def check_url(url):
-    """Checks the video is reachable and is an MP4. If the domain can't be reached
-    from here (restricted network), says so and moves on."""
-    try:
-        req = urllib.request.Request(url, method="GET", headers={"Range": "bytes=0-1023"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            kind = r.headers.get("Content-Type", "")
-            if not kind.startswith("video/"):
-                return f"unexpected type '{kind}'"
-            return None
-    except urllib.error.HTTPError as e:
-        return f"HTTP {e.code}"
-    except Exception as e:  # noqa: BLE001
-        return f"can't verify from here ({e.__class__.__name__})"
+def create_video_container(rel_file, params, sha, log=print):
+    """Creates the REELS container (download from jsDelivr, retried, raw as fallback)
+    and waits until Instagram has processed it. Returns (container_id, url)."""
+    def create(urls):
+        container = call("POST", f"{USER}/media", dict(params, video_url=urls[0]))
+        wait_for_container(container["id"])
+        return container["id"]
+
+    container_id, _host, urls = media_host.create_with_retry(
+        create, [rel_file], "video", CONFIG["github_repo"], sha, CONFIG,
+        retryable=video_retryable, log=log)
+    return container_id, urls[0]
 
 
 def wait_for_container(container_id, max_seconds=900):
@@ -104,36 +104,34 @@ def main():
         print("ERROR: the caption doesn't contain the link to the original video (required by CC BY)")
         sys.exit(2)
 
-    url = file_url(CONFIG["github_repo"], args.sha, f"{rel}/clip.mp4")
-    problem = check_url(url)
-    print(f"Video: {url}" + (f"  [WARNING: {problem}]" if problem else "  [ok]"))
-    if problem and problem.startswith(("HTTP", "unexpected")):
-        print("ERROR: Instagram wouldn't be able to download the video. Is the repo public? Did the push succeed?")
-        sys.exit(2)
-
+    rel_file = f"{rel}/clip.mp4"
     params = {
         "media_type": "REELS",
-        "video_url": url,
         "caption": caption,
         "share_to_feed": "true",
         "thumb_offset": "1000",
     }
     if args.dry_run:
+        host = media_host.hosts_for("video", CONFIG)[0]
+        url = media_host.url_for(host, CONFIG["github_repo"], args.sha, rel_file)
+        status, detail = media_host.probe(url, "video")
+        print(f"Video: {url}  [{status}: {detail}]")
         print("\n[dry-run] Caption:\n" + caption)
-        print(f"\n[dry-run] Planned calls: 1 × POST {USER}/media (REELS, {size_mb:.1f} MB), "
-              f"wait for processing, 1 × POST {USER}/media_publish")
+        print(f"\n[dry-run] Planned calls: 1 × POST {USER}/media (REELS, {size_mb:.1f} MB, retried on download errors), "
+              f"wait for processing, 1 × POST {USER}/media_publish (never retried)")
         return
 
+    url = ""
     try:
-        container = call("POST", f"{USER}/media", params)
-        wait_for_container(container["id"])
-        published = call("POST", f"{USER}/media_publish", {"creation_id": container["id"]})
+        container_id, url = create_video_container(rel_file, params, args.sha)
+        # The only step that makes something public: never retried.
+        published = call("POST", f"{USER}/media_publish", {"creation_id": container_id})
         media_id = published["id"]
         try:
             permalink = call("GET", media_id, {"fields": "permalink"}).get("permalink", "")
         except APIError:
             permalink = ""
-    except APIError as e:
+    except Exception as e:  # noqa: BLE001
         print("API ERROR:", e)
         reels_log.add(rid, title, "error", rel, reason=str(e)[:300])
         sys.exit(3)

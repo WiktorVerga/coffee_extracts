@@ -5,7 +5,8 @@ Publishes the carousel in a post folder to Instagram.
 Requirements:
   - the slide-XX.jpg images already exist (scripts/render.py)
   - the images are already committed and pushed to GitHub (PUBLIC repo),
-    because Instagram downloads them from a public URL
+    because Instagram downloads them from a public URL. Which URL, and the
+    retries when Instagram can't download them, are in scripts/media_host.py
   - the folder contains caption.txt
 
 Usage:
@@ -35,6 +36,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import log  # noqa: E402
+import media_host  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
@@ -68,26 +70,6 @@ def call(method, path, params=None):
         raise APIError(f"{method} {path} → HTTP {e.code}: {detail}") from None
 
 
-def image_url(repo, sha, rel_file):
-    return f"https://cdn.jsdelivr.net/gh/{repo}@{sha}/{rel_file}"
-
-
-def check_url(url):
-    """Checks the image is reachable and is a JPEG.
-    If the domain can't be reached from here (restricted network), says so and moves on."""
-    try:
-        req = urllib.request.Request(url, method="GET", headers={"Range": "bytes=0-1023"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            kind = r.headers.get("Content-Type", "")
-            if "jpeg" not in kind:
-                return f"unexpected type '{kind}'"
-            return None
-    except urllib.error.HTTPError as e:
-        return f"HTTP {e.code}"
-    except Exception as e:  # noqa: BLE001
-        return f"can't verify from here ({e.__class__.__name__})"
-
-
 def wait_for_container(container_id, max_seconds=180):
     start = time.time()
     while time.time() - start < max_seconds:
@@ -116,6 +98,10 @@ def main():
     images = sorted(folder.glob("slide-*.jpg"))
     caption_file = folder / "caption.txt"
 
+    done = folder / "publication.json"
+    if done.exists() and json.loads(done.read_text(encoding="utf-8")).get("media_id"):
+        print("ERROR: this carousel was already published (publication.json). Not publishing twice.")
+        sys.exit(2)
     if not 2 <= len(images) <= 10:
         print(f"ERROR: need 2 to 10 images, found {len(images)}")
         sys.exit(2)
@@ -130,29 +116,36 @@ def main():
         print("ERROR: more than 30 hashtags")
         sys.exit(2)
 
-    urls = [image_url(CONFIG["github_repo"], args.sha, f"{rel}/{f.name}") for f in images]
-
-    print("Images:")
-    for u in urls:
-        problem = check_url(u)
-        print(f"  {u}" + (f"  [WARNING: {problem}]" if problem else "  [ok]"))
-        if problem and problem.startswith(("HTTP", "unexpected")):
-            print("ERROR: Instagram wouldn't be able to download this image. Is the repo public? Did the push succeed?")
-            sys.exit(2)
+    files = [f"{rel}/{f.name}" for f in images]
+    hosts = media_host.hosts_for("image", CONFIG)
 
     if args.dry_run:
+        print("Images (first host):")
+        for f in files:
+            u = media_host.url_for(hosts[0], CONFIG["github_repo"], args.sha, f)
+            status, detail = media_host.probe(u, "image")
+            print(f"  {u}  [{status}: {detail}]")
         print("\n[dry-run] Caption:\n" + caption)
-        print(f"\n[dry-run] Planned calls: {len(urls)} × POST {USER}/media (is_carousel_item), "
-              f"1 × POST {USER}/media (CAROUSEL), wait for status, 1 × POST {USER}/media_publish")
+        print(f"\n[dry-run] Hosts, in order: {', '.join(hosts)}. Planned calls: {len(files)} × POST {USER}/media "
+              f"(is_carousel_item, retried on download errors), 1 × POST {USER}/media (CAROUSEL), "
+              f"wait for status, 1 × POST {USER}/media_publish (never retried)")
         return
 
-    try:
+    def create_children(urls):
+        """One draft container per slide. Drafts are never published on their own,
+        so creating them again after a failed download is safe."""
         children = []
         for u in urls:
             r = call("POST", f"{USER}/media", {"image_url": u, "is_carousel_item": "true"})
             children.append(r["id"])
         for c in children:
             wait_for_container(c)
+        return children
+
+    try:
+        children, host, urls = media_host.create_with_retry(
+            create_children, files, "image", CONFIG["github_repo"], args.sha, CONFIG,
+            retryable=lambda e: media_host.is_download_error(e) or "in state ERROR" in str(e))
 
         carousel = call("POST", f"{USER}/media", {
             "media_type": "CAROUSEL",
@@ -161,18 +154,19 @@ def main():
         })
         wait_for_container(carousel["id"])
 
+        # The only step that makes something public: never retried.
         published = call("POST", f"{USER}/media_publish", {"creation_id": carousel["id"]})
         media_id = published["id"]
         try:
             permalink = call("GET", media_id, {"fields": "permalink"}).get("permalink", "")
         except APIError:
             permalink = ""
-    except APIError as e:
+    except Exception as e:  # noqa: BLE001
         print("API ERROR:", e)
         log.add(args.id, args.idea, "error", rel, args.series, reason=str(e)[:300])
         sys.exit(3)
 
-    result = {"media_id": media_id, "permalink": permalink, "images": urls, "sha": args.sha}
+    result = {"media_id": media_id, "permalink": permalink, "host": host, "images": urls, "sha": args.sha}
     (folder / "publication.json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     log.add(args.id, args.idea, "published", rel, args.series, media_id=media_id, permalink=permalink)
     print(f"PUBLISHED: {permalink or media_id}")

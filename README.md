@@ -102,6 +102,7 @@ On **claude.ai/code** → environment selector → create a new environment (e.g
    playwright.download.prss.microsoft.com
    playwright.azureedge.net
    ```
+   Instagram downloads the images from `raw.githubusercontent.com` (already in the default list) and the videos from `cdn.jsdelivr.net`; each one is the other's fallback. The logic is in `scripts/media_host.py`.
 2. **Setup script**: paste the contents of `setup-environment.sh`.
 3. Save, then reopen the environment for editing → **API credentials** → **Add credential**:
    - type **Bearer**, name `Instagram`, host `graph.instagram.com`, value = the token.

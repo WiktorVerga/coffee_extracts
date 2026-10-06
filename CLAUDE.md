@@ -57,6 +57,9 @@ Rules for using them in a routine run (nobody is there to answer questions):
    `pip install --break-system-packages playwright && python3 -m playwright install --with-deps chromium`.
 
 ### 1. Pick the idea
+0. **First, a carousel that failed to publish.** Run `python3 scripts/log.py recent 10`. If an idea's **latest** entry has status `error`, its `folder` exists in `posts/` with the slides and `caption.txt`, and that folder has no `publication.json` with a `media_id`: this run publishes that folder again. Don't pick a new idea and don't rewrite anything: skip steps 2–6 and go straight to step 7 with that folder and its ID (the files are already on GitHub, so `SHA` is the current `HEAD`). If the folder already has `reel.mp4`, don't build the reel again either.
+   If that idea already has 3 `error` entries, don't retry it: log it with `--status skipped --reason "publishing failed 3 times"`, report it in the summary and continue with point 1.
+   This also applies when the payload names an ID that has such a folder.
 1. If the `routine-fire-payload` block contains an ID (e.g. "ID: 7"), use that idea and jump to step 2.
 2. Read the Google Sheet with the Google Drive connector (`read_file_content`, ID in `config.json` → `google_sheet_id`).
    Check that the number of rows you read matches the "Table Range": if only part of the sheet came back, download it as CSV with `download_file_content` and use that.
@@ -151,11 +154,11 @@ git push origin HEAD:main
   then commit and push `log.json`. Done.
 - **`publish` mode**:
   1. `SHA=$(git rev-parse HEAD)` (the commit with the images, already pushed)
-  1b. Warm the image cache: request every `slide-XX.jpg` once at `https://cdn.jsdelivr.net/gh/<github_repo>@$SHA/posts/<folder>/slide-XX.jpg` (e.g. with `curl`) and check each returns 200. Instagram often fails to fetch images that jsDelivr has not served yet.
+     Don't "warm" any cache with `curl`: `publish.py` does it properly. It serves the images from `raw.githubusercontent.com` (jsDelivr as fallback), waits until every URL answers 200 twice in a row, and if Instagram still can't download them (error 2207052) it creates the draft containers again, after a pause and then from the other host. Only the drafts are retried, never the publication.
   2. `python3 scripts/publish.py posts/<folder> --sha $SHA --id <ID> --idea "<text>" --series "<series>"`
      (the script updates `log.json` itself)
   3. Commit and push `log.json` and `posts/<folder>/publication.json`, even if it failed.
-  4. If the script fails, **don't try to publish again** in the same run: you could create a duplicate. Report the error in the summary.
+  4. If the script fails, **don't run it again** in the same run: it has already retried on its own, and running it twice could create a duplicate. Report the error in the summary: the next run will retry the same folder (step 1, point 0).
 
 ### 7b. Publish the reel
 Follow **`REEL-ANIMATED.md`, step 7b**. `config.json` → `reel_animated.mode` is separate from the carousel's `mode`: in `preview` the reel is not published; in `publish` it is, and only if the carousel was published in this run. Never try twice.

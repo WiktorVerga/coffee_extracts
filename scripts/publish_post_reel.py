@@ -6,7 +6,8 @@ Requirements:
   - posts/<folder>/ contains reel.mp4 and reel-meta.json (scripts/reel_animated/build_reel.py)
     and reel-caption.txt (written by the routine)
   - the folder is already committed and pushed to GitHub (PUBLIC repo):
-    Instagram downloads the video from jsDelivr, which serves files up to 20 MB
+    Instagram downloads the video from jsDelivr (files up to 20 MB), with
+    raw.githubusercontent.com as fallback. See scripts/media_host.py
 
 Usage:
     python3 scripts/publish_post_reel.py posts/2026-10-05-bitter-espresso --sha <commit>
@@ -28,7 +29,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from publish import CONFIG, USER, APIError, call  # noqa: E402
-from publish_reel import MAX_MB, check_url, file_url, wait_for_container  # noqa: E402
+import media_host  # noqa: E402
+from publish_reel import MAX_MB, create_video_container  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -74,36 +76,34 @@ def main():
         print("ERROR: more than 30 hashtags")
         sys.exit(2)
 
-    url = file_url(CONFIG["github_repo"], args.sha, f"{rel}/reel.mp4")
-    problem = check_url(url)
-    print(f"Video: {url}" + (f"  [WARNING: {problem}]" if problem else "  [ok]"))
-    if problem and problem.startswith(("HTTP", "unexpected")):
-        print("ERROR: Instagram wouldn't be able to download the video. Is the repo public? Did the push succeed?")
-        sys.exit(2)
-
+    rel_file = f"{rel}/reel.mp4"
     params = {
         "media_type": "REELS",
-        "video_url": url,
         "caption": caption,
         "share_to_feed": "true",
         "thumb_offset": "1000",   # the cover title is on screen at 1 s
     }
     if args.dry_run:
+        host = media_host.hosts_for("video", CONFIG)[0]
+        url = media_host.url_for(host, CONFIG["github_repo"], args.sha, rel_file)
+        status, detail = media_host.probe(url, "video")
+        print(f"Video: {url}  [{status}: {detail}]")
         print("\n[dry-run] Caption:\n" + caption)
-        print(f"\n[dry-run] Planned calls: 1 × POST {USER}/media (REELS, {size_mb:.1f} MB, {meta['duration']}s), "
-              f"wait for processing, 1 × POST {USER}/media_publish")
+        print(f"\n[dry-run] Planned calls: 1 × POST {USER}/media (REELS, {size_mb:.1f} MB, {meta['duration']}s, "
+              f"retried on download errors), wait for processing, 1 × POST {USER}/media_publish (never retried)")
         return
 
+    url = ""
     try:
-        container = call("POST", f"{USER}/media", params)
-        wait_for_container(container["id"])
-        published = call("POST", f"{USER}/media_publish", {"creation_id": container["id"]})
+        container_id, url = create_video_container(rel_file, params, args.sha)
+        # The only step that makes something public: never retried.
+        published = call("POST", f"{USER}/media_publish", {"creation_id": container_id})
         media_id = published["id"]
         try:
             permalink = call("GET", media_id, {"fields": "permalink"}).get("permalink", "")
         except APIError:
             permalink = ""
-    except APIError as e:
+    except Exception as e:  # noqa: BLE001
         print("API ERROR:", e)
         result_file.write_text(json.dumps({"error": str(e)[:400], "video": url, "sha": args.sha},
                                           ensure_ascii=False, indent=2), encoding="utf-8")

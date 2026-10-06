@@ -54,10 +54,10 @@ Add the reel files to the commit of step 6 (`git add posts/<folder>`): `reel.jso
 - **`reel_animated.mode` = `preview`**: don't publish. Done (the files are on GitHub).
 - **`reel_animated.mode` = `publish`**, and only if **the carousel was published in this run** (never a reel without its post):
   1. `SHA=$(git rev-parse HEAD)` (the commit that contains `reel.mp4`, already pushed)
-  2. Warm the cache: `curl -s -o /dev/null -w "%{http_code}" https://cdn.jsdelivr.net/gh/<github_repo>@$SHA/posts/<folder>/reel.mp4` must return 200 (retry up to 3 times, 20 seconds apart).
+  2. No cache warm-up with `curl`: the script checks that the video is served (jsDelivr, with `raw.githubusercontent.com` as fallback) and retries by itself when Instagram can't download it.
   3. `python3 scripts/publish_post_reel.py posts/<folder> --sha $SHA`
   4. Commit and push `posts/<folder>/reel-publication.json`, even if it failed.
-  5. If the script fails, **don't try again** in the same run: you could create a duplicate. Report the error.
+  5. If the script fails, **don't run it again** in the same run: it has already retried on its own, and running it twice could create a duplicate. Report the error.
 
 ## Summary lines to add (step 8)
 
