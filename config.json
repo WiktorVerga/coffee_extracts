@@ -19,5 +19,19 @@
     "max_mb": 18,
     "whisper_model": "large-v3-turbo",
     "license_label": "CC BY 3.0"
+  },
+  "reel_animated": {
+    "mode": "preview",
+    "voice": "af_sky",
+    "target_seconds": 30,
+    "min_seconds": 27,
+    "max_speed": 1.2,
+    "max_mb": 18,
+    "fps": 30,
+    "video_bitrate": "4M",
+    "hyperframes_version": "0.8.137",
+    "music_dir": "music",
+    "music_level_db": 0,
+    "sfx_level_db": -14
   }
 }

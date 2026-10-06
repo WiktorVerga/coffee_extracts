@@ -170,6 +170,27 @@ To change colors, fonts or icons, edit `template/story.html` and `template/highl
 2. Once posted, open your profile → **New** (the + under the bio) → select that group's stories → name it (Start, Moka, Espresso, Gear, Q&A) → **Edit cover** → pick the matching image from `covers/`.
 3. Repeat for each group. To add stories to an existing highlight later: open the story → **Highlight** → pick the group.
 
+## Animated reel of every post
+
+Every carousel also gets a **30-second animated reel** with the same content and the same look: the slides animate in 9:16 with wipes between them, the voice `af_sky` (HyperFrames TTS, Kokoro) reads a short spoken version of each slide, every transition has a sound effect, and a track from `music/` plays under the voice. It is built and published by the **same routine** as the carousel (steps 5b and 7b of `CLAUDE.md`, details in `REEL-ANIMATED.md`), fully on its own. It is separate from the Tuesday/Thursday YouTube reels below, which stay as they are.
+
+| File | What it is |
+|---|---|
+| `REEL-ANIMATED.md` | The procedure for the routine (narration rules, build, caption, publish). |
+| `scripts/reel_animated/build_reel.py` | Voice, timing (fits 30 s), audio mix, layout check, HyperFrames render. |
+| `scripts/reel_animated/make_sfx.py`, `sfx/` | The built-in sound effects, synthesized (no licenses). |
+| `sfx/custom/` | **Your own sound effects.** Name each file after where it is used (`transition-whoosh-1.wav`, `scene-impact.wav`, `text-pop.wav`, `cta-chime.mp3`...): the routine reads the name. Rules in `sfx/custom/README.md`. |
+| `template/reel/reel.html` | The 9:16 template. Colors, fonts and slide design come from `template/carousel.html`, so a change there changes both. |
+| `music/` | **Your tracks.** Format and rules in `music/README.md`. |
+| `scripts/publish_post_reel.py` | Publishes the reel (same Instagram API and token as the carousel). |
+| `config.json` → `reel_animated` | `mode` (`preview` / `publish`), voice, length. |
+
+**Setup (once):** paste the updated `setup-environment.sh` into the cloud environment (it installs the voice model, ffmpeg and HyperFrames), put some tracks in `music/` and push. `reel_animated.mode` starts as `preview`: the reel files are created on GitHub (`posts/<folder>/reel.mp4`) but not published. When the previews look right, change it to `"publish"`.
+
+**Test on your PC:** write `reel.json` in a post folder (see `REEL-ANIMATED.md`) and run `python3 scripts/reel_animated/build_reel.py posts/<folder>` (needs Python with `numpy`, `playwright` and `kokoro-onnx`, Node 22, ffmpeg).
+
+**Weight:** each `reel.mp4` is about 15 MB and stays in the repository (Instagram downloads it from GitHub through jsDelivr). Delete the `reel.mp4` of old posts from time to time if the repository grows too much.
+
 ## Reels (clips from YouTube, CC BY)
 
 Short clips of other creators' YouTube videos, only with a **Creative Commons Attribution** license, always credited. Published on **Tuesday and Thursday** by a second routine.

@@ -6,3 +6,5 @@ __pycache__/
 # reels: local environment, caches, models and temp files (never committed)
 .venv/
 .reels/
+# animated reels: temporary build folder
+.reel-build/

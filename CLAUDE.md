@@ -1,7 +1,7 @@
 # Coffee Autopost — instructions for Claude
 
 This repository publishes Instagram carousels about Italian coffee, in US English, automatically.
-Every routine run follows the procedure below **exactly** and produces **at most one post**.
+Every routine run follows the procedure below **exactly** and produces **at most one post and its animated reel** (see `REEL-ANIMATED.md`).
 
 > **Reels:** the reels routine (Tuesday and Thursday) follows `REELS.md` instead of this procedure. The carousel routine described here never touches `reels/`, `reels-log.json` or the reels scripts.
 
@@ -15,6 +15,7 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | `scripts/*.py` | render, publish, log | **No** |
 | `log.json` | history of used ideas | Only through `scripts/log.py` |
 | `posts/YYYY-MM-DD-slug/` | one post: `carousel.json`, `caption.txt`, `slide-XX.jpg` | Yes, this is your output |
+| `REEL-ANIMATED.md`, `scripts/reel_animated/`, `scripts/publish_post_reel.py`, `template/reel/`, `sfx/`, `music/` | the animated reel of each post (voice, sound effects, music) | **No**, except `posts/<folder>/reel.json` and `reel-caption.txt`, which you write |
 | `highlights/`, `template/story.html`, `template/highlight-cover.html`, `scripts/render_highlights.py` | evergreen highlight stories, made and uploaded by hand by the owner | **No: the routine never touches them** |
 | `REELS.md`, `reels/`, `reels-log.json`, `scripts/prepare_reels.py`, `scripts/publish_reel.py`, `scripts/reels_log.py`, `*.bat` | reels (clips from YouTube), handled by the reels routine and the owner's PC | **No: the carousel routine never touches them** |
 
@@ -133,6 +134,9 @@ Use **`ig-hashtag-strategist`** (draft only) on the finished caption. Keep guide
    - *Hashtags:* 3–5, all on-topic, at most one broad, different from the last 3 posts.
 4. If anything is off, fix it and go back to step 4 (re-render if the slides changed). Don't go on while a point of the quality gate fails.
 
+### 5b. Animated reel
+Follow **`REEL-ANIMATED.md`, step 5b**: write `reel.json` (the narration, one line per slide), run `python3 scripts/reel_animated/build_reel.py posts/<folder>`, look at the frames, and write `reel-caption.txt`. The carousel and its caption are final by now and the reel never changes them. If the reel can't be made, **skip the reel, not the post**: say why in the summary and go on.
+
 ### 6. Save to GitHub
 Work directly on `main` (don't create `claude/...` branches).
 ```
@@ -153,17 +157,21 @@ git push origin HEAD:main
   3. Commit and push `log.json` and `posts/<folder>/publication.json`, even if it failed.
   4. If the script fails, **don't try to publish again** in the same run: you could create a duplicate. Report the error in the summary.
 
+### 7b. Publish the reel
+Follow **`REEL-ANIMATED.md`, step 7b**. `config.json` → `reel_animated.mode` is separate from the carousel's `mode`: in `preview` the reel is not published; in `publish` it is, and only if the carousel was published in this run. Never try twice.
+
 ### 8. Final summary
 End the run with a short summary:
 - idea used (ID and text), series, number of slides
 - goal and formula chosen (e.g. "saves, IG5"), hashtag set with the size of each tag, and any skill that was not available
 - outcome: preview created / published (with link) / skipped / error (with reason)
+- reel (see `REEL-ANIMATED.md`): made / not made (reason), duration, music file used or "no music", outcome (preview / published with link / error with reason)
 - if `token_refreshed_on` in `config.json` is older than 50 days or not filled in: **"WARNING: refresh the Instagram token"**
 
 ## Fixed rules
 - Never print, save or commit tokens or keys.
 - Never edit the guide, the template, the scripts or `config.json`.
-- Never publish more than one post per run.
+- Never publish more than one post and one reel per run, and never a reel without its post.
 - Never publish if a check in steps 4–5 (quality gate included) didn't pass.
 - The Instagram skills only plan and draft. Never use their publishing features (Publora, `lib.publish`, `lib.illustrate`): only `scripts/publish.py` publishes.
 - When a skill and the guide disagree, the guide wins.
