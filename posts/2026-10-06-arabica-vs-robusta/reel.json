@@ -1,0 +1,9 @@
+{ "scenes": [
+ { "say": "Arabica or robusta? Here's what changes in your cup." },
+ { "say": "Arabica is usually sweeter and softer. Robusta is earthier, with more bite." },
+ { "say": "Robusta usually feels heavier and rounder. Arabica feels lighter." },
+ { "say": "Crema is the foam on espresso. Robusta usually gives more." },
+ { "say": "Is robusta always cheap and bad? False. Quality varies by farm." },
+ { "say": "Check your espresso bag. Does it list robusta? Then taste for body and crema." },
+ { "say": "Arabica for nuance, robusta for body. Does your blend list robusta?" }
+] }

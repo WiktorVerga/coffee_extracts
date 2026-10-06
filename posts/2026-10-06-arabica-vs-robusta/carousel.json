@@ -1,0 +1,60 @@
+{
+  "series": "Side by side",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "Side by side",
+      "title": "Arabica vs robusta: what you taste",
+      "subtitle": "Taste, body and crema. One myth falls along the way."
+    },
+    {
+      "type": "compare",
+      "title": "What you taste",
+      "left": {
+        "label": "Arabica",
+        "points": [
+          "Sweeter and softer",
+          "Tangy, fruity or floral notes",
+          "More delicate"
+        ]
+      },
+      "right": {
+        "label": "Robusta",
+        "points": [
+          "Earthy, woody notes",
+          "Less sweet, more bite",
+          "Bolder and harsher"
+        ]
+      }
+    },
+    {
+      "type": "text",
+      "title": "Body: the weight in your mouth",
+      "body": "Robusta usually feels heavier and rounder. Arabica feels lighter and more delicate. That extra body is why some blends for milk drinks include a little robusta.",
+      "highlight": "Body is how heavy coffee feels on your tongue."
+    },
+    {
+      "type": "text",
+      "title": "Crema: who makes more?",
+      "body": "Crema is the light-brown foam on top of an espresso. Robusta usually gives more of it, which is one reason many espresso blends include some.",
+      "highlight": "More robusta usually means thicker crema."
+    },
+    {
+      "type": "myth",
+      "myth": "Robusta is always the cheap, bad coffee.",
+      "verdict": "false",
+      "truth": "Quality varies by farm and processing, for both species. Good robusta can add body and crema, and many espresso blends use a little on purpose."
+    },
+    {
+      "type": "tip",
+      "label": "The tip",
+      "body": "Check your espresso bag: does it say 100% arabica, or list robusta? Then taste for sweetness, body and crema."
+    },
+    {
+      "type": "closing",
+      "title": "Nuance or body?",
+      "body": "Arabica brings sweet, tangy notes. Robusta brings body and crema. Many blends use both.",
+      "cta": "Save this for later"
+    }
+  ]
+}
