@@ -1,0 +1,12 @@
+{
+  "series": "Side by side",
+  "slides": [
+    { "type": "cover", "kicker": "Side by side", "title": "What robusta changes in espresso", "subtitle": "Crema, body, flavor and one myth." },
+    { "type": "text", "title": "Crema: robusta's signature", "body": "Crema is the light-brown foam on top of an espresso. Robusta usually makes more of it than arabica. That is one reason some espresso blends include a little.", "highlight": "More robusta usually means more foam." },
+    { "type": "compare", "title": "Flavor in the cup", "left": { "label": "Arabica", "points": ["Sweeter, more complex", "Fruity or floral notes", "Brighter acidity"] }, "right": { "label": "Robusta", "points": ["Cocoa and spice notes", "Little acidity", "Bolder, more bitter"] } },
+    { "type": "text", "title": "Body: weight on your tongue", "body": "Body is how heavy a coffee feels in your mouth. A small share of good robusta can add body to a blend, which also helps an espresso stand up to milk.", "highlight": "Arabica for nuance, robusta for weight." },
+    { "type": "myth", "myth": "Robusta is always the cheap, bad coffee.", "verdict": "false", "truth": "Quality depends on the farm and the processing, for both species. Well-grown robusta can add body and crema, and some roasters use it on purpose." },
+    { "type": "tip", "label": "The tip", "body": "Read your espresso bag: does it say 100% arabica or mention robusta? Then taste for sweetness, body and crema." },
+    { "type": "closing", "title": "Nuance or body?", "body": "Arabica is sweeter and more complex. Robusta adds crema and weight. Many blends mix both.", "cta": "Save this for later" }
+  ]
+}

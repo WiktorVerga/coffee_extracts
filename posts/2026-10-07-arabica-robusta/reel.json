@@ -1,0 +1,9 @@
+{ "scenes": [
+ { "say": "What does robusta change in your espresso?" },
+ { "say": "Crema is the foam on top. Robusta usually makes more." },
+ { "say": "Arabica is sweeter and more complex. Robusta brings cocoa, spice and bitterness." },
+ { "say": "Body is how heavy coffee feels. A little good robusta adds body." },
+ { "say": "Is robusta always bad coffee? False. Quality depends on the farm." },
+ { "say": "Check your bag for robusta. Then taste for sweetness, body and crema." },
+ { "say": "Arabica for nuance, robusta for body. Save this for later." }
+] }
