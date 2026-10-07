@@ -42,16 +42,5 @@
     "reason": "",
     "media_id": "18143057923598326",
     "permalink": "https://www.instagram.com/p/DeIbEDpkSnJ/"
-  },
-  {
-    "date": "2026-10-06 16:56",
-    "id": "3",
-    "idea": "Arabica e robusta: cosa cambia",
-    "series": "Side by side",
-    "status": "error",
-    "folder": "posts/2026-10-06-arabica-vs-robusta",
-    "reason": "POST me/media → HTTP 400: {\"error\":{\"message\":\"Only photo or video can be accepted as media type.\",\"type\":\"OAuthException\",\"code\":9004,\"error_subcode\":2207052,\"is_transient\":false,\"error_user_title\":\"Media download has failed. The media URI doesn't meet our requirements.\",\"error_user_msg\":\"The media",
-    "media_id": "",
-    "permalink": ""
   }
 ]
