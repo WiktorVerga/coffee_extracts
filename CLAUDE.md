@@ -16,6 +16,7 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | `log.json` | history of used ideas | Only through `scripts/log.py` |
 | `posts/YYYY-MM-DD-slug/` | one post: `carousel.json`, `caption.txt`, `slide-XX.jpg` | Yes, this is your output |
 | `REEL-ANIMATED.md`, `scripts/reel_animated/`, `scripts/publish_post_reel.py`, `template/reel/`, `sfx/`, `music/` | the animated reel of each post (voice, sound effects, music) | **No**, except `posts/<folder>/reel.json` and `reel-caption.txt`, which you write |
+| `reel-skill/viral-reel-generator/` | copy of the `viral-reel-generator` skill (instructions and references) used to write the reel script | **No** |
 | `highlights/`, `template/story.html`, `template/highlight-cover.html`, `scripts/render_highlights.py` | evergreen highlight stories, made and uploaded by hand by the owner | **No: the routine never touches them** |
 | `REELS.md`, `reels/`, `reels-log.json`, `scripts/prepare_reels.py`, `scripts/publish_reel.py`, `scripts/reels_log.py`, `*.bat` | reels (clips from YouTube), handled by the reels routine and the owner's PC | **No: the carousel routine never touches them** |
 
@@ -29,13 +30,14 @@ Read the idea and notes as a brief, then write the post in **US English** follow
 
 ## Instagram skills (used in steps 3, 3c, 3d and 5)
 
-Three skills raise the quality of the post. Call each one with the Skill tool, at the step that names it, and not before.
+Four skills raise the quality of the post and of its reel. Call each one with the Skill tool, at the step that names it, and not before.
 
 | Skill | Step | What it does for this project |
 |---|---|---|
 | `ig-carousel-planner` | 3 | plans the carousel: formula, slide order, what goes on each slide |
 | `ig-caption-writer` | 3c | writes the caption: hook, body, call to action, voice scrub |
 | `ig-hashtag-strategist` | 3d | picks the hashtag set, sized and matched to the content |
+| `viral-reel-generator` (copy in `reel-skill/`) | 5b | writes the script and organizes the animated reel: hook, retention beats, scene order, anti-AI-slop writing |
 
 Rules for using them in a routine run (nobody is there to answer questions):
 
@@ -43,7 +45,7 @@ Rules for using them in a routine run (nobody is there to answer questions):
 2. **Draft only. Never let a skill publish.** Do not run their publishing steps: `lib.publish`, Publora, media upload, scheduling, `lib.illustrate`. Publishing happens only in step 7, through `scripts/publish.py`.
 3. **No questions, no approval card.** Skip the skills' "gather inputs" questions and "approval card" steps. Choose the goal and the formula yourself (below) and report them in the final summary.
 4. **Never invent specifics.** If a skill asks for a figure, date or example you don't have from the sheet or a reliable source, leave it out.
-5. Don't call any other skill (for example `ig-humanizer`), and ignore a skill's suggestion to fill in a voice profile.
+5. Don't call any other skill (for example `ig-humanizer`), and ignore a skill's suggestion to fill in a voice profile. The only skills allowed are the four in the table above. `viral-reel-generator` is used **only** for the animated reel (step 5b), never for the carousel, the caption or the hashtags.
 6. **If a skill is missing or fails**, continue with the guide alone and write "Skill not available: <name>" in the final summary. Don't stop the run.
 
 **Goal:** `saves` for How-to, Side by side, Inside the cup, One word; `shares` for Myth or fact and Common mistake. If there is no series, pick by content.
@@ -138,7 +140,7 @@ Use **`ig-hashtag-strategist`** (draft only) on the finished caption. Keep guide
 4. If anything is off, fix it and go back to step 4 (re-render if the slides changed). Don't go on while a point of the quality gate fails.
 
 ### 5b. Animated reel
-Follow **`REEL-ANIMATED.md`, step 5b**: write `reel.json` (the narration, one line per slide), run `python3 scripts/reel_animated/build_reel.py posts/<folder>`, look at the frames, and write `reel-caption.txt`. The carousel and its caption are final by now and the reel never changes them. If the reel can't be made, **skip the reel, not the post**: say why in the summary and go on.
+Follow **`REEL-ANIMATED.md`, step 5b**: write `reel.json` (the narration, one line per slide) using the **`viral-reel-generator`** skill (the copy in `reel-skill/viral-reel-generator/`) for the script and the organization of the reel (draft only, same rules as "Instagram skills"), run `python3 scripts/reel_animated/build_reel.py posts/<folder>`, look at the frames, and write `reel-caption.txt`. The carousel and its caption are final by now and the reel never changes them. If the reel can't be made, **skip the reel, not the post**: say why in the summary and go on.
 
 ### 6. Save to GitHub
 Work directly on `main` (don't create `claude/...` branches).

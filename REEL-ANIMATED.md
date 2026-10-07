@@ -14,6 +14,7 @@ This file is part of the carousel routine (`CLAUDE.md` points here). It is **not
 | `template/reel/reel.html`, `template/reel/vendor/gsap.min.js` | the 9:16 template (colors, fonts and slides come from `template/carousel.html`) | **No** |
 | `music/` | the owner's tracks (see `music/README.md`) | **No** |
 | `scripts/publish_post_reel.py` | publishes the reel | **No** |
+| `reel-skill/viral-reel-generator/` | the script-writing skill of point 1 of step 5b (a copy, read from here) | **No** |
 | `config.json` → `reel_animated` | `mode` (`preview`/`publish`), voice, target length | **No** |
 | `posts/<folder>/reel.json` | the narration, one line per slide | Yes, your output |
 | `posts/<folder>/reel-caption.txt` | the reel caption | Yes, your output |
@@ -24,7 +25,15 @@ This file is part of the carousel routine (`CLAUDE.md` points here). It is **not
 
 The carousel and its caption are final. The reel never changes them.
 
-1. **Write `posts/<folder>/reel.json`**: the narration, **one line per slide, in the same order** (same number of scenes as slides):
+1. **Plan and write the script with `viral-reel-generator`.** Use it here, and not before. The skill lives in the repository: **read `reel-skill/viral-reel-generator/SKILL.md` with the Read tool** and the files of `reel-skill/viral-reel-generator/references/` that it names (`writing-styles.md` and `hook-patterns.md` always, the others if useful), and follow them. Don't depend on the plugin: if the Skill tool also offers `mcpmarket-me:viral-reel-generator` you may call it instead, but the repository copy is the reference. It is used for **the script and the organization of the reel**: the hook, how the scenes are ordered for retention, the pacing of each line, the ending, and its anti-AI-slop writing rules. Draft only. Give it: the finished `carousel.json` (slides in order, with their types), the caption, the series, the goal chosen in step 3 (`saves` or `shares`), the 30-second target, the voice (`af_sky`, about 2.8 words per second) and the constraints below. Ask it for the hook and for the scene-by-scene script, one scene per slide.
+   Rules for using it (nobody is there to answer questions):
+   - **The guide and this file win.** If the skill's advice contradicts `guide/style-guide.md`, `CLAUDE.md` or the rules below, follow those. Known cases: no emoji, no brands or company names, no figure or claim that is not on the slides, no personal story or result (the page has none), US English, no engagement bait, the word limits below, **one scene per slide in the slide order** (the skill may propose a different structure or scene count: keep its hook and pacing ideas, but map them onto the slides, never add or reorder scenes), and no on-screen text, B-roll, camera or editing directions (the template draws the reel).
+   - **No questions, no approval step.** Skip its "Discovery Questions" / Interactive Mode: the idea, the notes and the carousel are the brief, so choose the angle yourself and report it in the final summary.
+   - **Use only what the reel needs from it:** the style choice (Punchy or Deep Dive; pick by content, and a reel always fits 30 seconds), the hook patterns, the anti-slop rules and the flow patterns (connector words, contrast, mechanism). **Ignore** its output format with timecodes and visual cues, its metadata generation (caption hook, keywords, thumbnail text: the caption is already written), Roast Mode, and `visual-patterns.md` (the template draws the reel). The hook must be 12 words or less here, not 15.
+   - **Never invent specifics.** If it asks for a figure, date, name or example you don't have, leave it out.
+   - **Draft only.** Never let it publish, upload, schedule or generate media: the reel is built by `build_reel.py` and published by `publish_post_reel.py` only.
+   - **If the files in `reel-skill/` can't be read**, write the narration from the rules below alone and write "Skill not available: viral-reel-generator" in the final summary. Don't stop the run.
+   From the skill's output, keep only the spoken lines, and write them into `posts/<folder>/reel.json`: the narration, **one line per slide, in the same order** (same number of scenes as slides):
    ```json
    { "scenes": [ { "say": "Why does your espresso taste bitter? It's not the coffee." }, { "say": "..." } ] }
    ```
@@ -45,7 +54,7 @@ The carousel and its caption are final. The reel never changes them.
 4. **Quality gate of the reel:**
    - `reel-meta.json`: `duration` between 27 and 30.5 seconds, `size_mb` ≤ 18.
    - The narration says nothing the slides don't say; no banned words; hook in scene 1; one ask at the end.
-5. **Write `posts/<folder>/reel-caption.txt`**: start from `caption.txt` and adapt it to someone *watching* instead of swiping: hook (first line, ≤ 125 characters) that makes sense on its own, 1 or 2 short lines, the same closing question (or a new specific one), the **same `Sources:` line**, the **same hashtags** as the post. No emoji, at most 900 characters, nothing that refers to a swipe ("swipe", "slide 3"). Don't call extra skills for this.
+5. **Write `posts/<folder>/reel-caption.txt`**: start from `caption.txt` and adapt it to someone *watching* instead of swiping: hook (first line, ≤ 125 characters) that makes sense on its own, 1 or 2 short lines, the same closing question (or a new specific one), the **same `Sources:` line**, the **same hashtags** as the post. No emoji, at most 900 characters, nothing that refers to a swipe ("swipe", "slide 3"). Don't call extra skills for this (the viral-reel-generator is used only for the script in point 1).
 
 Add the reel files to the commit of step 6 (`git add posts/<folder>`): `reel.json`, `reel.mp4`, `reel-meta.json`, `reel-caption.txt`.
 
@@ -61,5 +70,5 @@ Add the reel files to the commit of step 6 (`git add posts/<folder>`): `reel.jso
 
 ## Summary lines to add (step 8)
 
-- reel: made / not made (reason); duration, size, music file used (or "no music")
+- reel: made / not made (reason); duration, size, music file used (or "no music"); hook and structure chosen with `viral-reel-generator` (or "Skill not available")
 - reel outcome: preview / published (with link) / error (with reason)
