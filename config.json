@@ -21,7 +21,7 @@
     "license_label": "CC BY 3.0"
   },
   "reel_animated": {
-    "mode": "preview",
+    "mode": "publish",
     "voice": "af_sky",
     "target_seconds": 30,
     "min_seconds": 27,
