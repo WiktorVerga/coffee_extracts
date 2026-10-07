@@ -1,0 +1,12 @@
+{
+  "series": "Myth or fact",
+  "slides": [
+    { "type": "cover", "kicker": "Myth or fact", "title": "Is dark roast stronger coffee?", "subtitle": "It depends on what you mean by strong." },
+    { "type": "myth", "myth": "Dark roast is stronger than light roast", "verdict": "false", "truth": "Not in caffeine. Measured by weight, light and dark roasts hold about the same. What changes is the taste." },
+    { "type": "text", "title": "Strong means two things", "body": "Strong flavor means bold, smoky, intense. Strong caffeine means how much caffeine ends up in your cup. Dark roast usually wins the first one. It doesn't win the second.", "highlight": "Bold taste is not extra caffeine." },
+    { "type": "text", "title": "What roasting really changes", "body": "Heat darkens the beans and builds roasty flavors. Lighter roasts usually taste brighter and fruitier. Darker roasts usually taste bolder, with less of that tangy note." },
+    { "type": "text", "title": "Why scoops can mislead", "body": "Roasting dries the beans and makes them puff up. A scoop of dark roast usually weighs a bit less than a scoop of light roast. Weigh your coffee in grams and the gap mostly disappears." },
+    { "type": "tip", "label": "The tip", "body": "Choose by taste, not by color. Want it bolder? Try a darker roast. Dose in grams, so every cup is comparable." },
+    { "type": "closing", "title": "Dark roast is bolder, not stronger", "body": "Roast changes the flavor. The caffeine stays about the same.", "cta": "Share with a dark roast fan" }
+  ]
+}

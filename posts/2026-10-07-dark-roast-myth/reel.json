@@ -1,0 +1,9 @@
+{ "scenes": [
+ { "say": "Dark roast isn't stronger coffee. So what does it change?" },
+ { "say": "Stronger than light roast? False. By weight, the caffeine is about the same." },
+ { "say": "Strong can mean bold flavor or more caffeine. Dark wins only the first." },
+ { "say": "Roasting changes taste: lighter is brighter, darker is bolder." },
+ { "say": "Roasting puffs beans up, so a dark roast scoop weighs less. Weigh in grams." },
+ { "say": "So choose by taste, not by color. Want bolder? Go darker." },
+ { "say": "Dark roast is bolder, not stronger. Share this with a dark roast fan." }
+] }
