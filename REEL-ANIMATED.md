@@ -35,7 +35,7 @@ The carousel and its caption are final. The reel never changes them.
    - **If the files in `reel-skill/` can't be read**, write the narration from the rules below alone and write "Skill not available: viral-reel-generator" in the final summary. Don't stop the run.
    From the skill's output, keep only the spoken lines, and write them into `posts/<folder>/reel.json`: the narration, **one line per slide, in the same order** (same number of scenes as slides):
    ```json
-   { "scenes": [ { "say": "Why does your espresso taste bitter? It's not the coffee." }, { "say": "..." } ] }
+   { "scenes": [ { "say": "Why does your espresso taste bitter? It's not the coffee." }, { "title": "Sip one: flavor.", "say": "Arabica is sweet. Robusta bites back." }, { "say": "..." } ] }
    ```
    Rules:
    - **Same content as the carousel, in spoken form.** Every fact must already be on the slides (or in the caption, with its source). Never add a figure, name or claim the carousel doesn't have. The guide's fact rules (section 4) apply word for word.
@@ -52,6 +52,7 @@ The carousel and its caption are final. The reel never changes them.
    - **Write for the ear:** spell numbers and units as they are spoken ("twenty-five to thirty seconds", "two hundred degrees Fahrenheit", "nine bar"). No symbols, no hashtags, no links, no handles.
    - **Italian words:** the English voice mispronounces them. Respell them for the ear only in `reel.json` (the slides keep the correct spelling): *moka* → "moh-ka", *caffè* → "caf-feh", *ristretto* → "ris-tret-toh", *macchiato* → "mak-kee-ah-toh", *al banco* → "al bahn-koh". If unsure, avoid the word in the narration.
    - Keep the slide and the sentence together: the line of scene N is heard while slide N is on screen.
+   - **Spoken titles (optional):** when a scene opens with a real title, a short label that names the point ("Sip one: flavor.", "Mistake two: the heat.", "The tip."), put it in `"title"` (max 5 words) and the rest of the line in `"say"`: the voice pauses `title_pause` (0.5 s) after the title, then goes on. A normal sentence is **never** a title ("Robusta has more caffeine." stays in `"say"`), and scene 1 (the hook) never has one. Scenes without a title get no extra pause.
 2. **Build it:** `python3 scripts/reel_animated/build_reel.py posts/<folder>`
    - exit **0**: the reel is ready (`reel.mp4`, `reel-meta.json`). Frames to look at: `.reel-build/<folder>/frames/scene-XX.jpg`.
    - exit **2** (content problem: too long, too short, text that doesn't fit): read the message, fix `reel.json` and run again. If a slide's text doesn't fit, shorten `carousel.json` **only if** you then also re-render the images (step 4) and redo the checks of step 5. 3 attempts max.

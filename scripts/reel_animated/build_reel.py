@@ -9,6 +9,7 @@ Usage:
 Input (inside the post folder):
     carousel.json   the carousel (already written and checked)
     reel.json       the narration, one line per slide:  {"scenes": [{"say": "..."}, ...]}
+                    optional "title" in a scene: a spoken title, followed by a title_pause
 
 Output (inside the post folder):
     reel.mp4        the video (H.264 + AAC, 1080x1920, <= max_mb)
@@ -46,7 +47,7 @@ CFG = {
     "max_speed": 1.25,
     "voice_speed": 1.1,      # base speed of the voice: a reel needs energy, 1.0 sounds sleepy
     "max_gap": 0,            # longest silence kept INSIDE a line (s); 0 = keep the voice's natural pauses
-    "title_pause": 0.8,      # silence (s) between a scene's first sentence (its "title") and the rest of the scene; 0 = off
+    "title_pause": 0.5,      # silence (s) after a scene's spoken title ("title" in reel.json) before the rest; 0 = off
     "voice_pitch_semitones": 0.0,   # voice pitch shift (0 = natural voice); duration is unchanged
     "voice_reverb_wet": 0.08,       # light room reverb on the voice (0 = dry, 0.3 = very roomy)
     "voice_reverb_seconds": 0.45,   # reverb tail length (RT60): short = small room
@@ -177,24 +178,37 @@ def load_inputs(folder):
     total_words = 0
     for i, sc in enumerate(scenes, 1):
         say = str(sc.get("say", "")).strip()
-        n = words(say)
+        title = str(sc.get("title", "") or "").strip()
+        if title:
+            if i == 1:
+                errors.append("Scene 1: no 'title' (scene 1 is the hook, one single beat).")
+            if words(title) > 5:
+                errors.append(f"Scene {i}: the title \"{title}\" has {words(title)} words, max 5 (a short label like \"Sip two: body.\").")
+            if not re.search(r"[.!?:]$", title):
+                errors.append(f"Scene {i}: end the title with a period: \"{title}.\"")
+        n = words(say) + words(title)
         total_words += n
         if not say:
             errors.append(f"Scene {i}: empty 'say'.")
         if n > 20:
             errors.append(f"Scene {i}: {n} words, max 20 (one breath, it's a reel).")
-        for sent in re.split(r"(?<=[.!?])\s+", say):
+        for sent in re.split(r"(?<=[.!?])\s+", say) + ([title] if title else []):
             if words(sent) > MAX_SENTENCE_WORDS:
                 errors.append(f"Scene {i}: the sentence \"{sent}\" has {words(sent)} words, max {MAX_SENTENCE_WORDS}: split it.")
-        if EMOJI.search(say):
+        if EMOJI.search(say + title):
             errors.append(f"Scene {i}: no emoji.")
-        if "http" in say or "@" in say or "#" in say:
+        if any(c in say + title for c in ("http", "@", "#")):
             errors.append(f"Scene {i}: no links, handles or hashtags in the narration.")
     if total_words > 80:
         errors.append(f"The narration has {total_words} words: too many for {CFG['target_seconds']:.0f} seconds (aim for 45-65).")
     if errors:
         raise ContentError("\n".join(errors))
-    return carousel, [str(s["say"]).strip() for s in scenes]
+    # a scene with a spoken title becomes (title, rest): the voice pauses between the two
+    texts = []
+    for i, s in enumerate(scenes):
+        title, say = str(s.get("title", "") or "").strip(), str(s["say"]).strip()
+        texts.append((title, say) if title and i > 0 else say)
+    return carousel, texts
 
 
 # ── 2. voice ─────────────────────────────────────────────────────────
@@ -203,11 +217,13 @@ def tts_all(texts, workdir, speed):
     out = []
     for i, text in enumerate(texts):
         wav = workdir / f"voice-{i + 1:02d}.wav"
-        title, rest = split_title(text) if i > 0 else (text, "")   # scene 1 is the hook: no split
-        parts = [(wav, title)]
-        if rest and float(CFG.get("title_pause") or 0) > 0:
+        # only scenes that open with a real title (a "title" in reel.json) get the pause
+        title, rest = text if isinstance(text, tuple) else ("", text)
+        if title and float(CFG.get("title_pause") or 0) > 0:
             parts = [(workdir / f"voice-{i + 1:02d}a.wav", title), (workdir / f"voice-{i + 1:02d}b.wav", rest)]
-        for w_, t_ in parts if len(parts) > 1 else [(wav, text)]:
+        else:
+            parts = [(wav, f"{title} {rest}".strip())]
+        for w_, t_ in parts:
             cmd = hf_cmd() + ["tts", t_, "--voice", CFG["voice"], "--speed", f"{speed:.3f}",
                               "--output", str(w_), "--json"]
             p = run(cmd, env=env, timeout=300)
@@ -220,12 +236,6 @@ def tts_all(texts, workdir, speed):
         pitch_shift(wav, float(CFG.get("voice_pitch_semitones") or 0))
         out.append(wav)
     return out
-
-
-def split_title(text):
-    """The first sentence of a scene is its 'title'; returns (title, rest)."""
-    m = re.match(r"(.+?[.!?])\s+(\S.*)$", text.strip(), re.S)
-    return (m.group(1), m.group(2)) if m else (text.strip(), "")
 
 
 def join_with_pause(a_wav, b_wav, out_wav, pause):
