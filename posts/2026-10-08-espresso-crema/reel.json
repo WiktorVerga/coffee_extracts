@@ -1,0 +1,8 @@
+{ "scenes": [
+ { "say": "That golden foam? It fools you." },
+ { "say": "It's just gas. Roasting traps carbon dioxide in the beans. Oils hold the bubbles." },
+ { "say": "Fresher beans hold more gas. Older beans, thinner foam." },
+ { "say": "Honey color, fine bubbles: promising. Pale and loose? Less so." },
+ { "say": "Lots of crema isn't proof. It hints at freshness, not flavor." },
+ { "say": "Crema is a clue, not a score. Save this, then taste." }
+] }

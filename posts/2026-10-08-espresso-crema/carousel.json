@@ -1,0 +1,11 @@
+{
+  "series": "One word",
+  "slides": [
+    { "type": "cover", "kicker": "One word", "title": "Crema: the foam that fools you", "subtitle": "What it really is, and when to trust it." },
+    { "type": "text", "title": "Crema is trapped gas", "body": "Roasting leaves carbon dioxide inside the beans. Pressure pushes it into the water. When the espresso comes out, it turns into tiny bubbles held together by coffee oils.", "highlight": "Gas and oil, not cream." },
+    { "type": "text", "title": "Why fresh coffee foams more", "body": "That gas slowly escapes after roasting. The older the beans, the less gas is left, so the foam gets thinner.", "highlight": "Crema hints at freshness." },
+    { "type": "compare", "title": "Crema worth noticing", "left": { "label": "Promising", "points": ["Honey color", "Fine, tight bubbles"] }, "right": { "label": "Less reassuring", "points": ["Pale, thin layer", "Big, loose bubbles"] } },
+    { "type": "myth", "myth": "Lots of crema means a great espresso.", "verdict": "false", "truth": "Not on its own. Crema is a hint about freshness, not a verdict on flavor. The cup is the real test." },
+    { "type": "closing", "title": "Crema: a clue, not a score", "body": "It is gas held by oils. Read it as a hint, then taste.", "cta": "Save this for your next shot" }
+  ]
+}
