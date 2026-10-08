@@ -1,11 +1,11 @@
 {
   "duration": 26.63,
-  "size_mb": 13.01,
+  "size_mb": 13.0,
   "voice": "af_heart",
   "voice_speed": 1.1,
   "music": {
-    "file": "Chris Isaak - Wicked Game.mp3",
-    "start": 0,
+    "file": "Satie - Gymnopédie No1.mp3",
+    "start": 5,
     "gain_db": -6
   },
   "scenes": [
