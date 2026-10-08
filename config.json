@@ -1,6 +1,6 @@
 {
   "handle": "@coffee_extracts",
-  "mode": "preview",
+  "mode": "publish",
   "google_sheet_id": "1Osn--FyHY-qSU6iafApyH9PRawN3fmOYrlK0VaShaEE",
   "github_repo": "WiktorVerga/coffee_extracts",
   "branch": "main",
@@ -21,7 +21,7 @@
     "license_label": "CC BY 3.0"
   },
   "reel_animated": {
-    "mode": "preview",
+    "mode": "publish",
     "voice": "af_heart",
     "target_seconds": 30,
     "min_seconds": 15,
