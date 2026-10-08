@@ -46,6 +46,7 @@ CFG = {
     "max_speed": 1.25,
     "voice_speed": 1.1,      # base speed of the voice: a reel needs energy, 1.0 sounds sleepy
     "max_gap": 0,            # longest silence kept INSIDE a line (s); 0 = keep the voice's natural pauses
+    "title_pause": 0.8,      # silence (s) between a scene's first sentence (its "title") and the rest of the scene; 0 = off
     "voice_pitch_semitones": 0.0,   # voice pitch shift (0 = natural voice); duration is unchanged
     "voice_reverb_wet": 0.08,       # light room reverb on the voice (0 = dry, 0.3 = very roomy)
     "voice_reverb_seconds": 0.45,   # reverb tail length (RT60): short = small room
@@ -202,16 +203,60 @@ def tts_all(texts, workdir, speed):
     out = []
     for i, text in enumerate(texts):
         wav = workdir / f"voice-{i + 1:02d}.wav"
-        cmd = hf_cmd() + ["tts", text, "--voice", CFG["voice"], "--speed", f"{speed:.3f}",
-                          "--output", str(wav), "--json"]
-        p = run(cmd, env=env, timeout=300)
-        if p.returncode != 0 or not wav.exists():
-            raise TechError(f"TTS failed on scene {i + 1}:\n{(p.stdout or '')[-600:]}")
-        if float(CFG.get("max_gap") or 0) > 0:
-            tighten(wav)
+        title, rest = split_title(text) if i > 0 else (text, "")   # scene 1 is the hook: no split
+        parts = [(wav, title)]
+        if rest and float(CFG.get("title_pause") or 0) > 0:
+            parts = [(workdir / f"voice-{i + 1:02d}a.wav", title), (workdir / f"voice-{i + 1:02d}b.wav", rest)]
+        for w_, t_ in parts if len(parts) > 1 else [(wav, text)]:
+            cmd = hf_cmd() + ["tts", t_, "--voice", CFG["voice"], "--speed", f"{speed:.3f}",
+                              "--output", str(w_), "--json"]
+            p = run(cmd, env=env, timeout=300)
+            if p.returncode != 0 or not w_.exists():
+                raise TechError(f"TTS failed on scene {i + 1}:\n{(p.stdout or '')[-600:]}")
+            if float(CFG.get("max_gap") or 0) > 0:
+                tighten(w_)
+        if len(parts) > 1:
+            join_with_pause(parts[0][0], parts[1][0], wav, float(CFG["title_pause"]))
         pitch_shift(wav, float(CFG.get("voice_pitch_semitones") or 0))
         out.append(wav)
     return out
+
+
+def split_title(text):
+    """The first sentence of a scene is its 'title'; returns (title, rest)."""
+    m = re.match(r"(.+?[.!?])\s+(\S.*)$", text.strip(), re.S)
+    return (m.group(1), m.group(2)) if m else (text.strip(), "")
+
+
+def join_with_pause(a_wav, b_wav, out_wav, pause):
+    """Joins the title line and the rest of the scene with exactly `pause` seconds of
+    silence between the last word of the title and the first word of the rest."""
+    def load(path):
+        with wave.open(str(path)) as w:
+            params = w.getparams()
+            x = np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").reshape(-1, params.nchannels)
+        return params, x.astype(np.float32) / 32768
+
+    def trim(x, sr):
+        win = max(1, int(sr * 0.01))
+        n = len(x) // win
+        if n < 3:
+            return x
+        e = np.sqrt(np.mean(x[: n * win].reshape(n, win, -1) ** 2, axis=(1, 2)))
+        idx = np.flatnonzero(e > max(10 ** (-42 / 20), e.max() * 10 ** (-38 / 20)))
+        if idx.size == 0:
+            return x
+        return x[max(0, idx[0] - 2) * win: min(n, idx[-1] + 3) * win]
+
+    params, a = load(a_wav)
+    _, b = load(b_wav)
+    sr = params.framerate
+    gap = np.zeros((int(sr * pause), a.shape[1]), dtype=np.float32)
+    lead = np.zeros((int(sr * 0.02), a.shape[1]), dtype=np.float32)
+    y = np.concatenate([lead, trim(a, sr), gap, trim(b, sr), lead])
+    with wave.open(str(out_wav), "wb") as w:
+        w.setparams(params)
+        w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
 
 
 _PITCH_FILTER = None
