@@ -1,6 +1,6 @@
 # Music for the animated reels
 
-Put your curated tracks **in this folder** (`music/`). The reel routine picks one for every reel: always the **least recently used** one, so the tracks rotate and the same one never plays twice in a row (as long as you have 2 or more).
+Put your curated tracks **in this folder** (`music/`). The reel routine picks one for every reel **at random**, but in turns: it draws only among the tracks that have been used the fewest times, so **every track in the folder plays before any of them repeats**. When a new round starts the draw is open again, so a track can occasionally play twice in a row (never three times). A track you add later starts with zero uses, so it comes up in the next reels.
 
 ## Format
 
@@ -8,7 +8,7 @@ Put your curated tracks **in this folder** (`music/`). The reel routine picks on
 |---|---|---|
 | **File type** | `.mp3`, `.m4a`, `.aac`, `.wav`, `.flac`, `.ogg` or `.opus` | **`.mp3`, 256-320 kbps** (small and universal) |
 | **Channels / sample rate** | anything (it is converted automatically) | stereo, 44.1 or 48 kHz |
-| **Length** | at least 5 seconds (shorter tracks loop with a crossfade) | **40 seconds or more**: the reel is 30 s, and a longer track lets you pick the best part |
+| **Length** | at least 5 seconds (shorter tracks loop with a crossfade) | **40 seconds or more**: the reel lasts up to 30 s, and a longer track lets you pick the best part |
 | **Size** | up to about **10 MB per file** (the files live in the GitHub repository) | 3-6 MB |
 | **Content** | **instrumental** (no vocals, they fight with the narration) | steady rhythm, no long silent intro, no sudden drops: lo-fi, soft jazz, acoustic, light electronic |
 | **Names** | any, no special characters needed | `cafe-bossa.mp3`, `morning-groove.mp3` |

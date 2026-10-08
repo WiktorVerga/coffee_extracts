@@ -173,7 +173,7 @@ To change colors, fonts or icons, edit `template/story.html` and `template/highl
 
 ## Animated reel of every post
 
-Every carousel also gets a **30-second animated reel** with the same content and the same look: the slides animate in 9:16 with wipes between them, the voice `af_sky` (HyperFrames TTS, Kokoro) reads a short spoken version of each slide, every transition has a sound effect, and a track from `music/` plays under the voice. It is built and published by the **same routine** as the carousel (steps 5b and 7b of `CLAUDE.md`, details in `REEL-ANIMATED.md`), fully on its own. It is separate from the Tuesday/Thursday YouTube reels below, which stay as they are.
+Every carousel also gets a **30-second animated reel** with the same content and the same look: the slides animate in 9:16 with wipes between them, the voice `af_heart` (HyperFrames TTS, Kokoro) reads a short spoken version of each slide, every transition has a sound effect, and a track from `music/` plays under the voice. It is built and published by the **same routine** as the carousel (steps 5b and 7b of `CLAUDE.md`, details in `REEL-ANIMATED.md`), fully on its own. It is separate from the Tuesday/Thursday YouTube reels below, which stay as they are.
 
 | File | What it is |
 |---|---|

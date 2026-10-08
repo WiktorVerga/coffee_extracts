@@ -143,15 +143,27 @@ html, body { width: 1080px; height: 1920px; margin: 0; overflow: hidden; backgro
       const bar = el.querySelector(".level > i");
       if (bar) tl.fromTo(bar, { height: (i / total * 100) + "%" }, { height: ((i + 1) / total * 100) + "%", duration: 0.5, ease: "power2.out" }, sc.start);
 
-      el.querySelectorAll(".cup").forEach(c =>
-        tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power1.out" }, sc.start));
+      // Frame 0 is the hook: on the first scene the cup and the title are already
+      // on screen at t = 0 (an empty first frame is an instant swipe-away)
+      el.querySelectorAll(".cup").forEach(c => {
+        if (i === 0) tl.fromTo(c, { opacity: 1, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+        else tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, sc.start);
+      });
 
-      [...el.querySelectorAll(REVEAL[type] || ".title")].forEach((it, j) => {
+      const items = [...el.querySelectorAll(REVEAL[type] || ".title")];
+      const hook = i === 0 ? (el.querySelector(".title") || items[0]) : null;
+      let j = 0;
+      items.forEach((it) => {
+        if (it === hook) {   // fully visible from the very first frame (the cup gives the motion)
+          tl.set(it, { opacity: 1 }, 0);
+          return;
+        }
         const t0 = sc.start + sc.first + j * sc.step;
+        j += 1;
         if (it.matches(POP)) {
-          tl.fromTo(it, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)", transformOrigin: "0% 60%" }, t0);
+          tl.fromTo(it, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.9)", transformOrigin: "0% 60%" }, t0);
         } else {
-          tl.fromTo(it, { opacity: 0, y: 70 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, t0);
+          tl.fromTo(it, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" }, t0);
         }
       });
 

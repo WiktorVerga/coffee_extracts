@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Builds the animated reel of a post: same content and same look as the carousel,
-narrated, with sound effects and music, 9:16, about 30 seconds.
+narrated, with sound effects and music, 9:16, 15 to 30 seconds, no dead air.
 
 Usage:
     python3 scripts/reel_animated/build_reel.py posts/2026-10-05-bitter-espresso
@@ -25,6 +25,7 @@ Exit codes:
 import argparse
 import json
 import os
+import random
 import re
 import shutil
 import subprocess
@@ -39,10 +40,16 @@ ROOT = HERE.parent.parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
 CFG = {
     "mode": "preview",
-    "voice": "af_sky",
+    "voice": "af_heart",
     "target_seconds": 30.0,
     "min_seconds": 27.0,
-    "max_speed": 1.2,
+    "max_speed": 1.25,
+    "voice_speed": 1.1,      # base speed of the voice: a reel needs energy, 1.0 sounds sleepy
+    "max_gap": 0,            # longest silence kept INSIDE a line (s); 0 = keep the voice's natural pauses
+    "voice_pitch_semitones": 0.0,   # voice pitch shift (0 = natural voice); duration is unchanged
+    "voice_reverb_wet": 0.08,       # light room reverb on the voice (0 = dry, 0.3 = very roomy)
+    "voice_reverb_seconds": 0.45,   # reverb tail length (RT60): short = small room
+    "voice_echo_wet": 0.12,         # very light echo: the early reflections of a small room (0 = off)
     "max_mb": 18,
     "fps": 30,
     "video_bitrate": "4M",
@@ -56,6 +63,7 @@ SR = 48000
 LEAD = 0.12          # silence before each narration line (s)
 PAD = 0.32           # silence after each narration line (s)
 LAST_PAD = 1.1       # the last scene lingers on the call to action
+MAX_SENTENCE_WORDS = 9   # short, punchy sentences: one beat each
 EMOJI = re.compile("[\U0001F300-\U0001FAFF☀-➿]")
 AUDIO_EXT = {".mp3", ".m4a", ".aac", ".wav", ".flac", ".ogg", ".opus"}
 
@@ -172,14 +180,17 @@ def load_inputs(folder):
         total_words += n
         if not say:
             errors.append(f"Scene {i}: empty 'say'.")
-        if n > 26:
-            errors.append(f"Scene {i}: {n} words, max 26 (one breath, it's a reel).")
+        if n > 20:
+            errors.append(f"Scene {i}: {n} words, max 20 (one breath, it's a reel).")
+        for sent in re.split(r"(?<=[.!?])\s+", say):
+            if words(sent) > MAX_SENTENCE_WORDS:
+                errors.append(f"Scene {i}: the sentence \"{sent}\" has {words(sent)} words, max {MAX_SENTENCE_WORDS}: split it.")
         if EMOJI.search(say):
             errors.append(f"Scene {i}: no emoji.")
         if "http" in say or "@" in say or "#" in say:
             errors.append(f"Scene {i}: no links, handles or hashtags in the narration.")
-    if total_words > 95:
-        errors.append(f"The narration has {total_words} words: too many for {CFG['target_seconds']:.0f} seconds (aim for 60-80).")
+    if total_words > 80:
+        errors.append(f"The narration has {total_words} words: too many for {CFG['target_seconds']:.0f} seconds (aim for 45-65).")
     if errors:
         raise ContentError("\n".join(errors))
     return carousel, [str(s["say"]).strip() for s in scenes]
@@ -196,8 +207,126 @@ def tts_all(texts, workdir, speed):
         p = run(cmd, env=env, timeout=300)
         if p.returncode != 0 or not wav.exists():
             raise TechError(f"TTS failed on scene {i + 1}:\n{(p.stdout or '')[-600:]}")
+        if float(CFG.get("max_gap") or 0) > 0:
+            tighten(wav)
+        pitch_shift(wav, float(CFG.get("voice_pitch_semitones") or 0))
         out.append(wav)
     return out
+
+
+_PITCH_FILTER = None
+
+
+def pitch_shift(wav, semitones):
+    """Raises (or lowers) the pitch of one voice line without changing its length.
+    Uses ffmpeg's rubberband filter (clean, high quality); if this ffmpeg was built
+    without it, falls back to resampling + tempo correction (same result, a bit rawer)."""
+    global _PITCH_FILTER
+    if abs(semitones) < 0.01:
+        return
+    ratio = 2 ** (semitones / 12)
+    with wave.open(str(wav)) as w:
+        sr = w.getframerate()
+    tmp = Path(str(wav) + ".pitch.wav")
+    rubber = f"rubberband=pitch={ratio:.5f}"
+    resample = f"asetrate={sr * ratio:.0f},aresample={sr},atempo={1 / ratio:.5f}"
+    for flt in ([_PITCH_FILTER] if _PITCH_FILTER else [rubber, resample]):
+        p = subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(wav), "-af", flt, "-ar", str(sr), str(tmp)],
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if p.returncode == 0 and tmp.exists():
+            _PITCH_FILTER = flt
+            tmp.replace(wav)
+            return
+    raise TechError(f"pitch shift failed on {wav.name}: {p.stderr[-400:]}")
+
+
+def add_echo(bus, wet):
+    """Very light echo: the first reflections of the walls of a small room (a few
+    quiet copies of the voice 15-90 ms later, slightly different left and right),
+    so it sounds recorded in a room rather than inside the computer."""
+    if wet <= 0 or not np.any(bus):
+        return bus
+    taps = [  # (delay s left, delay s right, relative gain)
+        (0.017, 0.021, 1.00),
+        (0.029, 0.026, 0.75),
+        (0.043, 0.047, 0.55),
+        (0.061, 0.057, 0.40),
+        (0.089, 0.083, 0.25),
+    ]
+    out = bus.copy()
+    for dl, dr, g in taps:
+        for c, d in ((0, dl), (1, dr)):
+            k = int(SR * d)
+            out[k:, c] += bus[:-k, c] * (wet * g)
+    return out.astype(np.float32)
+
+
+def add_reverb(bus, wet, seconds):
+    """Light room reverb: the dry voice plus a soft, decaying, slightly delayed
+    stereo tail (synthetic impulse response, always the same). Length unchanged."""
+    if wet <= 0 or seconds <= 0 or not np.any(bus):
+        return bus
+    rng = np.random.default_rng(7)                 # fixed: the same room on every reel
+    n = int(SR * seconds)
+    t = np.arange(n) / SR
+    decay = np.exp(-6.91 * t / seconds)            # -60 dB at `seconds`
+    ir = rng.standard_normal((n, 2)) * decay[:, None]
+    k = int(SR * 0.0015)                           # soften the highs: a warm room, not a tin can
+    ir = np.stack([np.convolve(ir[:, c], np.ones(k) / k, mode="same") for c in range(2)], axis=1)
+    pre = int(SR * 0.018)                          # pre-delay keeps the words clear
+    ir = np.concatenate([np.zeros((pre, 2)), ir])
+    ir /= np.sqrt(np.sum(ir ** 2, axis=0, keepdims=True)) + 1e-12
+    size = 1 << int(np.ceil(np.log2(len(bus) + len(ir))))
+    tail = np.stack([np.fft.irfft(np.fft.rfft(bus[:, c], size) * np.fft.rfft(ir[:, c], size), size)[: len(bus)]
+                     for c in range(2)], axis=1)
+    tail *= np.sqrt(np.mean(bus ** 2)) / (np.sqrt(np.mean(tail ** 2)) + 1e-12)   # same loudness as the dry voice
+    return (bus * (1 - wet * 0.5) + tail * wet).astype(np.float32)
+
+
+def tighten(wav, edge=0.02):
+    """Cuts the dead air out of one TTS line: trims the silence at both ends and
+    shortens every pause inside the line to at most max_gap seconds. This is what
+    keeps the narration punchy (Kokoro leaves ~0.3-0.5 s after every period)."""
+    with wave.open(str(wav)) as w:
+        params = w.getparams()
+        raw = w.readframes(w.getnframes())
+    if params.sampwidth != 2:
+        return
+    x = np.frombuffer(raw, dtype="<i2").reshape(-1, params.nchannels).astype(np.float32) / 32768
+    sr = params.framerate
+    win = max(1, int(sr * 0.01))
+    nwin = len(x) // win
+    if nwin < 3:
+        return
+    energy = np.sqrt(np.mean(x[: nwin * win].reshape(nwin, win, -1) ** 2, axis=(1, 2)))
+    loud = energy > max(10 ** (-42 / 20), energy.max() * 10 ** (-38 / 20))
+    idx = np.flatnonzero(loud)
+    if idx.size == 0:
+        return
+    keep_gap = int(round(float(CFG["max_gap"]) / 0.01))
+    pieces, run_start, prev = [], idx[0], idx[0]
+    for k in idx[1:]:
+        if k - prev - 1 > keep_gap:          # a long pause: close the voiced run
+            pieces.append((run_start, prev + 1))
+            run_start = k
+        prev = k
+    pieces.append((run_start, prev + 1))
+    e = int(edge / 0.01)
+    out = []
+    for j, (a, b) in enumerate(pieces):
+        a2 = max(0, a - e) if j == 0 else a
+        b2 = min(nwin, b + (e if j == len(pieces) - 1 else keep_gap // 2))
+        if j > 0:
+            out.append(np.zeros((win * (keep_gap - keep_gap // 2), x.shape[1]), dtype=np.float32))
+        out.append(x[a2 * win: b2 * win])
+    y = np.concatenate(out)
+    f = min(len(y) // 4, int(sr * 0.008))    # tiny fades: no clicks at the cuts
+    if f > 1:
+        y[:f] *= np.linspace(0, 1, f)[:, None]
+        y[-f:] *= np.linspace(1, 0, f)[:, None]
+    with wave.open(str(wav), "wb") as w:
+        w.setparams(params)
+        w.writeframes((np.clip(y, -1, 1) * 32767).astype("<i2").tobytes())
 
 
 def duration_of(wav):
@@ -210,16 +339,16 @@ def plan_timing(texts, workdir, n_items):
     """Voice at normal speed first; if it doesn't fit in the target, speed it up
     (never beyond max_speed). Returns voice files, speed, scene timings."""
     target = float(CFG["target_seconds"])
-    speed = 1.0
+    speed = float(CFG["voice_speed"])
     voices = tts_all(texts, workdir, speed)
     durs = [duration_of(v) for v in voices]
     n = len(texts)
     pads = [LEAD + PAD] * (n - 1) + [LEAD + LAST_PAD]
     natural = sum(durs) + sum(pads)
-    log(f"Narration at normal speed: {sum(durs):.1f}s of speech, {natural:.1f}s with pauses (target {target:.0f}s)")
+    log(f"Narration at {speed:.2f}x: {sum(durs):.1f}s of speech, {natural:.1f}s with pauses (max {target:.0f}s)")
 
     if natural > target:
-        speed = sum(durs) / (target - sum(pads))
+        speed = speed * sum(durs) / (target - sum(pads))
         if speed > CFG["max_speed"]:
             raise ContentError(
                 f"The narration is too long: it would need {speed:.2f}x speed to fit {target:.0f}s "
@@ -237,26 +366,21 @@ def plan_timing(texts, workdir, n_items):
         if natural > target + 0.05:
             raise ContentError(f"Still {natural:.1f}s after speeding up. Shorten reel.json.")
 
-    extra = max(0.0, target - natural)
-    if natural + min(extra, 0.8 * (n - 1) + 2.0) < CFG["min_seconds"]:
+    # target_seconds is a MAXIMUM, not a length to fill: spare time is never turned
+    # into silence (dead air is what makes people swipe away)
+    extra = 0.0
+    if natural < CFG["min_seconds"]:
         raise ContentError(
             f"The narration is too short: {natural:.1f}s, the reel must be at least {CFG['min_seconds']:.0f}s. "
             f"Add about {int((CFG['min_seconds'] - natural) * 2.6) + 2} words to reel.json (keep it natural, no padding).")
-    # spread the spare time on the middle scenes (max 0.8s each), the rest on the last one
     add = [0.0] * n
-    if n > 1:
-        per = min(0.8, extra / (n - 1))
-        for i in range(n - 1):
-            add[i] = per
-        extra -= per * (n - 1)
-    add[-1] = min(extra, 2.0)
 
     scenes, t = [], 0.0
     for i in range(n):
         dur = durs[i] + pads[i] + add[i]
-        first = 0.05 if i == 0 else 0.10
-        avail = min(dur * 0.6, 2.2)
-        step = max(0.2, min(0.5, avail / max(n_items[i] - 1, 1)))
+        first = 0.0 if i == 0 else 0.06
+        avail = min(dur * 0.5, 1.6)
+        step = max(0.15, min(0.32, avail / max(n_items[i] - 1, 1)))
         scenes.append({"start": round(t, 3), "dur": round(dur, 3), "first": first, "step": round(step, 3),
                        "voice_start": round(t + LEAD, 3), "voice_dur": round(durs[i], 3)})
         t += dur
@@ -265,7 +389,10 @@ def plan_timing(texts, workdir, n_items):
 
 # ── 4. music ─────────────────────────────────────────────────────────
 def pick_music():
-    """The least recently used track of music/ (None if the folder has no tracks)."""
+    """A random track of music/ that still has to take its turn (None if the folder has
+    no tracks). Shuffle-bag rotation: the pick is random, but only among the tracks
+    used the fewest times so far, so every track plays before any repeats. A track can
+    come back right after itself only when a new round starts (never 3 times in a row)."""
     mdir = ROOT / CFG["music_dir"]
     tracks = sorted(p for p in mdir.glob("*") if p.suffix.lower() in AUDIO_EXT) if mdir.exists() else []
     if not tracks:
@@ -284,11 +411,11 @@ def pick_music():
         except Exception:  # noqa: BLE001
             pass
 
-    def key(p):
-        uses = history.count(p.name)
-        last = max([i for i, h in enumerate(history) if h == p.name], default=-1)
-        return (uses, last, p.name)
-    best = sorted(tracks, key=key)[0]
+    uses = {p.name: history.count(p.name) for p in tracks}
+    fewest = min(uses.values())
+    candidates = [p for p in tracks if uses[p.name] == fewest]
+    best = random.SystemRandom().choice(candidates)   # not seeded: a real random pick
+    log(f"Music pick: random among {[p.name for p in candidates]} (uses so far: {uses})")
     return best, meta.get(best.name, {})
 
 
@@ -385,6 +512,8 @@ def build_audio(voices, scenes, items, total, speed, music, music_meta, out_wav)
     # voice
     for v, sc in zip(voices, scenes):
         place(voice_bus, decode(v), sc["voice_start"])
+    voice_bus = add_echo(voice_bus, float(CFG.get("voice_echo_wet") or 0))
+    voice_bus = add_reverb(voice_bus, float(CFG.get("voice_reverb_wet") or 0), float(CFG.get("voice_reverb_seconds") or 0))
     peak = np.max(np.abs(voice_bus)) + 1e-9
     voice_bus *= min(0.85 / peak, 4.0)
     voice_bus *= 10 ** ((-17 - rms_db(voice_bus[np.abs(voice_bus[:, 0]) > 0.01])) / 20) \
@@ -628,7 +757,7 @@ def main():
         dur = float(pr["format"]["duration"])
         size_mb = int(pr["format"]["size"]) / 1024 / 1024
         v = next(s for s in pr["streams"] if s.get("width"))
-        if not (CFG["min_seconds"] - 1 <= dur <= CFG["target_seconds"] + 0.6):
+        if not (CFG["min_seconds"] - 1 <= dur <= CFG["target_seconds"] + 1.0):
             raise TechError(f"unexpected duration: {dur:.1f}s")
         if size_mb > CFG["max_mb"] + 0.01:
             raise TechError(f"reel.mp4 is {size_mb:.1f} MB (max {CFG['max_mb']})")
