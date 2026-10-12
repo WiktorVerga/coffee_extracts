@@ -1,0 +1,11 @@
+{
+  "series": "How-to",
+  "slides": [
+    { "type": "cover", "kicker": "How-to", "title": "Your ground coffee goes stale fast", "subtitle": "Four habits keep it tasting fresh for longer." },
+    { "type": "text", "title": "Air is the main enemy", "body": "Ground coffee has far more surface than whole beans, so oxygen reaches it faster. Heat and moisture speed up staling too.", "highlight": "Less air, less heat, less moisture." },
+    { "type": "steps", "title": "Storing it, in order", "steps": ["Pour it into an airtight container.", "Pick a size that leaves little empty space.", "Keep it in a cool, dark cupboard.", "Keep it away from the stove and sink."] },
+    { "type": "compare", "title": "Good spot, bad spot", "left": { "label": "Good", "points": ["Closed pantry shelf", "Cool, dark cupboard"] }, "right": { "label": "Bad", "points": ["Next to the stove", "Sunny countertop", "Open bag"] } },
+    { "type": "tip", "label": "The tip", "body": "Close the lid right after you scoop. An open container lets in air and kitchen steam." },
+    { "type": "closing", "title": "Closed, cool, dark and dry", "body": "Less air, heat and moisture keeps ground coffee fresher.", "cta": "Save this for your kitchen" }
+  ]
+}

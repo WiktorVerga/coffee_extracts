@@ -1,0 +1,8 @@
+{ "scenes": [
+  { "say": "Your ground coffee goes stale fast." },
+  { "say": "Ground coffee has more surface than beans. Air reaches it faster. Heat and moisture speed it up too." },
+  { "say": "Use an airtight container. Keep it cool and dark. Away from the stove." },
+  { "say": "A closed pantry shelf works well. A sunny counter does not." },
+  { "title": "The tip.", "say": "Close the lid right after scooping. Open means air and steam." },
+  { "say": "Closed, cool, dark and dry. Save this for your kitchen." }
+] }
