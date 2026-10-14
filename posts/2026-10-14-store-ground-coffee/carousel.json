@@ -1,0 +1,12 @@
+{
+  "series": "How-to",
+  "slides": [
+    { "type": "cover", "kicker": "How-to", "title": "Keep ground coffee fresh longer", "subtitle": "Three simple rules, and the one that matters most." },
+    { "type": "text", "title": "Air is the main enemy", "body": "Oxygen speeds up staling more than anything else. Ground coffee exposes far more surface to the air than whole beans, so it fades faster.", "highlight": "Seal it tight." },
+    { "type": "text", "title": "Light dulls the flavor", "body": "Clear canisters let light in, and that can dull the taste. Pick an opaque container, or keep a clear one inside a closed cupboard.", "highlight": "Dark beats pretty." },
+    { "type": "text", "title": "Heat and moisture speed it up", "body": "Warmth and moisture both make coffee go stale sooner. Skip the cabinet by the oven or dishwasher, and the sunny windowsill.", "highlight": "Cool and dry wins." },
+    { "type": "number", "number": "1-2", "unit": "weeks", "caption": "About how long ground coffee stays at its best at room temperature, in a sealed container." },
+    { "type": "tip", "label": "The tip", "body": "Buy only what you will use in a week or two. A small bag bought often beats a big one that sits." },
+    { "type": "closing", "title": "Sealed, dark, cool, and soon", "body": "Close it tight, keep it dark and cool, and use it within a couple of weeks.", "cta": "Save this for your next bag" }
+  ]
+}

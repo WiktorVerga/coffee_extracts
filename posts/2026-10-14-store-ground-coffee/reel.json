@@ -1,0 +1,9 @@
+{ "scenes": [
+ { "say": "Your ground coffee is going stale." },
+ { "say": "Air is the main culprit. Seal it tight." },
+ { "say": "Light dulls flavor. Choose an opaque jar." },
+ { "say": "Heat and moisture hurt too. Skip the spot by the oven." },
+ { "say": "Sealed, it stays best for one to two weeks." },
+ { "say": "Buy small bags, more often. That beats a big bag that sits." },
+ { "say": "Sealed, dark, cool, and soon. Save this for your next bag." }
+] }
