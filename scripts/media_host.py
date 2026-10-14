@@ -6,36 +6,39 @@ downloads reliable. Used by publish.py, publish_reel.py and publish_post_reel.py
 Why this exists
 ---------------
 Instagram does not receive our files: it downloads them from a public URL.
-With jsDelivr, the first request for a file of a brand-new commit can get a
-transient 403 that jsDelivr then caches for about 60 seconds. If Instagram
-asks in that window (or through a different CDN node), it fails with error
-2207052 "Media download has failed". A curl "warm-up" from the routine's
-sandbox only warms the nodes the sandbox reaches, not the ones Meta uses.
+- jsDelivr, on a brand-new commit, can answer 403 or 503 until it has fetched
+  the whole file from GitHub, and it can serve the first bytes of a file
+  (a range request) while the full file still fails. Instagram downloads the
+  full file, so a check on the first kilobyte proves nothing.
+- raw.githubusercontent.com answers at once, but serves .mp4 files as
+  application/octet-stream.
 
 What it does
 ------------
-1. Two hosts for the same file of the same commit:
+1. Hosts for the same file of the same commit:
      raw       https://raw.githubusercontent.com/<repo>/<sha>/<path>
-               no CDN cache to warm, answers right away; serves .jpg as
-               image/jpeg, but .mp4 as application/octet-stream
      jsdelivr  https://cdn.jsdelivr.net/gh/<repo>@<sha>/<path>
-               serves .mp4 as video/mp4, but needs time on a new commit
-   Images try raw first, videos try jsDelivr first. Override with
-   config.json → "media_hosts": {"image": [...], "video": [...]}.
-2. Before Instagram is called, every URL must answer 200 with the right
-   content type twice in a row, a few seconds apart (a cached 403 doesn't
-   pass this check).
-3. If Instagram still fails to download (2207052 and similar), the media
-   container is created again after a pause, then with the other host.
-   Retrying a container is safe: containers are drafts, nothing is posted
-   until media_publish, which is never retried.
+     pages     https://<owner>.github.io/<repo>/<path>   (only if GitHub Pages
+               is turned on for the repo; serves .mp4 as video/mp4)
+   Images try raw, then jsDelivr. Videos try jsDelivr, then raw.
+   Override with config.json → "media_hosts": {"image": [...], "video": [...]}.
+2. Before Instagram is called, every file is downloaded IN FULL from that
+   host, twice in a row, and must come back with status 200, an acceptable
+   content type and exactly the size of the local file. This also forces
+   jsDelivr to fetch and cache the whole file.
+3. If Instagram still fails (download error 2207052, or a video container
+   ending in ERROR), the draft container is created again after a pause,
+   then from the next host. Retrying a container is safe: containers are
+   drafts, nothing is posted until media_publish, which is never retried.
 """
 import time
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 DEFAULT_HOSTS = {"image": ["raw", "jsdelivr"], "video": ["jsdelivr", "raw"]}
-EXPECTED_TYPE = {"image": "image/jpeg", "video": "video/"}
+PAUSES = {"image": (0, 60), "video": (0, 120)}          # per host: 1st try, 2nd try
+READY_TIMEOUT = {"image": 240, "video": 420}             # seconds to wait for a host
 
 # Instagram error subcodes that mean "I couldn't download the media".
 # 2207052: media download failed / URI doesn't meet requirements
@@ -43,11 +46,23 @@ EXPECTED_TYPE = {"image": "image/jpeg", "video": "video/"}
 DOWNLOAD_ERRORS = ("2207052", "2207003", "Media download has failed", "media download")
 
 
+class PublishFailed(Exception):
+    """Raised when every attempt failed. `attempts` lists what was tried."""
+
+    def __init__(self, message, attempts, last_url=""):
+        super().__init__(message)
+        self.attempts = attempts
+        self.last_url = last_url
+
+
 def url_for(host, repo, sha, rel_file):
     if host == "raw":
         return f"https://raw.githubusercontent.com/{repo}/{sha}/{rel_file}"
     if host == "jsdelivr":
         return f"https://cdn.jsdelivr.net/gh/{repo}@{sha}/{rel_file}"
+    if host == "pages":
+        owner, name = repo.split("/", 1)
+        return f"https://{owner.lower()}.github.io/{name}/{rel_file}"
     raise ValueError(f"unknown media host '{host}'")
 
 
@@ -56,37 +71,55 @@ def hosts_for(kind, config):
     return list(custom) if custom else list(DEFAULT_HOSTS[kind])
 
 
-def probe(url, kind):
-    """Returns (status, detail): status is 'ok', 'bad' (Instagram would fail too)
-    or 'unknown' (can't be checked from this network)."""
+def type_ok(kind, url, ctype):
+    if kind == "image":
+        return ctype.startswith("image/jpeg")
+    if ctype.startswith("video/"):
+        return True
+    # raw.githubusercontent.com only knows .mp4 as a generic binary
+    return "raw.githubusercontent.com" in url and ctype.startswith("application/octet-stream")
+
+
+def probe(url, kind, expected_size=None, timeout=180):
+    """Downloads the whole file once. Returns (status, detail): status is 'ok',
+    'bad' (Instagram would fail too) or 'unknown' (can't be checked from here)."""
     try:
         req = urllib.request.Request(url, method="GET", headers={
-            "Range": "bytes=0-1023",
             "Cache-Control": "no-cache",
-            "User-Agent": "coffee-autopost-check/1.0",
+            "User-Agent": "coffee-autopost-check/1.1",
         })
-        with urllib.request.urlopen(req, timeout=30) as r:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
             ctype = r.headers.get("Content-Type", "")
-            if r.status not in (200, 206):
+            if r.status != 200:
                 return "bad", f"HTTP {r.status}"
-            if not ctype.startswith(EXPECTED_TYPE[kind]):
+            size = 0
+            while True:
+                chunk = r.read(1024 * 1024)
+                if not chunk:
+                    break
+                size += len(chunk)
+            if not type_ok(kind, url, ctype):
                 return "bad", f"content type '{ctype}'"
-            return "ok", ctype
+            if expected_size is not None and size != expected_size:
+                return "bad", f"{size} bytes instead of {expected_size}"
+            return "ok", f"{ctype}, {size} bytes"
     except urllib.error.HTTPError as e:
         return "bad", f"HTTP {e.code}"
     except Exception as e:  # noqa: BLE001
         return "unknown", f"can't verify from here ({e.__class__.__name__})"
 
 
-def wait_until_ready(urls, kind, rounds=2, pause=10, max_seconds=240, log=print):
-    """Waits until every URL answers 'ok' for `rounds` checks in a row.
-    Returns 'ok', 'unknown' (network can't reach the host: go ahead and let
-    Instagram try) or 'bad' (still failing after max_seconds)."""
+def wait_until_ready(urls, kind, sizes=None, rounds=2, pause=15, max_seconds=None, log=print):
+    """Waits until every URL is downloaded in full, correctly, `rounds` times in
+    a row. Returns 'ok', 'unknown' (this network can't reach the host: go ahead
+    and let Instagram try) or 'bad' (still failing after max_seconds)."""
+    max_seconds = max_seconds or READY_TIMEOUT[kind]
+    sizes = sizes or [None] * len(urls)
     start = time.time()
     streak = 0
     while True:
-        results = [probe(u, kind) for u in urls]
-        states = {s for s, _ in results}
+        results = [probe(u, kind, s) for u, s in zip(urls, sizes)]
+        states = {st for st, _ in results}
         if states == {"unknown"}:
             log(f"  can't check {urls[0].split('/')[2]} from here: going ahead")
             return "unknown"
@@ -96,7 +129,7 @@ def wait_until_ready(urls, kind, rounds=2, pause=10, max_seconds=240, log=print)
                 return "ok"
         else:
             streak = 0
-            bad = [(u.rsplit('/', 1)[-1], d) for u, (s, d) in zip(urls, results) if s == "bad"]
+            bad = [(u.rsplit('/', 1)[-1], d) for u, (st, d) in zip(urls, results) if st == "bad"]
             log(f"  not ready yet: {', '.join(f'{n} {d}' for n, d in bad)}")
         if time.time() - start > max_seconds:
             return "bad"
@@ -108,41 +141,40 @@ def is_download_error(err):
     return any(code in text for code in DOWNLOAD_ERRORS)
 
 
-def create_with_retry(create, files, kind, repo, sha, config, log=print,
-                      pauses=(0, 60, 0, 90), retryable=None):
-    """Runs create(urls) until Instagram accepts the media, where `urls` are the
-    public URLs of `files` (paths relative to the repo) on one host.
+def create_with_retry(create, files, kind, repo, sha, config, root=None, log=print, retryable=None):
+    """Runs create(urls) until Instagram accepts the media. `urls` are the public
+    URLs of `files` (paths relative to the repo root `root`) on one host.
 
-    Attempt plan with two hosts A and B: A, A after 60 s, B, B after 90 s.
-    Only download errors are retried (or what `retryable(err)` accepts); any
-    other error is raised at once.
-    Returns (result, host, urls)."""
-    hosts = hosts_for(kind, config)
-    plan = []
-    for h in hosts:
-        plan += [h, h]
-    last_err = None
-    checked = {}
-    for attempt, (host, pause) in enumerate(zip(plan, pauses * len(hosts)), 1):
+    For each host in order: check it serves the files (see wait_until_ready),
+    try, wait (60 s for images, 120 s for videos), try again, then go to the
+    next host. Only download errors are retried (or what `retryable(err)`
+    accepts); any other error is raised at once.
+    Returns (result, host, urls, attempts). Raises PublishFailed if all fail."""
+    sizes = [Path(root, f).stat().st_size for f in files] if root else None
+    attempts = []
+    last_url = ""
+    for host in hosts_for(kind, config):
         urls = [url_for(host, repo, sha, f) for f in files]
-        if host not in checked:
-            log(f"Checking {host} ({len(urls)} file{'s' if len(urls) > 1 else ''})…")
-            checked[host] = wait_until_ready(urls, kind, log=log)
-            if checked[host] == "bad":
-                log(f"  {host} is not serving the files: skipping it")
-                last_err = last_err or RuntimeError(f"{host} not serving the files")
-                continue
-        elif checked[host] == "bad":
+        last_url = urls[0]
+        log(f"Checking {host} ({len(urls)} file{'s' if len(urls) > 1 else ''}, full download)…")
+        ready = wait_until_ready(urls, kind, sizes, log=log)
+        if ready == "bad":
+            log(f"  {host} is not serving the files correctly: next host")
+            attempts.append({"host": host, "result": "not served correctly"})
             continue
-        if pause:
-            log(f"  waiting {pause} s before trying again…")
-            time.sleep(pause)
-        try:
-            log(f"Attempt {attempt}: Instagram downloads from {host}")
-            return create(urls), host, urls
-        except Exception as e:  # noqa: BLE001
-            if not (retryable or is_download_error)(e):
-                raise
-            last_err = e
-            log(f"  Instagram couldn't download the media from {host} (attempt {attempt})")
-    raise last_err
+        for pause in PAUSES[kind]:
+            if pause:
+                log(f"  waiting {pause} s before trying again…")
+                time.sleep(pause)
+            log(f"Attempt {len(attempts) + 1}: Instagram downloads from {host}")
+            try:
+                result = create(urls)
+                attempts.append({"host": host, "result": "ok"})
+                return result, host, urls, attempts
+            except Exception as e:  # noqa: BLE001
+                if not (retryable or is_download_error)(e):
+                    raise
+                attempts.append({"host": host, "result": str(e)[:160]})
+                log(f"  Instagram couldn't use the media from {host}: {str(e)[:120]}")
+    summary = "; ".join(f"{a['host']}: {a['result']}" for a in attempts)
+    raise PublishFailed(f"all hosts failed ({summary})", attempts, last_url)

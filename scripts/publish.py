@@ -143,8 +143,8 @@ def main():
         return children
 
     try:
-        children, host, urls = media_host.create_with_retry(
-            create_children, files, "image", CONFIG["github_repo"], args.sha, CONFIG,
+        children, host, urls, _attempts = media_host.create_with_retry(
+            create_children, files, "image", CONFIG["github_repo"], args.sha, CONFIG, root=ROOT,
             retryable=lambda e: media_host.is_download_error(e) or "in state ERROR" in str(e))
 
         carousel = call("POST", f"{USER}/media", {

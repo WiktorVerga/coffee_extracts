@@ -41,17 +41,19 @@ def video_retryable(err):
 
 
 def create_video_container(rel_file, params, sha, log=print):
-    """Creates the REELS container (download from jsDelivr, retried, raw as fallback)
-    and waits until Instagram has processed it. Returns (container_id, url)."""
+    """Creates the REELS container and waits until Instagram has processed it.
+    The video is checked and downloaded in full from each host first (jsDelivr,
+    then raw.githubusercontent.com), and the container is created again when it
+    fails. Returns (container_id, url, attempts); raises media_host.PublishFailed."""
     def create(urls):
         container = call("POST", f"{USER}/media", dict(params, video_url=urls[0]))
         wait_for_container(container["id"])
         return container["id"]
 
-    container_id, _host, urls = media_host.create_with_retry(
-        create, [rel_file], "video", CONFIG["github_repo"], sha, CONFIG,
+    container_id, _host, urls, attempts = media_host.create_with_retry(
+        create, [rel_file], "video", CONFIG["github_repo"], sha, CONFIG, root=ROOT,
         retryable=video_retryable, log=log)
-    return container_id, urls[0]
+    return container_id, urls[0], attempts
 
 
 def wait_for_container(container_id, max_seconds=900):
@@ -123,7 +125,7 @@ def main():
 
     url = ""
     try:
-        container_id, url = create_video_container(rel_file, params, args.sha)
+        container_id, url, _attempts = create_video_container(rel_file, params, args.sha)
         # The only step that makes something public: never retried.
         published = call("POST", f"{USER}/media_publish", {"creation_id": container_id})
         media_id = published["id"]
