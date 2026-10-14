@@ -71,10 +71,14 @@ Add the reel files to the commit of step 6 (`git add posts/<folder>`): `reel.jso
 - **`reel_animated.mode` = `preview`**: don't publish. Done (the files are on GitHub).
 - **`reel_animated.mode` = `publish`**, and only if **the carousel was published in this run** (never a reel without its post):
   1. `SHA=$(git rev-parse HEAD)` (the commit that contains `reel.mp4`, already pushed)
-  2. No cache warm-up with `curl`: the script checks that the video is served (jsDelivr, with `raw.githubusercontent.com` as fallback) and retries by itself when Instagram can't download it.
+  2. No cache warm-up with `curl`: before calling Instagram the script downloads the whole video twice from jsDelivr (this also makes jsDelivr cache it), and if jsDelivr answers 503 or Instagram's container ends in ERROR it tries again and then uses `raw.githubusercontent.com`. This can take several minutes: let it finish.
   3. `python3 scripts/publish_post_reel.py posts/<folder> --sha $SHA`
   4. Commit and push `posts/<folder>/reel-publication.json`, even if it failed.
   5. If the script fails, **don't run it again** in the same run: it has already retried on its own, and running it twice could create a duplicate. Report the error.
+
+### Retry of a reel that failed in an earlier run
+
+At step 7b, also when this run's carousel wasn't published (for example, there was no new idea), and only if `reel_animated.mode` = `publish`: look for a folder in `posts/` whose **carousel is published** (`publication.json` has a `media_id`), that has `reel.mp4` and `reel-caption.txt`, and whose `reel-publication.json` has an `error`, no `media_id` and `failures` below 3. Take the most recent one and run step 7b for it (`SHA` = current `HEAD`, the files are already on GitHub). At most **one** reel retry per run, and never a reel whose post isn't published. If `failures` is 3 or more, don't retry: write it in the summary.
 
 ## Summary lines to add (step 8)
 

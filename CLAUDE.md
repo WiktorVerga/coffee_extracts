@@ -163,7 +163,7 @@ git push origin HEAD:main
   4. If the script fails, **don't run it again** in the same run: it has already retried on its own, and running it twice could create a duplicate. Report the error in the summary: the next run will retry the same folder (step 1, point 0).
 
 ### 7b. Publish the reel
-Follow **`REEL-ANIMATED.md`, step 7b**. `config.json` → `reel_animated.mode` is separate from the carousel's `mode`: in `preview` the reel is not published; in `publish` it is, and only if the carousel was published in this run. Never try twice.
+Follow **`REEL-ANIMATED.md`, step 7b**. `config.json` → `reel_animated.mode` is separate from the carousel's `mode`: in `preview` the reel is not published; in `publish` it is, if the carousel was published in this run, or as the retry of a reel that failed in an earlier run whose post is already published (see "Retry of a reel" in `REEL-ANIMATED.md`). Never run the publish script twice in the same run.
 
 ### 8. Final summary
 End the run with a short summary:
@@ -176,7 +176,7 @@ End the run with a short summary:
 ## Fixed rules
 - Never print, save or commit tokens or keys.
 - Never edit the guide, the template, the scripts or `config.json`.
-- Never publish more than one post and one reel per run, and never a reel without its post.
+- Never publish more than one post and one reel per run, and never a reel whose post isn't published.
 - Never publish if a check in steps 4–5 (quality gate included) didn't pass.
 - The Instagram skills only plan and draft. Never use their publishing features (Publora, `lib.publish`, `lib.illustrate`): only `scripts/publish.py` publishes.
 - When a skill and the guide disagree, the guide wins.

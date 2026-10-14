@@ -51,11 +51,13 @@ def main():
         if not f.exists():
             print(f"ERROR: {f.name} is missing")
             sys.exit(2)
+    failures = 0
     if result_file.exists():
         prev = json.loads(result_file.read_text(encoding="utf-8"))
         if prev.get("media_id"):
             print(f"ERROR: this reel was already published ({prev.get('permalink') or prev['media_id']}). Not publishing twice.")
             sys.exit(2)
+        failures = int(prev.get("failures", 1 if prev.get("error") else 0))
 
     meta = json.loads(meta_file.read_text(encoding="utf-8"))
     if not 20 <= float(meta.get("duration", 0)) <= 91:
@@ -95,7 +97,7 @@ def main():
 
     url = ""
     try:
-        container_id, url = create_video_container(rel_file, params, args.sha)
+        container_id, url, attempts = create_video_container(rel_file, params, args.sha)
         # The only step that makes something public: never retried.
         published = call("POST", f"{USER}/media_publish", {"creation_id": container_id})
         media_id = published["id"]
@@ -105,11 +107,14 @@ def main():
             permalink = ""
     except Exception as e:  # noqa: BLE001
         print("API ERROR:", e)
-        result_file.write_text(json.dumps({"error": str(e)[:400], "video": url, "sha": args.sha},
-                                          ensure_ascii=False, indent=2), encoding="utf-8")
+        record = {"error": str(e)[:600], "failures": failures + 1, "sha": args.sha,
+                  "video": getattr(e, "last_url", "") or url,
+                  "attempts": getattr(e, "attempts", [])}
+        result_file.write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
         sys.exit(3)
 
-    result_file.write_text(json.dumps({"media_id": media_id, "permalink": permalink, "video": url, "sha": args.sha},
+    result_file.write_text(json.dumps({"media_id": media_id, "permalink": permalink, "video": url, "sha": args.sha,
+                                       "attempts": attempts},
                                       ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"PUBLISHED: {permalink or media_id}")
 
