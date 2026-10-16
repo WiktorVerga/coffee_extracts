@@ -1,0 +1,11 @@
+{
+  "series": "Common mistake",
+  "slides": [
+    { "type": "cover", "kicker": "Common mistake", "title": "Your moka is brewing too long", "subtitle": "One sound tells you when to stop. Most people miss it." },
+    { "type": "myth", "myth": "Leave the moka on the heat until it finishes.", "verdict": "false", "truth": "Once it gurgles and hisses, steam is pushing the last liquid through. That final bit tends to taste bitter." },
+    { "type": "text", "title": "What the gurgle means", "body": "A moka is the Italian stovetop coffee pot. By the time it gurgles, most of the water has already risen. What is left is thin and sputtering, and the hot pot keeps brewing it.", "highlight": "The gurgle means: stop now." },
+    { "type": "steps", "title": "Stop in four moves", "steps": ["Brew over low to medium heat, lid open.", "Watch the stream turn pale.", "At the first gurgle or hiss, lift it off the heat.", "Cool the base under cold tap water."] },
+    { "type": "tip", "label": "The tip", "body": "Move it off the heat a little early. Cold water on the base stops the brewing right away." },
+    { "type": "closing", "title": "Stop at the first gurgle", "body": "Lift it off at the first hiss, then cool the base.", "cta": "Send this to a moka friend" }
+  ]
+}
