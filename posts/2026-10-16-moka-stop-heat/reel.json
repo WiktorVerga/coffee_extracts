@@ -1,8 +1,8 @@
 { "scenes": [
  { "say": "Your moh-ka brews too long." },
  { "say": "Waiting for it to finish is the mistake. The last bit tends to taste bitter." },
- { "say": "Hear the gurgle? Most of the water has risen." },
+ { "say": "Hear the gurgle? Most water has risen." },
  { "say": "Lift it at the first hiss. Cool the base under cold water." },
- { "say": "Even better, lift it a little early." },
+ { "say": "Even better, lift it a little early. Watch for a pale stream." },
  { "say": "Stop at the first gurgle. Send this to a moh-ka friend." }
 ] }

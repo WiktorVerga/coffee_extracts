@@ -1,11 +1,11 @@
 {
-  "duration": 19.7,
-  "size_mb": 9.6,
+  "duration": 20.83,
+  "size_mb": 10.11,
   "voice": "af_heart",
   "voice_speed": 1.1,
   "music": {
-    "file": "Satie - Gymnopédie No1.mp3",
-    "start": 5,
+    "file": "Chris Isaak - Wicked Game.mp3",
+    "start": 0,
     "gain_db": -6
   },
   "scenes": [
@@ -27,34 +27,34 @@
     },
     {
       "start": 6.448,
-      "dur": 2.829,
+      "dur": 2.616,
       "first": 0.06,
       "step": 0.32,
       "voice_start": 6.568,
-      "voice_dur": 2.389
+      "voice_dur": 2.176
     },
     {
-      "start": 9.277,
+      "start": 9.064,
       "dur": 3.768,
       "first": 0.06,
       "step": 0.32,
-      "voice_start": 9.397,
+      "voice_start": 9.184,
       "voice_dur": 3.328
     },
     {
-      "start": 13.045,
-      "dur": 2.381,
+      "start": 12.832,
+      "dur": 3.725,
       "first": 0.06,
       "step": 0.32,
-      "voice_start": 13.165,
-      "voice_dur": 1.941
+      "voice_start": 12.952,
+      "voice_dur": 3.285
     },
     {
-      "start": 15.427,
+      "start": 16.557,
       "dur": 4.271,
       "first": 0.06,
       "step": 0.32,
-      "voice_start": 15.547,
+      "voice_start": 16.677,
       "voice_dur": 3.051
     }
   ],
