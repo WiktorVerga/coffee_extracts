@@ -1,0 +1,9 @@
+{ "scenes": [
+  { "say": "Your moh-ka pot is done sooner." },
+  { "say": "The last drop is the mistake. That stream is bitter." },
+  { "title": "The sputter.", "say": "It means the good coffee is gone." },
+  { "title": "Heat lingers.", "say": "A hot pot keeps brewing. Cool the base." },
+  { "title": "How to stop.", "say": "Low heat. Watch the stream. Pull at the first sputter." },
+  { "title": "The tip.", "say": "Hear sputtering? You're a few seconds late." },
+  { "say": "Stop at the first sputter. Send this to a moh-ka friend." }
+] }

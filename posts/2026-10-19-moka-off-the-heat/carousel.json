@@ -1,0 +1,12 @@
+{
+  "series": "Common mistake",
+  "slides": [
+    { "type": "cover", "kicker": "Common mistake", "title": "Your moka is done sooner than you think", "subtitle": "One sound tells you when to stop. Most people wait past it." },
+    { "type": "myth", "myth": "Leave the moka pot on the heat until it stops.", "verdict": "false", "truth": "The last stream is paler and more bitter. Most guides say to pull the pot off the heat at the first sputter." },
+    { "type": "text", "title": "What the sputter means", "body": "Gurgling and sputtering mark the end of the good coffee. The stream turns pale, almost honey-colored, and what follows tastes more bitter.", "highlight": "Pale stream, time to stop." },
+    { "type": "text", "title": "Heat lingers after the flame", "body": "A hot pot keeps pushing water through the coffee even off the stove. Run the base under cold tap water to stop it.", "highlight": "Cool the base." },
+    { "type": "steps", "title": "How to stop in time", "steps": ["Use low to medium heat, lid open.", "Watch the stream, not the clock.", "Pull the pot at the first sputter.", "Cool the base under cold water."] },
+    { "type": "tip", "label": "The tip", "body": "If you hear sputtering, you are already a few seconds late. Pull the pot when the stream turns honey-colored, then taste and adjust." },
+    { "type": "closing", "title": "Stop at the first sputter", "body": "Pale stream, sputter, off the heat. Then cool the base.", "cta": "Send this to a moka friend" }
+  ]
+}
