@@ -1,0 +1,11 @@
+{
+  "series": "Side by side",
+  "slides": [
+    { "type": "cover", "kicker": "Side by side", "title": "Whole beans or ground coffee?", "subtitle": "One choice decides how fast your coffee fades." },
+    { "type": "text", "title": "Grinding changes everything", "body": "Grinding breaks each bean into many tiny pieces. Far more surface meets the air, and oxygen is what stales coffee fastest.", "highlight": "More surface, faster fade." },
+    { "type": "compare", "title": "Beans vs ground", "left": { "label": "Whole beans", "points": ["Stay fresh longer", "Grind right before brewing", "Needs a grinder"] }, "right": { "label": "Pre-ground", "points": ["Fades faster once opened", "Ready to scoop", "Grind size is already set"] } },
+    { "type": "text", "title": "Your brewer picks the grind", "body": "A moka pot and an espresso machine want different grinds. With whole beans, you choose. With a bag of ground coffee, someone else already did.", "highlight": "Choose your own grind." },
+    { "type": "tip", "label": "The tip", "body": "Stuck with ground coffee? Buy small bags, close them tight after each use, and finish them soon." },
+    { "type": "closing", "title": "Beans keep longer, ground saves time", "body": "Whole beans protect the flavor. Ground coffee is convenient but fades sooner.", "cta": "Save this for your next bag" }
+  ]
+}
