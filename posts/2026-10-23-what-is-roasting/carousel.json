@@ -1,0 +1,11 @@
+{
+  "series": "One word",
+  "slides": [
+    { "type": "cover", "kicker": "One word", "title": "Tostatura: what roast does to coffee", "subtitle": "The word on the bag shapes your cup." },
+    { "type": "text", "title": "Tostatura means roasting", "body": "Coffee beans start out green and hard. Roasting heats them until they turn brown and develop the aromas you know as coffee.", "highlight": "Same bean, different roast, different cup." },
+    { "type": "compare", "title": "Light vs dark roast", "left": { "label": "Light", "points": ["More acidity", "Fruity notes", "Lighter body"] }, "right": { "label": "Dark", "points": ["Roasty, bittersweet", "More bitterness", "Less fruitiness"] } },
+    { "type": "text", "title": "Medium sits in between", "body": "Medium roasts usually balance acidity with a fuller body. If you're unsure which to pick, start here and adjust.", "highlight": "Not too bright, not too bold." },
+    { "type": "tip", "label": "The tip", "body": "Roast names aren't standardized. One roaster's medium can be another's dark, so taste first and trust your cup over the label." },
+    { "type": "closing", "title": "Roast sets the flavor of your cup", "body": "Light is brighter, dark is bolder, medium sits between.", "cta": "Save this for your next bag" }
+  ]
+}

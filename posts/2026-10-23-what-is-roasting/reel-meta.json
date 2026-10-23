@@ -1,0 +1,62 @@
+{
+  "duration": 27.0,
+  "size_mb": 13.38,
+  "voice": "af_heart",
+  "voice_speed": 1.1,
+  "music": {
+    "file": "Satie - Gymnopédie No1.mp3",
+    "start": 5,
+    "gain_db": -6
+  },
+  "scenes": [
+    {
+      "start": 0.0,
+      "dur": 2.488,
+      "first": 0.0,
+      "step": 0.32,
+      "voice_start": 0.12,
+      "voice_dur": 2.048
+    },
+    {
+      "start": 2.488,
+      "dur": 6.371,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 2.608,
+      "voice_dur": 5.931
+    },
+    {
+      "start": 8.859,
+      "dur": 4.6,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 8.979,
+      "voice_dur": 4.16
+    },
+    {
+      "start": 13.459,
+      "dur": 3.747,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 13.579,
+      "voice_dur": 3.307
+    },
+    {
+      "start": 17.205,
+      "dur": 5.688,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 17.325,
+      "voice_dur": 5.248
+    },
+    {
+      "start": 22.893,
+      "dur": 4.1,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 23.013,
+      "voice_dur": 2.88
+    }
+  ],
+  "hyperframes": "0.8.137"
+}
