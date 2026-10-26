@@ -1,0 +1,70 @@
+{
+  "duration": 25.7,
+  "size_mb": 12.86,
+  "voice": "af_heart",
+  "voice_speed": 1.1,
+  "music": {
+    "file": "Chris Isaak - Wicked Game.mp3",
+    "start": 0,
+    "gain_db": -6
+  },
+  "scenes": [
+    {
+      "start": 0.0,
+      "dur": 2.723,
+      "first": 0.0,
+      "step": 0.32,
+      "voice_start": 0.12,
+      "voice_dur": 2.283
+    },
+    {
+      "start": 2.723,
+      "dur": 5.048,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 2.843,
+      "voice_dur": 4.608
+    },
+    {
+      "start": 7.771,
+      "dur": 3.277,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 7.891,
+      "voice_dur": 2.837
+    },
+    {
+      "start": 11.048,
+      "dur": 3.768,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 11.168,
+      "voice_dur": 3.328
+    },
+    {
+      "start": 14.816,
+      "dur": 3.448,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 14.936,
+      "voice_dur": 3.008
+    },
+    {
+      "start": 18.264,
+      "dur": 2.936,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 18.384,
+      "voice_dur": 2.496
+    },
+    {
+      "start": 21.2,
+      "dur": 4.484,
+      "first": 0.06,
+      "step": 0.32,
+      "voice_start": 21.32,
+      "voice_dur": 3.264
+    }
+  ],
+  "hyperframes": "0.8.137"
+}

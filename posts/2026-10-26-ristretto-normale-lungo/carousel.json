@@ -1,0 +1,12 @@
+{
+  "series": "Side by side",
+  "slides": [
+    { "type": "cover", "kicker": "Side by side", "title": "Ristretto, normale, lungo: what changes?", "subtitle": "Only the water changes, and so does the taste." },
+    { "type": "text", "title": "The word is the recipe", "body": "Ristretto is Italian for restricted. Lungo means long. Normale is the standard shot between them. The word tells you how much water goes through the coffee.", "highlight": "Length is the water. Size is the coffee." },
+    { "type": "compare", "title": "Ristretto vs lungo", "left": { "label": "Ristretto", "points": ["Same coffee, less water", "Short and concentrated", "Usually sweeter"] }, "right": { "label": "Lungo", "points": ["Same coffee, more water", "Longer pull", "Usually more bitter"] } },
+    { "type": "myth", "myth": "A ristretto is just an espresso stopped early.", "verdict": "false", "truth": "Cutting a normal shot short tastes sour. A true ristretto uses the same coffee with about half the water, planned from the start." },
+    { "type": "text", "title": "Why the cup changes", "body": "Water keeps pulling more out of the coffee the longer it runs. The early part tastes sweeter. The later part adds the bitter, roasty notes.", "highlight": "More water, more bitterness." },
+    { "type": "tip", "label": "The tip", "body": "Keep your coffee dose the same and change only the water. Taste each cup side by side, then pick the length you like." },
+    { "type": "closing", "title": "Same coffee, less or more water", "body": "Ristretto is short and sweeter. Lungo is long and more bitter. Normale sits between.", "cta": "Save this cheat sheet" }
+  ]
+}
