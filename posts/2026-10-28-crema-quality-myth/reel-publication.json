@@ -1,0 +1,16 @@
+{
+  "media_id": "18116688716330498",
+  "permalink": "https://www.instagram.com/reel/DfDHW1lAYIz/",
+  "video": "https://cdn.jsdelivr.net/gh/WiktorVerga/coffee_extracts@8f77c4f4255e0ec11b63e91bfd15121415203599/posts/2026-10-28-crema-quality-myth/reel.mp4",
+  "sha": "8f77c4f4255e0ec11b63e91bfd15121415203599",
+  "attempts": [
+    {
+      "host": "jsdelivr",
+      "result": "Container 17978911146146389 in state ERROR: ERROR"
+    },
+    {
+      "host": "jsdelivr",
+      "result": "ok"
+    }
+  ]
+}
