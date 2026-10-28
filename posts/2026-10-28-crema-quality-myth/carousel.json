@@ -1,0 +1,11 @@
+{
+  "series": "Myth or fact",
+  "slides": [
+    { "type": "cover", "kicker": "Myth or fact", "title": "Thick crema does not mean good coffee", "subtitle": "Some machines make it with almost any coffee." },
+    { "type": "myth", "myth": "Thick crema means great coffee.", "verdict": "false", "truth": "Crema hints at freshness and extraction, but it says little about flavor. A shot can look rich and still taste bitter." },
+    { "type": "text", "title": "Some machines make foam anyway", "body": "Machines that push coffee through a tiny outlet whip air into it. The foam looks like crema, but the flavor does not always match.", "highlight": "Looks like crema. Tastes like anything." },
+    { "type": "compare", "title": "Reading the foam", "left": { "label": "Promising", "points": ["Honey color", "Fine, tight bubbles"] }, "right": { "label": "Less reassuring", "points": ["Big, coarse bubbles", "Uneven texture"] } },
+    { "type": "tip", "label": "The tip", "body": "Taste before you judge. If the foam is thick but the cup is bitter or flat, the crema told you very little." },
+    { "type": "closing", "title": "Judge the cup, not the foam", "body": "Foam can come from the coffee or the machine. Taste decides.", "cta": "Share with a crema fan" }
+  ]
+}
