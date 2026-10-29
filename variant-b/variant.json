@@ -1,0 +1,38 @@
+{
+  "name": "B - Film",
+  "about": "Variant B of the A/B test. Paths are relative to this folder. The 'reel' block overrides config.json -> reel_animated only for B posts.",
+  "carousel_template": "carousel.html",
+  "fonts": "fonts",
+  "reel_template": "reel/reel.html",
+  "reel_vendor": "reel/vendor",
+  "reel_rules": "REEL-B.md",
+  "reel": {
+    "target_seconds": 60,
+    "min_seconds": 35,
+    "voice_speed": 1.0,
+    "max_speed": 1.08,
+    "video_bitrate": "2M",
+    "max_title_words": 6,
+    "hook_max_words": 14,
+    "max_sentence_words": 24,
+    "max_scene_words": 50,
+    "min_total_words": 100,
+    "max_total_words": 175,
+    "total_words_hint": "120-160",
+    "scene_pad": 0.45,
+    "last_pad": 1.4,
+    "reveal_window": 0.7,
+    "reveal_cap": 30,
+    "reveal_max_step": 3.0,
+    "reveals": {
+      "cover": ".title, .subtitle",
+      "text": ".title, .body, .highlight",
+      "number": ".title, .number, .body",
+      "steps": ".title, li",
+      "compare": ".title, .col",
+      "myth": ".myth, .verdict, .body",
+      "tip": ".body",
+      "closing": ".title, .body, .cta"
+    }
+  }
+}

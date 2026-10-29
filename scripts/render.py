@@ -3,7 +3,11 @@
 Builds the JPEG images of a carousel from its carousel.json.
 
 Usage:
-    python scripts/render.py posts/2026-10-05-fill-a-moka
+    python scripts/render.py posts/2026-10-05-fill-a-moka [--variant A|B]
+
+The template comes from the post's A/B variant ("variant" in carousel.json,
+set by scripts/ab.py assign; A when missing). --variant overrides it, only for
+trying a design by hand: it does not change carousel.json.
 
 The post folder must contain carousel.json. The script writes
 slide-01.jpg, slide-02.jpg, ... and render-report.json into the same folder.
@@ -20,8 +24,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-TEMPLATE = ROOT / "template" / "carousel.html"
 CONFIG = ROOT / "config.json"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import ab  # noqa: E402  (A/B test: which template a post uses)
 
 # Word limits per field, taken from the style guide (section 5).
 LIMITS = {
@@ -125,6 +130,14 @@ def main():
     data = json.loads(source.read_text(encoding="utf-8"))
     config = json.loads(CONFIG.read_text(encoding="utf-8")) if CONFIG.exists() else {}
     data.setdefault("handle", config.get("handle", ""))
+    override = sys.argv[sys.argv.index("--variant") + 1] if "--variant" in sys.argv else None
+    try:
+        variant = ab.variant_of(data, override)
+        template = ab.template_for(variant)
+    except ab.ABError as e:
+        print("ERROR:", e)
+        sys.exit(3)
+    print(f"Template: variant {variant} ({template.relative_to(ROOT).as_posix()})")
 
     errors, warnings = check_structure(data)
     for w in warnings:
@@ -134,14 +147,14 @@ def main():
             print("ERROR:", e)
         sys.exit(2)
 
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = template.read_text(encoding="utf-8")
     start = html.index('<script id="data" type="application/json">')
     start = html.index(">", start) + 1
     end = html.index("</script>", start)
     safe_json = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     html = html[:start] + "\n" + safe_json + "\n" + html[end:]
     html = html.replace('data-mode="preview"', 'data-mode="render"', 1)
-    temp = TEMPLATE.parent / ".render-temp.html"
+    temp = template.parent / ".render-temp.html"
     temp.write_text(html, encoding="utf-8")
 
     from playwright.sync_api import sync_playwright
@@ -170,6 +183,7 @@ def main():
 
     report["files"] = created
     report["warnings"] = warnings
+    report["variant"] = variant
     (folder / "render-report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
     if not report["ok"]:

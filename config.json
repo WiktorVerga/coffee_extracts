@@ -39,5 +39,15 @@
     "music_dir": "music",
     "music_level_db": 0,
     "sfx_level_db": -14
+  },
+  "ab_test": {
+    "enabled": true,
+    "started_on": "2026-10-29",
+    "variants": {
+      "A": "base",
+      "B": "variant-b"
+    },
+    "default": "A",
+    "measure_after_days": 7
   }
 }

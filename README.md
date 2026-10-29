@@ -21,6 +21,8 @@ Cost: nothing beyond the Claude Pro subscription. Each run uses part of the plan
 |---|---|
 | `guide/style-guide.md` | Voice, fact rules, carousel structure. **The most important file: edit it as much as you like.** |
 | `template/carousel.html` | The design. Open it in a browser to preview; colors and sizes are variables at the top of the file. |
+| `variant-b/` | Variant B of the A/B test ("Film"), all in one folder: carousel and reel templates, fonts, reel settings and rules. See `variant-b/README.md`. |
+| `scripts/ab.py`, `scripts/ab_report.py`, `ab/` | A/B test: which variant each post gets (alternating), and the insights report in `ab/report.md`. See below. |
 | `template/fonts/` | Archivo Black (titles) and Archivo Narrow (body text), OFL license, free for commercial use too. |
 | `posts/example-moka/` | A complete example carousel: JSON, caption and images. |
 | `scripts/render.py` | Turns `carousel.json` into 1080×1350 JPEG images. |
@@ -181,7 +183,7 @@ Every carousel also gets a **30-second animated reel** with the same content and
 | `scripts/reel_animated/build_reel.py` | Voice, timing (fits 30 s), audio mix, layout check, HyperFrames render. |
 | `scripts/reel_animated/make_sfx.py`, `sfx/` | The built-in sound effects, synthesized (no licenses). |
 | `sfx/custom/` | **Your own sound effects.** Name each file after where it is used (`transition-whoosh-1.wav`, `scene-impact.wav`, `text-pop.wav`, `cta-chime.mp3`...): the routine reads the name. Rules in `sfx/custom/README.md`. |
-| `template/reel/reel.html` | The 9:16 template. Colors, fonts and slide design come from `template/carousel.html`, so a change there changes both. |
+| `template/reel/reel.html` | The 9:16 template. Colors, fonts and slide design come from the post's carousel template (A or B), so a change there changes both. |
 | `music/` | **Your tracks.** Format and rules in `music/README.md`. |
 | `scripts/publish_post_reel.py` | Publishes the reel (same Instagram API and token as the carousel). |
 | `config.json` → `reel_animated` | `mode` (`preview` / `publish`), voice, length. |
@@ -239,3 +241,30 @@ Options: `run-reels.bat --dry-run` (no push), `--only 3`, `--retry` (retry rejec
 - If the sheet gets very long, the connector might read only part of it: the procedure checks for this and downloads the full CSV in that case. Moving old ideas to another tab now and then helps.
 - Highlights can't be created or edited through the Instagram API: that part is always manual.
 - No human review in `publish` mode: that's why the guide bans invented facts, health claims, brands and stereotypes.
+
+## A/B test (variant A vs variant B)
+
+Variant **A** is the original project, untouched. Variant **B** lives in `variant-b/` (own carousel and reel templates, fonts, reel settings in `variant-b/variant.json`, reel rules in `variant-b/REEL-B.md`): change one and the other doesn't move. The scripts are shared and load the files of the post's variant.
+
+Settings in `config.json` → `ab_test`:
+
+| Key | Meaning |
+|---|---|
+| `enabled` | `true`: new posts alternate A and B. `false`: every new post uses `default`. |
+| `started_on` | start date of the test: posts before it are only a reference in the report |
+| `variants` | where each variant lives: `"base"` = the original files (A), a folder name = a self-contained variant with its `variant.json` (B: `variant-b`) |
+| `default` | variant of posts without one (all the posts before the test) |
+| `measure_after_days` | the report freezes each post's numbers at this age, so posts are compared at the same age |
+
+How it runs: after writing `carousel.json`, the routine runs `scripts/ab.py assign` (it writes `"variant"` into the file), renders with that variant's template, writes the reel with that variant's rules, publishes, and at the end runs `scripts/ab_report.py`, which reads the insights of the carousel and of its reel and rewrites `ab/report.md` (main metrics: views and likes, and the reel's average watch time).
+
+By hand:
+```
+python scripts/ab.py status                       # posts per variant, next variant
+python scripts/ab.py rules posts/<folder>          # reel rules of that post (A or B)
+python scripts/render.py posts/<folder> --variant B   # try a design on an existing post (doesn't change carousel.json)
+python scripts/ab_report.py --offline             # rebuild the report without calling Instagram
+```
+
+The token needs the `instagram_business_manage_insights` permission for the report. To stop the test: `"enabled": false`. To pick a winner: set `default` to it and `enabled` to false: every new post then uses that variant (its templates and its reel rules).
+

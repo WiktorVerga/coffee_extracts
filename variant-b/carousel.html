@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en" data-mode="preview">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carousel template B</title>
+<!--
+  VARIANT B "Film" — INSTAGRAM CAROUSEL TEMPLATE (1080 x 1350, 4:5)
+  ------------------------------------------------------------------
+  Everything about variant B lives in the variant-b/ folder (see
+  variant-b/README.md). Variant A is the original template/carousel.html.
+  Same palette and same data as A (carousel.json, same slide types and word
+  limits). What changes: light paper, Fraunces serif titles, a few fine-line
+  details (hairline rules, a line-drawn cup whose rings look like wood grain)
+  and film grain. Clean on purpose: no frame, no handle, no small labels
+  (the "kicker" of the cover and the "label" of tip/myth are not shown).
+
+  How to edit it by hand:
+  1. Colors, fonts and sizes: the variables in ":root" below.
+  2. Look of one slide type: find its block ("type: ...").
+  3. Grain and vignette: the "Film layer" block (--grain-opacity, --vignette).
+  4. Preview: open this file in a browser. Content is NOT written here: it
+     comes from each post's carousel.json (the data block is only an example).
+  5. Try it on a real post: python scripts/render.py posts/<folder> --variant B
+
+  KEEP COMPATIBLE WITH ITS REEL (variant-b/reel/reel.html):
+  - build_reel.py cuts this file at the same fixed markers as template A
+    (see extract_between in build_reel.py): the CSS from the first font-face
+    rule, the slide markup from the "esc" helper to the "problems" list, the
+    fit code from the auto-fit comment. Never copy those exact strings into a
+    comment above them, or the cut lands in the wrong place.
+  - the elements the reel reveals one by one are listed in
+    variant-b/variant.json -> reel.reveals: if you add or remove one of them
+    here, update that list too.
+-->
+<style>
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-VariableFont.ttf") format("truetype");
+  font-weight: 100 900; font-style: normal;
+  font-display: block;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Italic-VariableFont.ttf") format("truetype");
+  font-weight: 100 900; font-style: italic;
+  font-display: block;
+}
+@font-face {
+  font-family: "Archivo Narrow";
+  src: url("fonts/ArchivoNarrow-VariableFont_wght.ttf") format("truetype");
+  font-weight: 400 700;
+  font-display: block;
+}
+
+:root {
+  /* ── Palette: same coffee colors as variant A ───────────── */
+  --espresso:   #3b312b;  /* main text, fine lines              */
+  --roast:      #684f36;  /* secondary text                     */
+  --crema:      #b39977;  /* accent lines                       */
+  --hazel:      #EFD6B4;  /* "warm" slides background           */
+  --hazel-2:    #E4C49B;  /* tints, dividers                    */
+  --porcelain:  #F7F1E8;  /* main background (paper)            */
+
+  /* ── Type ───────────────────────────────────────────────── */
+  --font-titles: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body:   "Archivo Narrow", "Helvetica Neue", Arial, sans-serif;
+  --t-cover:     150px;
+  --t-title:      88px;
+  --t-number:    340px;
+  --t-body:       52px;
+  --t-small:      27px;
+  --tracking:     .02em;
+
+  /* ── Spacing and lines ──────────────────────────────────── */
+  --margin:       112px;  /* right, top margin of the content    */
+  --inset:         40px;  /* the progress line sits 34px inside this */
+  --hair:         1.6px;  /* fine-line thickness                 */
+
+  /* ── Film layer ─────────────────────────────────────────── */
+  --grain-opacity: .5;
+  --vignette:      rgba(104, 79, 54, .20);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #2a221d; }
+body {
+  font-family: var(--font-body); letter-spacing: var(--tracking);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Serif elements */
+.title, .t-number .number, .t-number .unit, .t-steps li::before,
+.t-compare .col h3, .t-myth .myth, .t-myth .verdict,
+.t-text .highlight, .t-tip .body, .t-closing .cta {
+  font-family: var(--font-titles);
+  font-variation-settings: "SOFT" 100, "WONK" 0;
+  font-optical-sizing: auto;
+}
+
+/* Preview mode (opened in a browser): scaled-down grid */
+html[data-mode="preview"] body {
+  display: flex; flex-wrap: wrap; gap: 24px; padding: 24px;
+}
+html[data-mode="preview"] .slide { zoom: .36; }
+
+/* ── Shared slide structure ────────────────────────────────── */
+.slide {
+  position: relative;
+  width: 1080px; height: 1350px;
+  overflow: hidden;
+  background: var(--porcelain);
+  color: var(--espresso);
+}
+/* "dark" slides (cover, tip, closing) stay light: a warmer paper */
+.slide.dark { background: #F3E4CC; }
+
+/* Progress: a hairline that fills as you swipe */
+.level {
+  position: absolute; left: calc(var(--inset) + 34px);
+  top: 168px; bottom: 168px;
+  width: var(--hair);
+  background: rgba(179, 153, 119, .6);
+}
+.level > i {
+  position: absolute; left: -.4px; right: -.4px; bottom: 0;
+  background: var(--espresso);
+}
+
+.content {
+  position: absolute;
+  top: var(--margin);
+  bottom: 150px;
+  left: 150px;
+  right: var(--margin);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.footer {
+  position: absolute; z-index: 2;
+  left: 150px; right: var(--margin);
+  bottom: 72px;
+  display: flex; justify-content: flex-end; align-items: center;
+  font-size: var(--t-small); font-weight: 600;
+  text-transform: uppercase; letter-spacing: .16em;
+  color: var(--roast);
+}
+.swipe { display: flex; align-items: center; gap: 16px; }
+.swipe svg { width: 72px; height: 16px; }
+
+.title {
+  font-size: var(--t-title); font-weight: 380;
+  line-height: 1.02; letter-spacing: -.022em;
+  margin-bottom: 48px;
+}
+.body {
+  font-size: var(--t-body); font-weight: 400;
+  line-height: 1.36; max-width: 30ch;
+}
+.body + .body { margin-top: 28px; }
+
+/* ── The cup, drawn in fine line: its rings read as wood grain ─ */
+.cup { position: absolute; z-index: 1; pointer-events: none; }
+.cup svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.cup .rim   { stroke: var(--espresso); stroke-width: 1.8; fill: none; }
+.cup .ring  { stroke: var(--crema);    stroke-width: 1.4; fill: none; }
+.cup .grain-line { stroke: var(--roast); stroke-width: 1.1; fill: none; opacity: .38; }
+.cup .stain { stroke: var(--crema); stroke-width: 5; fill: none; opacity: .32; stroke-linecap: round; }
+
+/* ── Film layer: grain and vignette ────────────────────────── */
+.film { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.film .vig {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 6% 4%, rgba(228, 196, 155, .38), rgba(228, 196, 155, 0) 38%),
+    radial-gradient(ellipse 75% 70% at 50% 46%, rgba(0, 0, 0, 0) 58%, var(--vignette) 100%);
+}
+.film .grain {
+  position: absolute; inset: -40px;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: multiply;
+  background-size: 260px 260px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='n' x='0' y='0'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' seed='7' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .23  0 0 0 0 .19  0 0 0 0 .17  1.9 0 0 0 -.78'/></filter><rect width='260' height='260' filter='url(%23n)'/></svg>");
+}
+
+/* ── type: cover ───────────────────────────────────────────── */
+.t-cover .cup { width: 900px; height: 900px; right: -330px; top: -300px; }
+.t-cover .content { top: 560px; }
+.t-cover .content > :first-child { margin-top: auto; }
+.t-cover .title {
+  font-size: var(--t-cover); font-weight: 340;
+  line-height: .96; letter-spacing: -.03em; margin-bottom: 44px;
+}
+.t-cover .subtitle {
+  font-size: 44px; line-height: 1.3; max-width: 22ch;
+  color: var(--roast);
+  padding-top: 30px; border-top: var(--hair) solid rgba(104, 79, 54, .45);
+}
+
+/* ── type: text ────────────────────────────────────────────── */
+.t-text .highlight {
+  margin-top: auto;
+  font-size: 56px; font-style: italic; font-weight: 360;
+  line-height: 1.14; letter-spacing: -.01em;
+  max-width: 22ch;
+  padding-top: 34px;
+  border-top: var(--hair) solid var(--crema);
+}
+
+/* ── type: number ──────────────────────────────────────────── */
+.t-number .number {
+  font-size: var(--t-number); font-weight: 300;
+  line-height: .86; letter-spacing: -.04em;
+  margin-top: auto; white-space: nowrap;
+}
+.t-number .unit {
+  font-size: 110px; font-style: italic; font-weight: 340;
+  letter-spacing: -.01em; color: var(--roast); margin-left: 20px;
+}
+.t-number .body {
+  margin-top: 54px; padding-top: 34px;
+  border-top: var(--hair) solid rgba(104, 79, 54, .45);
+}
+
+/* ── type: steps ───────────────────────────────────────────── */
+.t-steps ol { list-style: none; counter-reset: step; margin-top: auto; }
+.t-steps li {
+  counter-increment: step;
+  display: grid; grid-template-columns: 104px 1fr; align-items: baseline;
+  font-size: 46px; line-height: 1.26;
+  padding: 32px 0;
+  border-top: var(--hair) solid rgba(104, 79, 54, .35);
+}
+.t-steps li:last-child { border-bottom: var(--hair) solid rgba(104, 79, 54, .35); }
+.t-steps li::before {
+  content: counter(step, decimal-leading-zero);
+  font-size: 50px; font-style: italic; font-weight: 340;
+  color: var(--roast); line-height: 1;
+}
+
+/* ── type: compare (paper top, warm bottom, a hairline and "vs") ─ */
+.t-compare .dark-half {
+  position: absolute; left: 0; right: 0; bottom: 0; top: 50%;
+  background: #F1E2C9;
+  border-top: var(--hair) solid rgba(104, 79, 54, .55);
+}
+.t-compare .content.top { bottom: calc(50% + 56px); }
+.t-compare .content.bottom { top: calc(50% + 86px); }
+.t-compare .title { margin-bottom: auto; }
+.t-compare .col h3 {
+  font-size: 66px; font-weight: 400; letter-spacing: -.02em;
+  margin-bottom: 20px; line-height: 1;
+}
+.t-compare .bottom h3 { font-style: italic; }
+.t-compare .col p { font-size: 40px; line-height: 1.28; padding-left: 34px; position: relative; }
+.t-compare .col p::before {
+  content: ""; position: absolute; left: 0; top: .66em;
+  width: 18px; height: var(--hair); background: var(--crema);
+}
+.t-compare .col p + p { margin-top: 10px; }
+
+/* ── type: myth ────────────────────────────────────────────── */
+.t-myth .myth {
+  font-size: 90px; font-weight: 360;
+  line-height: 1.04; letter-spacing: -.02em;
+  color: var(--roast);
+  margin-bottom: 36px;
+}
+.t-myth.is-false .myth {
+  text-decoration: line-through;
+  text-decoration-color: var(--espresso);
+  text-decoration-thickness: 3px;
+}
+.t-myth .verdict {
+  font-size: 104px; font-style: italic; font-weight: 380;
+  line-height: 1; letter-spacing: -.02em;
+  color: var(--espresso);
+}
+.t-myth .body {
+  margin-top: auto; padding-top: 34px;
+  border-top: var(--hair) solid rgba(104, 79, 54, .45);
+}
+
+/* ── type: tip ─────────────────────────────────────────────── */
+.t-tip .cup { width: 300px; height: 300px; top: 96px; right: 96px; }
+.t-tip .content > :first-child { margin-top: auto; }
+.t-tip .body {
+  font-size: 66px; font-weight: 360;
+  line-height: 1.14; letter-spacing: -.018em; max-width: 22ch;
+}
+
+/* ── type: closing ─────────────────────────────────────────── */
+.t-closing .cup { width: 640px; height: 640px; left: 50%; top: -250px; transform: translateX(-38%); }
+.t-closing .content > :first-child { margin-top: auto; }
+.t-closing .title { font-size: 112px; font-weight: 340; line-height: .98; }
+.t-closing .body { color: var(--roast); }
+.t-closing .cta {
+  margin-top: 60px; align-self: flex-start;
+  display: flex; align-items: center; gap: 22px;
+  font-size: 50px; font-style: italic; font-weight: 400;
+  color: var(--espresso);
+  padding-bottom: 12px;
+  border-bottom: var(--hair) solid var(--espresso);
+}
+.t-closing .cta svg { width: 64px; height: 16px; flex: none; }
+
+</style>
+</head>
+<body>
+
+<!--
+  EXAMPLE DATA. The render script replaces the content of this block with
+  the post's carousel.json.
+-->
+<script id="data" type="application/json">
+{
+  "series": "How-to",
+  "handle": "@yourpage",
+  "slides": [
+    { "type": "cover", "kicker": "How-to", "title": "Fill a moka pot the right way", "subtitle": "Four small moves that change your morning coffee." },
+    { "type": "myth", "myth": "You should tamp the coffee down hard.", "verdict": "false", "truth": "Not in a moka pot: just level it. Packed coffee makes it hard for water to pass, and the result tastes bitter and burnt." },
+    { "type": "steps", "title": "Filling it, in order", "steps": [
+      "Water in the bottom chamber, just below the valve.",
+      "Coffee in the filter basket, no tamping.",
+      "Level it and wipe stray grounds off the rim.",
+      "Screw it shut firmly, without forcing it."
+    ] },
+    { "type": "text", "title": "Why the valve matters", "body": "It releases pressure if something gets blocked. If the water covers it, it can't do its job.", "highlight": "Keep the water below the valve." },
+    { "type": "compare", "title": "Grind: moka vs espresso", "left": { "label": "Moka", "points": ["Medium, slightly gritty", "Like fine table salt"] }, "right": { "label": "Espresso", "points": ["Fine, almost powder", "Sticks to your fingers"] } },
+    { "type": "number", "number": "1.5", "unit": "bar", "caption": "Roughly the pressure inside a moka pot. Espresso uses around 9: that's why they're two different coffees." },
+    { "type": "tip", "label": "The tip", "body": "Low heat, and never let the flame reach past the sides of the base." },
+    { "type": "closing", "title": "Save it for tomorrow morning", "body": "Four moves, no extra gear. The moka does the rest.", "cta": "Save and try it" }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById("data").textContent);
+  const total = data.slides.length;
+  const DARK = new Set(["cover", "tip", "closing"]);
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const arrow = '<svg viewBox="0 0 72 16" aria-hidden="true"><path d="M0 8h68M60 1l8 7-8 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>';
+
+  // Deterministic pseudo-random numbers: the cup is always drawn the same way
+  const seeded = (seed) => () => {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+
+  // A slightly irregular closed ring (wood grain / hand-drawn line)
+  function ringPath(cx, cy, r, wobble, rnd) {
+    const ph = [rnd() * 6.28, rnd() * 6.28, rnd() * 6.28];
+    const pts = [];
+    for (let k = 0; k <= 144; k++) {
+      const a = k / 144 * Math.PI * 2;
+      const rr = r * (1 + wobble * (0.55 * Math.sin(3 * a + ph[0]) + 0.3 * Math.sin(5 * a + ph[1]) + 0.15 * Math.sin(11 * a + ph[2])));
+      pts.push(`${(cx + rr * Math.cos(a)).toFixed(1)} ${(cy + rr * Math.sin(a)).toFixed(1)}`);
+    }
+    return "M" + pts.join("L") + "Z";
+  }
+
+  // The cup from above, in fine line: rim, crema rings, a coffee stain, wood grain
+  function cupArt(seed) {
+    const rnd = seeded(seed);
+    const P = (cls, d) => `<path class="${cls}" vector-effect="non-scaling-stroke" d="${d}"/>`;
+    let out = "";
+    [0.985, 0.93, 0.87].forEach((r, i) => { out += P("grain-line", ringPath(500, 500, 500 * r, 0.012 + i * 0.004, rnd)); });
+    out += P("stain", ringPath(512, 488, 500 * 0.74, 0.02, rnd));
+    out += `<circle class="rim" vector-effect="non-scaling-stroke" cx="500" cy="500" r="330"/>`;
+    out += `<circle class="rim" vector-effect="non-scaling-stroke" cx="500" cy="500" r="306"/>`;
+    [0.52, 0.42, 0.32, 0.22, 0.12].forEach((r, i) => { out += P("ring", ringPath(492, 506, 500 * r, 0.03 + i * 0.012, rnd)); });
+    return `<svg viewBox="0 0 1000 1000" aria-hidden="true">${out}</svg>`;
+  }
+
+  // Film layer: vignette and grain (same on every slide, in the reel too)
+  const film = () => `
+      <div class="film"><div class="vig"></div><div class="grain"></div></div>`;
+
+  const types = {
+    cover: s => `
+      <div class="cup">${cupArt(11)}</div>
+      <div class="content">
+        <h1 class="title" data-fit>${esc(s.title)}</h1>
+        ${s.subtitle ? `<p class="subtitle">${esc(s.subtitle)}</p>` : ""}
+      </div>`,
+    text: s => `
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        ${[].concat(s.body || []).map(p => `<p class="body">${esc(p)}</p>`).join("")}
+        ${s.highlight ? `<p class="highlight">${esc(s.highlight)}</p>` : ""}
+      </div>`,
+    number: s => `
+      <div class="content">
+        ${s.title ? `<h2 class="title" data-fit>${esc(s.title)}</h2>` : ""}
+        <p class="number" data-fit-w>${esc(s.number)}${s.unit ? `<span class="unit">${esc(s.unit)}</span>` : ""}</p>
+        <p class="body">${esc(s.caption)}</p>
+      </div>`,
+    steps: s => `
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        <ol>${(s.steps || []).map(p => `<li><span>${esc(p)}</span></li>`).join("")}</ol>
+      </div>`,
+    compare: s => {
+      const col = (c) => `
+        <div class="col">
+          <h3>${esc(c?.label)}</h3>
+          ${(c?.points || []).map(p => `<p>${esc(p)}</p>`).join("")}
+        </div>`;
+      return `
+      <div class="dark-half"></div>
+      <div class="content top">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        ${col(s.left)}
+      </div>
+      <div class="content bottom">${col(s.right)}</div>`;
+    },
+    myth: s => `
+      <div class="content">
+        <p class="myth" data-fit>${esc(s.myth)}</p>
+        <p class="verdict">${String(s.verdict).toLowerCase() === "true" ? "True." : "False."}</p>
+        <p class="body">${esc(s.truth)}</p>
+      </div>`,
+    tip: s => `
+      <div class="cup">${cupArt(23)}</div>
+      <div class="content">
+        <p class="body" data-fit>${esc(s.body)}</p>
+      </div>`,
+    closing: s => `
+      <div class="cup">${cupArt(37)}</div>
+      <div class="content">
+        <h2 class="title" data-fit>${esc(s.title)}</h2>
+        ${s.body ? `<p class="body">${esc(s.body)}</p>` : ""}
+        ${s.cta ? `<p class="cta">${esc(s.cta)}${arrow}</p>` : ""}
+      </div>`
+  };
+  // Every slide type gets the film layer (in the reel too)
+  Object.keys(types).forEach(k => { const make = types[k]; types[k] = s => make(s) + film(); });
+
+  const problems = [];
+
+  data.slides.forEach((s, i) => {
+    const make = types[s.type];
+    if (!make) { problems.push(`Slide ${i + 1}: unknown type "${s.type}"`); return; }
+    const el = document.createElement("section");
+    el.className = `slide t-${s.type}` + (DARK.has(s.type) ? " dark" : "")
+      + (s.type === "myth" && String(s.verdict).toLowerCase() !== "true" ? " is-false" : "");
+    el.dataset.index = i + 1;
+    el.innerHTML = `
+      <div class="level"><i style="height:${((i + 1) / total * 100).toFixed(2)}%"></i></div>
+      ${make(s)}
+      ${i === 0 ? `<div class="footer"><span class="swipe">Swipe ${arrow}</span></div>` : ""}`;
+    document.body.appendChild(el);
+  });
+
+  // Auto-fit: shrinks titles until they fit (down to 72% of the original
+  // size at most), then reports the problem.
+  // Compares the children's boxes with the container (not scrollHeight, which
+  // also counts the glyphs' ink and gives false alarms with tight line-heights).
+  function overflows(box) { return overflowPx(box) > 4; }
+  function overflowPx(box) {
+    const r = box.getBoundingClientRect();
+    let over = 0;
+    for (const c of box.children) {
+      const cr = c.getBoundingClientRect();
+      over = Math.max(over, cr.bottom - r.bottom, r.top - cr.top);
+    }
+    return Math.round(over);
+  }
+
+  function fit() {
+    document.querySelectorAll(".slide").forEach(slide => {
+      const boxes = [...slide.querySelectorAll(".content")];
+      const box = boxes[0];
+      const n = slide.dataset.index;
+      const anyOverflow = () => boxes.some(overflows);
+
+      slide.querySelectorAll("[data-fit-w]").forEach(el => {
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        let size = base;
+        while (el.scrollWidth > box.clientWidth + 1 && size > base * 0.5) {
+          size -= 4; el.style.fontSize = size + "px";
+        }
+      });
+
+      slide.querySelectorAll("[data-fit]").forEach(el => {
+        const base = parseFloat(getComputedStyle(el).fontSize);
+        let size = base;
+        while ((anyOverflow() || el.scrollWidth > el.clientWidth + 1) && size > base * 0.72) {
+          size -= 2; el.style.fontSize = size + "px";
+        }
+      });
+
+      boxes.forEach(b => {
+        if (overflows(b)) problems.push(`Slide ${n}: text doesn't fit (overflows by ${overflowPx(b)}px). Shorten the text.`);
+      });
+      // words so long they spill past the margin
+      slide.querySelectorAll(".content *").forEach(el => {
+        if (el.children.length === 0 && el.scrollWidth > box.clientWidth + 2) {
+          problems.push(`Slide ${n}: a word spills past the margin ("${el.textContent.slice(0, 40)}").`);
+        }
+      });
+    });
+    window.__REPORT = { ok: problems.length === 0, slides: total, problems };
+    document.documentElement.dataset.ready = "1";
+  }
+
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(fit);
+})();
+</script>
+</body>
+</html>

@@ -6,6 +6,12 @@ narrated, with sound effects and music, 9:16, 15 to 30 seconds, no dead air.
 Usage:
     python3 scripts/reel_animated/build_reel.py posts/2026-10-05-bitter-espresso
 
+A/B test: the post's variant ("variant" in carousel.json, see scripts/ab.py)
+decides the carousel template, fonts, reel template and the reel rules.
+Variant A uses the original files and the defaults below (rules: REEL-ANIMATED.md);
+variant B uses variant-b/ and the "reel" block of variant-b/variant.json
+(rules: variant-b/REEL-B.md), which overrides config.json -> reel_animated.
+
 Input (inside the post folder):
     carousel.json   the carousel (already written and checked)
     reel.json       the narration, one line per slide:  {"scenes": [{"say": "..."}, ...]}
@@ -39,6 +45,8 @@ import numpy as np
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 CONFIG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
+sys.path.insert(0, str(ROOT / "scripts"))
+import ab  # noqa: E402  (A/B test: the reel uses the same template variant as the carousel)
 CFG = {
     "mode": "preview",
     "voice": "af_heart",
@@ -59,13 +67,48 @@ CFG = {
     "music_dir": "music",
     "music_level_db": 0.0,
     "sfx_level_db": -14.0,   # sound effects level (dB), 0 = old loud level
+    # script limits and pacing (variant A values; a variant can override them)
+    "max_title_words": 5,
+    "hook_max_words": 0,         # 0 = not checked by the script (REEL-ANIMATED.md asks for 8)
+    "max_sentence_words": 9,     # short, punchy sentences: one beat each
+    "max_scene_words": 20,
+    "min_total_words": 0,
+    "max_total_words": 80,
+    "total_words_hint": "45-65",
+    "scene_pad": 0.32,           # silence after each narration line (s)
+    "last_pad": 1.1,             # the last scene lingers on the call to action
+    "reveal_window": 0.5,        # items of a slide appear within this share of the scene...
+    "reveal_cap": 1.6,           # ...and within this many seconds
+    "reveal_max_step": 0.32,     # max seconds between two items
+    "reveals": {                 # MUST match REVEAL in the variant's reel template
+        "cover": ".label, .title, .subtitle",
+        "text": ".title, .body, .highlight",
+        "number": ".title, .number, .body",
+        "steps": ".title, li",
+        "compare": ".title, .col",
+        "myth": ".label, .myth, .verdict, .body",
+        "tip": ".label, .body",
+        "closing": ".title, .body, .cta",
+    },
     **CONFIG.get("reel_animated", {}),
 }
+PROFILE = None   # the post's variant profile (scripts/ab.py), set in main()
+
+
+def use_variant(carousel):
+    """Loads the post's variant: its files, and its reel settings on top of CFG."""
+    global PROFILE
+    try:
+        PROFILE = ab.profile(ab.variant_of(carousel))
+    except ab.ABError as e:
+        raise TechError(str(e)) from None
+    PROFILE["variant"] = ab.variant_of(carousel)
+    CFG.update(PROFILE["reel"])
+    log(f"Variant {PROFILE['variant']} ({PROFILE['name']}): template {PROFILE['reel_template'].relative_to(ROOT).as_posix()}, "
+        f"max {CFG['target_seconds']:.0f}s, voice {CFG['voice_speed']}x")
+
 SR = 48000
 LEAD = 0.12          # silence before each narration line (s)
-PAD = 0.32           # silence after each narration line (s)
-LAST_PAD = 1.1       # the last scene lingers on the call to action
-MAX_SENTENCE_WORDS = 9   # short, punchy sentences: one beat each
 EMOJI = re.compile("[\U0001F300-\U0001FAFF☀-➿]")
 AUDIO_EXT = {".mp3", ".m4a", ".aac", ".wav", ".flac", ".ogg", ".opus"}
 
@@ -137,28 +180,29 @@ def words(text):
 
 
 def reveal_count(slide):
-    """How many elements appear one after the other on a slide.
-    MUST match the REVEAL selectors in template/reel/reel.html."""
+    """How many elements appear one after the other on a slide, from CFG["reveals"]
+    (the same selector list the reel template uses for its REVEAL map)."""
     t = slide.get("type")
-    if t == "cover":
-        return 1 + bool(slide.get("kicker")) + bool(slide.get("subtitle"))
-    if t == "text":
-        body = slide.get("body")
-        bodies = body if isinstance(body, list) else [body]
-        return 1 + len([b for b in bodies if b]) + bool(slide.get("highlight"))
-    if t == "number":
-        return bool(slide.get("title")) + 2
-    if t == "steps":
-        return 1 + len(slide.get("steps", []))
-    if t == "compare":
-        return 3
-    if t == "myth":
-        return 4
-    if t == "tip":
-        return 2
-    if t == "closing":
-        return 1 + bool(slide.get("body")) + bool(slide.get("cta"))
-    return 1
+    body = slide.get("body")
+    bodies = len([b for b in (body if isinstance(body, list) else [body]) if b])
+    per = {
+        "label": {"cover": bool(slide.get("kicker")), "myth": 1, "tip": 1},
+        "title": {"number": bool(slide.get("title")), "closing": 1, "cover": 1, "text": 1, "steps": 1, "compare": 1},
+        "subtitle": {"cover": bool(slide.get("subtitle"))},
+        "body": {"text": bodies, "number": 1, "myth": 1, "tip": 1, "closing": bool(slide.get("body"))},
+        "highlight": {"text": bool(slide.get("highlight"))},
+        "number": {"number": 1},
+        "li": {"steps": len(slide.get("steps", []))},
+        "col": {"compare": 2},
+        "myth": {"myth": 1},
+        "verdict": {"myth": 1},
+        "cta": {"closing": bool(slide.get("cta"))},
+    }
+    sel = CFG["reveals"].get(t, ".title")
+    n = 0
+    for token in (x.strip().lstrip(".") for x in sel.split(",")):
+        n += int(per.get(token, {}).get(t, 0))
+    return max(n, 1)
 
 
 # ── 1. load and validate ─────────────────────────────────────────────
@@ -182,25 +226,32 @@ def load_inputs(folder):
         if title:
             if i == 1:
                 errors.append("Scene 1: no 'title' (scene 1 is the hook, one single beat).")
-            if words(title) > 5:
-                errors.append(f"Scene {i}: the title \"{title}\" has {words(title)} words, max 5 (a short label like \"Sip two: body.\").")
+            if words(title) > CFG["max_title_words"]:
+                errors.append(f"Scene {i}: the title \"{title}\" has {words(title)} words, max {CFG['max_title_words']} (a short label like \"Sip two: body.\").")
             if not re.search(r"[.!?:]$", title):
                 errors.append(f"Scene {i}: end the title with a period: \"{title}.\"")
         n = words(say) + words(title)
         total_words += n
         if not say:
             errors.append(f"Scene {i}: empty 'say'.")
-        if n > 20:
-            errors.append(f"Scene {i}: {n} words, max 20 (one breath, it's a reel).")
-        for sent in re.split(r"(?<=[.!?])\s+", say) + ([title] if title else []):
-            if words(sent) > MAX_SENTENCE_WORDS:
-                errors.append(f"Scene {i}: the sentence \"{sent}\" has {words(sent)} words, max {MAX_SENTENCE_WORDS}: split it.")
+        if n > CFG["max_scene_words"]:
+            errors.append(f"Scene {i}: {n} words, max {CFG['max_scene_words']}.")
+        sentences = re.split(r"(?<=[.!?])\s+", say)
+        if i == 1 and CFG["hook_max_words"] and words(sentences[0]) > CFG["hook_max_words"]:
+            errors.append(f"Scene 1: the hook \"{sentences[0]}\" has {words(sentences[0])} words, max {CFG['hook_max_words']}.")
+        for sent in sentences + ([title] if title else []):
+            if words(sent) > CFG["max_sentence_words"]:
+                errors.append(f"Scene {i}: the sentence \"{sent}\" has {words(sent)} words, max {CFG['max_sentence_words']}: split it.")
         if EMOJI.search(say + title):
             errors.append(f"Scene {i}: no emoji.")
         if any(c in say + title for c in ("http", "@", "#")):
             errors.append(f"Scene {i}: no links, handles or hashtags in the narration.")
-    if total_words > 80:
-        errors.append(f"The narration has {total_words} words: too many for {CFG['target_seconds']:.0f} seconds (aim for 45-65).")
+    if total_words > CFG["max_total_words"]:
+        errors.append(f"The narration has {total_words} words: too many for {CFG['target_seconds']:.0f} seconds "
+                      f"(aim for {CFG['total_words_hint']}).")
+    if total_words < CFG["min_total_words"]:
+        errors.append(f"The narration has {total_words} words: too few for this variant "
+                      f"(aim for {CFG['total_words_hint']}).")
     if errors:
         raise ContentError("\n".join(errors))
     # a scene with a spoken title becomes (title, rest): the voice pauses between the two
@@ -398,7 +449,7 @@ def plan_timing(texts, workdir, n_items):
     voices = tts_all(texts, workdir, speed)
     durs = [duration_of(v) for v in voices]
     n = len(texts)
-    pads = [LEAD + PAD] * (n - 1) + [LEAD + LAST_PAD]
+    pads = [LEAD + CFG["scene_pad"]] * (n - 1) + [LEAD + CFG["last_pad"]]
     natural = sum(durs) + sum(pads)
     log(f"Narration at {speed:.2f}x: {sum(durs):.1f}s of speech, {natural:.1f}s with pauses (max {target:.0f}s)")
 
@@ -434,9 +485,10 @@ def plan_timing(texts, workdir, n_items):
     for i in range(n):
         dur = durs[i] + pads[i] + add[i]
         first = 0.0 if i == 0 else 0.06
-        avail = min(dur * 0.5, 1.6)
-        step = max(0.15, min(0.32, avail / max(n_items[i] - 1, 1)))
+        avail = min(dur * CFG["reveal_window"], CFG["reveal_cap"])
+        step = max(0.15, min(CFG["reveal_max_step"], avail / max(n_items[i] - 1, 1)))
         scenes.append({"start": round(t, 3), "dur": round(dur, 3), "first": first, "step": round(step, 3),
+                       "items": n_items[i],
                        "voice_start": round(t + LEAD, 3), "voice_dur": round(durs[i], 3)})
         t += dur
     return voices, speed, scenes, round(t, 3)
@@ -662,13 +714,13 @@ def extract_between(text, start_marker, end_marker, what):
     a = text.find(start_marker)
     b = text.find(end_marker, a + 1)
     if a < 0 or b < 0:
-        raise TechError(f"template/carousel.html changed: can't find the {what} block "
+        raise TechError(f"the carousel template changed: can't find the {what} block "
                         f"(markers: {start_marker!r} .. {end_marker!r}). Update build_reel.py.")
     return text[a:b]
 
 
 def write_project(workdir, carousel, scenes, total):
-    car = (ROOT / "template" / "carousel.html").read_text(encoding="utf-8")
+    car = PROFILE["carousel_template"].read_text(encoding="utf-8")   # the post's A/B variant
     css = extract_between(car, "@font-face", "</style>", "CSS")
     types_js = extract_between(car, "const esc =", "const problems = [];", "slide markup (esc/arrow/types)")
     fit_js = extract_between(car, "// Auto-fit:", "(document.fonts && document.fonts.ready", "auto-fit")
@@ -677,8 +729,9 @@ def write_project(workdir, carousel, scenes, total):
 
     plan = {"handle": CONFIG.get("handle", ""), "slides": carousel["slides"], "scenes": scenes, "duration": total}
     plan_json = json.dumps(plan, ensure_ascii=False).replace("</", "<\\/")
-    html = (ROOT / "template" / "reel" / "reel.html").read_text(encoding="utf-8")
+    html = PROFILE["reel_template"].read_text(encoding="utf-8")
     for token, value in {
+        "{{REVEAL_JSON}}": json.dumps(CFG["reveals"]),
         "{{CAROUSEL_CSS}}": css,
         "{{CAROUSEL_JS_TYPES}}": types_js,
         "{{CAROUSEL_JS_FIT}}": fit_js,
@@ -687,8 +740,8 @@ def write_project(workdir, carousel, scenes, total):
     }.items():
         html = html.replace(token, value)
     (workdir / "index.html").write_text(html, encoding="utf-8")
-    shutil.copy(ROOT / "template" / "reel" / "vendor" / "gsap.min.js", workdir / "gsap.min.js")
-    shutil.copytree(ROOT / "template" / "fonts", workdir / "fonts", dirs_exist_ok=True)
+    shutil.copy(PROFILE["reel_vendor"] / "gsap.min.js", workdir / "gsap.min.js")
+    shutil.copytree(PROFILE["fonts"], workdir / "fonts", dirs_exist_ok=True)
     (workdir / "meta.json").write_text(json.dumps({"id": "reel", "name": "reel"}), encoding="utf-8")
     (workdir / "hyperframes.json").write_text(json.dumps({
         "$schema": "https://hyperframes.heygen.com/schema/hyperframes.json",
@@ -720,7 +773,8 @@ def check_layout_and_frames(workdir, scenes, chrome):
         problems += report.get("problems", [])
         problems += [f"page error: {e}" for e in errors]
         for i, sc in enumerate(scenes, 1):
-            t = sc["start"] + min(sc["dur"] * 0.8, sc["first"] + 2.4)
+            # the moment every element of the slide is on screen (after the last reveal)
+            t = sc["start"] + min(sc["dur"] * 0.9, sc["first"] + max(sc.get("items", 1) - 1, 0) * sc["step"] + 1.0)
             page.evaluate("t => { window.__timelines.main.seek(t); }", t)   # (never return the timeline: it is not serializable)
             page.screenshot(path=str(frames / f"scene-{i:02d}.jpg"), type="jpeg", quality=80)
         browser.close()
@@ -781,6 +835,10 @@ def main():
     work.mkdir(parents=True)
 
     try:
+        cj = folder / "carousel.json"
+        if not cj.exists():
+            raise TechError("carousel.json is missing")
+        use_variant(json.loads(cj.read_text(encoding="utf-8")))
         carousel, texts = load_inputs(folder)
         items = [reveal_count(s) for s in carousel["slides"]]
         voices, speed, scenes, total = plan_timing(texts, work, items)
@@ -822,6 +880,7 @@ def main():
             "duration": round(dur, 2), "size_mb": round(size_mb, 2), "voice": CFG["voice"], "voice_speed": speed,
             "music": {"file": music.name if music else None, **({} if not music else music_meta)},
             "scenes": scenes, "hyperframes": CFG["hyperframes_version"],
+            "variant": PROFILE["variant"],
         }
         (folder / "reel-meta.json").write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
         log(f"DONE: {final.relative_to(ROOT)}  {dur:.1f}s  {size_mb:.1f} MB  music={meta['music']['file']}")

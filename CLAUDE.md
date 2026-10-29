@@ -10,10 +10,12 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | File | Purpose | Can it change during a run? |
 |---|---|---|
 | `guide/style-guide.md` | voice, fact rules, carousel structure | **No** |
-| `config.json` | handle, mode (`preview` or `publish`), sheet ID, repo | **No** |
-| `template/carousel.html` | slide design | **No** |
-| `scripts/*.py` | render, publish, log | **No** |
-| `log.json` | history of used ideas | Only through `scripts/log.py` |
+| `config.json` | handle, mode (`preview` or `publish`), sheet ID, repo, A/B test settings (`ab_test`) | **No** |
+| `template/carousel.html` | slide design of variant A (the original) | **No** |
+| `variant-b/` | **everything of variant B** ("Film"): carousel and reel templates, fonts, reel settings (`variant.json`), reel rules (`REEL-B.md`); see `variant-b/README.md` | **No** |
+| `scripts/*.py` | render, publish, log, A/B assignment (`ab.py`) and report (`ab_report.py`) | **No** |
+| `log.json` | history of used ideas (with each post's variant) | Only through `scripts/log.py` |
+| `ab/metrics.json`, `ab/report.md` | A/B test numbers and report | Only through `scripts/ab_report.py` |
 | `posts/YYYY-MM-DD-slug/` | one post: `carousel.json`, `caption.txt`, `slide-XX.jpg` | Yes, this is your output |
 | `REEL-ANIMATED.md`, `scripts/reel_animated/`, `scripts/publish_post_reel.py`, `template/reel/`, `sfx/`, `music/` | the animated reel of each post (voice, sound effects, music) | **No**, except `posts/<folder>/reel.json` and `reel-caption.txt`, which you write |
 | `reel-skill/viral-reel-generator/` | copy of the `viral-reel-generator` skill (instructions and references) used to write the reel script | **No** |
@@ -21,6 +23,15 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | `REELS.md`, `reels/`, `reels-log.json`, `scripts/prepare_reels.py`, `scripts/publish_reel.py`, `scripts/reels_log.py`, `*.bat` | reels (clips from YouTube), handled by the reels routine and the owner's PC | **No: the carousel routine never touches them** |
 
 Full example of a valid post: `posts/example-moka/`.
+
+## A/B test of the templates
+
+Two variants are being compared. **A** is the original project (`template/carousel.html`, `template/reel/`, reel rules in `REEL-ANIMATED.md`). **B** lives entirely in `variant-b/`: its own carousel and reel templates, and its own reel rules (`variant-b/REEL-B.md`: a reel of up to 60 seconds with fuller, explanatory narration). The carousel content is the same for both: same data, same slide types, same word limits. A post's reel always uses the same variant as its carousel.
+- `scripts/ab.py assign` gives each new post its variant (alternating, self-balancing) and writes it into `carousel.json` as `"variant"`. **Never choose, change or remove the variant yourself**, and never pick a variant because it "fits" a topic: that would break the test.
+- `scripts/render.py` and `scripts/reel_animated/build_reel.py` read the variant and load its files and settings; `scripts/log.py` copies it into `log.json`.
+- `python3 scripts/ab.py rules posts/<folder>` prints the reel rules file of the post (`REEL-ANIMATED.md` for A, `variant-b/REEL-B.md` for B).
+- `scripts/ab_report.py` (step 7c) reads the insights of the published posts and writes `ab/report.md`.
+- Content rules don't depend on the variant: write the carousel exactly as you would for A. If a slide doesn't fit, shorten the text (step 4), never touch either template.
 
 ## The ideas sheet is in Italian
 
@@ -102,6 +113,11 @@ and go back to step 1 with the next candidate (at most 3 attempts per run).
 }
 ```
    Optional fields: `kicker`, `subtitle`, `highlight`, `unit`, the `title` of `number`, `body` and `cta` of `closing`.
+   Don't write a `variant` field: the next point adds it.
+4. **Assign the template variant** (A/B test):
+   - `publish` mode: `python3 scripts/ab.py assign posts/<folder>`
+   - `preview` mode: `python3 scripts/ab.py assign posts/<folder> --include-previews`
+   It prints `A` or `B` and writes it into `carousel.json`. If the folder already has a variant (a rewritten or retried post), it keeps it. Remember it: it decides the reel rules of step 5b. Write the carousel the same way for both variants.
 
 ### 3b. Find the sources
 Every figure or fact in the slides and caption needs a source (guide, section 4).
@@ -125,7 +141,7 @@ Use **`ig-hashtag-strategist`** (draft only) on the finished caption. Keep guide
 - add them as the last line of `caption.txt`
 
 ### 4. Render the images
-`python3 scripts/render.py posts/<folder>`
+`python3 scripts/render.py posts/<folder>` (it uses the template of the post's variant; it prints which one)
 - exit **0**: continue
 - exit **2**: read the messages, **shorten the text** in `carousel.json` (don't touch the template) and try again. 3 attempts max.
 - exit **3**, or 3 failed attempts: log `--status error` with the reason, commit and push, stop.
@@ -140,14 +156,14 @@ Use **`ig-hashtag-strategist`** (draft only) on the finished caption. Keep guide
 4. If anything is off, fix it and go back to step 4 (re-render if the slides changed). Don't go on while a point of the quality gate fails.
 
 ### 5b. Animated reel
-Follow **`REEL-ANIMATED.md`, step 5b**: write `reel.json` (the narration, one line per slide) using the **`viral-reel-generator`** skill (the copy in `reel-skill/viral-reel-generator/`) for the script and the organization of the reel (draft only, same rules as "Instagram skills"), run `python3 scripts/reel_animated/build_reel.py posts/<folder>`, look at the frames, and write `reel-caption.txt`. The carousel and its caption are final by now and the reel never changes them. If the reel can't be made, **skip the reel, not the post**: say why in the summary and go on.
+Follow step 5b of **the reel rules of the post's variant**: `REEL-ANIMATED.md` for **A**, `variant-b/REEL-B.md` for **B** (check with `python3 scripts/ab.py rules posts/<folder>`). Never apply the B rules to an A post or the other way round. In short: write `reel.json` (the narration, one line per slide) using the **`viral-reel-generator`** skill (the copy in `reel-skill/viral-reel-generator/`) for the script and the organization of the reel (draft only, same rules as "Instagram skills"), run `python3 scripts/reel_animated/build_reel.py posts/<folder>`, look at the frames, and write `reel-caption.txt`. The carousel and its caption are final by now and the reel never changes them. If the reel can't be made, **skip the reel, not the post**: say why in the summary and go on.
 
 ### 6. Save to GitHub
 Work directly on `main` (don't create `claude/...` branches).
 ```
 git add posts/<folder>
 git commit -m "Post: <cover title>"
-git push origin HEAD:main
+git push origin HEAD:main --force
 ```
 
 ### 7. Publish (`publish` mode only)
@@ -165,17 +181,29 @@ git push origin HEAD:main
 ### 7b. Publish the reel
 Follow **`REEL-ANIMATED.md`, step 7b**. `config.json` → `reel_animated.mode` is separate from the carousel's `mode`: in `preview` the reel is not published; in `publish` it is, if the carousel was published in this run, or as the retry of a reel that failed in an earlier run whose post is already published (see "Retry of a reel" in `REEL-ANIMATED.md`). Never run the publish script twice in the same run.
 
+### 7c. A/B report
+Run `python3 scripts/ab_report.py` (read-only: it only reads Instagram insights, it never publishes). Then:
+```
+git add ab/
+git commit -m "A/B metrics"
+git push origin HEAD:main
+```
+- Run it in every run that reaches step 7, even if publishing failed, and also when the run stops at step 1.6 ("No ideas available").
+- It never fails the run: if it prints `WARNING` lines (for example a token without the insights permission), copy them into the summary and go on. Never run it more than once per run.
+
 ### 8. Final summary
 End the run with a short summary:
-- idea used (ID and text), series, number of slides
+- idea used (ID and text), series, number of slides, **template variant (A or B)**
 - goal and formula chosen (e.g. "saves, IG5"), hashtag set with the size of each tag, and any skill that was not available
 - outcome: preview created / published (with link) / skipped / error (with reason)
 - reel (see `REEL-ANIMATED.md`): made / not made (reason), duration, music file used or "no music", outcome (preview / published with link / error with reason)
+- A/B test: the last line printed by `scripts/ab_report.py` (frozen posts per variant, carousel views, reel watch time), plus any `WARNING` it printed
 - if `token_refreshed_on` in `config.json` is older than 50 days or not filled in: **"WARNING: refresh the Instagram token"**
 
 ## Fixed rules
 - Never print, save or commit tokens or keys.
-- Never edit the guide, the template, the scripts or `config.json`.
+- Never edit the guide, the templates, the scripts or `config.json`.
+- Never set or change a post's `variant` by hand, and never edit `ab/` by hand: only `scripts/ab.py` and `scripts/ab_report.py` do.
 - Never publish more than one post and one reel per run, and never a reel whose post isn't published.
 - Never publish if a check in steps 4–5 (quality gate included) didn't pass.
 - The Instagram skills only plan and draft. Never use their publishing features (Publora, `lib.publish`, `lib.illustrate`): only `scripts/publish.py` publishes.

@@ -19,7 +19,10 @@ Usage:
     python scripts/log.py add --id 7 --idea "Caricare la moka" \
         --series "How-to" --folder posts/2026-10-05-fill-a-moka \
         --status preview|published|skipped|error [--reason "..."] \
-        [--media-id 123] [--permalink https://...]
+        [--media-id 123] [--permalink https://...] [--variant A|B]
+
+Every entry also records the post's A/B template variant ("variant"): taken
+from --variant, or else from the folder's carousel.json (see scripts/ab.py).
 """
 import argparse
 import json
@@ -43,7 +46,17 @@ def save(entries):
     LOG.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def add(idea_id, idea, status, folder="", series="", reason="", media_id="", permalink=""):
+def variant_for(folder):
+    if not folder:
+        return ""
+    try:
+        import ab
+        return ab.variant_of_folder(ROOT / folder)
+    except Exception:  # noqa: BLE001  (the log must never fail because of the A/B test)
+        return ""
+
+
+def add(idea_id, idea, status, folder="", series="", reason="", media_id="", permalink="", variant=""):
     entries = load()
     entries.append({
         "date": datetime.now(ZoneInfo("Europe/Rome")).strftime("%Y-%m-%d %H:%M"),
@@ -55,6 +68,7 @@ def add(idea_id, idea, status, folder="", series="", reason="", media_id="", per
         "reason": reason,
         "media_id": media_id,
         "permalink": permalink,
+        "variant": variant or variant_for(folder),
     })
     save(entries)
 
@@ -75,6 +89,7 @@ def main():
     a.add_argument("--reason", default="")
     a.add_argument("--media-id", default="")
     a.add_argument("--permalink", default="")
+    a.add_argument("--variant", default="")
     args = ap.parse_args()
 
     if args.cmd == "used":
@@ -83,9 +98,11 @@ def main():
                 print(e["id"])
     elif args.cmd == "recent":
         for e in load()[-args.n:]:
-            print(f'{e["date"]} | ID {e["id"]} | {e["status"]} | {e.get("series", "")} | {e["idea"]}')
+            v = f' | variant {e["variant"]}' if e.get("variant") else ""
+            print(f'{e["date"]} | ID {e["id"]} | {e["status"]} | {e.get("series", "")} | {e["idea"]}{v}')
     elif args.cmd == "add":
-        add(args.id, args.idea, args.status, args.folder, args.series, args.reason, args.media_id, args.permalink)
+        add(args.id, args.idea, args.status, args.folder, args.series, args.reason, args.media_id, args.permalink,
+            args.variant)
         print("Logged.")
 
 

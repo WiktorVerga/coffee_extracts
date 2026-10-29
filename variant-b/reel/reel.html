@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1080, height=1920">
+<title>Reel - variant B</title>
+<!--
+  VARIANT B "Film" — ANIMATED REEL TEMPLATE (1080 x 1920, 9:16), rendered with HyperFrames.
+  Used only for posts with "variant": "B" (see variant-b/README.md).
+  ------------------------------------------------------------------
+  Do NOT edit by hand for a single post: scripts/reel_animated/build_reel.py
+  fills the {{...}} placeholders for every reel.
+
+  - The colors, fonts and slide markup come from variant-b/carousel.html
+    (injected at build time), so the reel always looks like the B carousel.
+  - The elements revealed one by one come from variant-b/variant.json ->
+    reel.reveals (the REVEAL_JSON placeholder below), the same list build_reel.py uses to
+    time the sound effects.
+  - Only the reel-specific differences live here: the 9:16 frame, the Instagram
+    safe zones, the motion (GSAP timeline) and the audio track.
+-->
+<script src="gsap.min.js"></script>
+<style>
+{{CAROUSEL_CSS}}
+
+/* ── Reel-specific overrides (variant B) ──────────────────── */
+html, body { width: 1080px; height: 1920px; margin: 0; overflow: hidden; background: #2a221d; }
+#root { position: relative; width: 100%; height: 100%; overflow: hidden; background: #2a221d; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+.slide {
+  position: absolute; left: 0; top: 0;
+  width: 1080px; height: 1920px;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+/* Instagram covers the top ~250px and the bottom ~420px with its own UI */
+:root { --safe-top: 250px; --safe-bottom: 430px; }
+.content { top: var(--safe-top); bottom: var(--safe-bottom); left: 150px; }
+.footer { display: none; }
+.level { top: 260px; bottom: 440px; }
+/* Bigger type than the carousel: a reel is watched at arm's length, in motion */
+:root {
+  --t-cover: 172px; --t-title: 108px; --t-number: 420px; --t-body: 62px; --t-small: 36px;
+  --margin: 96px;
+}
+.title { margin-bottom: 56px; }
+.t-cover .cup { width: 900px; height: 900px; right: -360px; top: -60px; }
+.t-cover .content { top: 640px; }
+.t-cover .subtitle { font-size: 58px; max-width: 22ch; }
+.t-text .highlight { font-size: 66px; max-width: 22ch; }
+.t-number .unit { font-size: 140px; }
+.t-steps li { font-size: 56px; grid-template-columns: 116px 1fr; padding: 38px 0; }
+.t-steps li::before { font-size: 62px; }
+.t-compare .content.top { top: var(--safe-top); bottom: calc(50% + 56px); }
+.t-compare .content.bottom { top: calc(50% + 86px); bottom: var(--safe-bottom); }
+.t-compare .col h3 { font-size: 86px; margin-bottom: 26px; }
+.t-compare .col p { font-size: 52px; }
+.t-myth .myth { font-size: 104px; }
+.t-myth .verdict { font-size: 124px; }
+.t-tip .cup { width: 340px; height: 340px; top: var(--safe-top); right: 96px; }
+.t-tip .body { font-size: 80px; }
+.t-closing .title { font-size: 124px; }
+.t-closing .cta { font-size: 64px; padding: 0 0 14px; }
+.t-closing .cup { width: 640px; height: 640px; top: -130px; }
+.film .grain { background-size: 300px 300px; }
+/* Transitions: soft paper-colored wipes (calmer than variant A) */
+.wipe { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 50; }
+.wipe.w0 { background: var(--hazel); }
+.wipe.w1 { background: var(--porcelain); }
+.wipe.w2 { background: var(--hazel-2); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="{{DURATION}}" data-width="1080" data-height="1920">
+  <div id="stage"></div>
+  <div class="wipe w0"></div>
+  <div class="wipe w1"></div>
+  <div class="wipe w2"></div>
+</div>
+<audio id="mix" src="mix.wav" data-start="0" data-duration="{{DURATION}}" data-track-index="1" data-volume="1"></audio>
+
+<script>
+(function () {
+  const PLAN = {{PLAN_JSON}};
+  const total = PLAN.slides.length;
+  const handle = PLAN.handle || "";
+  const DARK = new Set(["cover", "tip", "closing"]);
+
+  {{CAROUSEL_JS_TYPES}}
+
+  const problems = [];
+  const stage = document.getElementById("stage");
+
+  PLAN.slides.forEach((s, i) => {
+    const make = types[s.type];
+    if (!make) { problems.push(`Slide ${i + 1}: unknown type "${s.type}"`); return; }
+    const el = document.createElement("section");
+    el.className = `slide t-${s.type}` + (DARK.has(s.type) ? " dark" : "")
+      + (s.type === "myth" && String(s.verdict).toLowerCase() !== "true" ? " is-false" : "");
+    el.dataset.index = i + 1;
+    el.innerHTML = `
+      <div class="level"><i style="height:${((i + 1) / total * 100).toFixed(2)}%"></i></div>
+      ${make(s)}`;
+    stage.appendChild(el);
+  });
+
+  {{CAROUSEL_JS_FIT}}
+
+  // Which elements of each slide type appear one after the other: from
+  // variant-b/variant.json -> reel.reveals (build_reel.py times the ticks from the same list).
+  const REVEAL = {{REVEAL_JSON}};
+  const POP = ".number, .verdict, .cta, .highlight";
+
+  function buildTimeline() {
+    const tl = gsap.timeline({ paused: true });
+    const slides = [...document.querySelectorAll(".slide")];
+    const wipes = [...document.querySelectorAll(".wipe")];
+
+    slides.forEach((el, i) => {
+      const sc = PLAN.scenes[i];
+      const type = PLAN.slides[i].type;
+
+      // The scene is visible from its start to the start of the next one.
+      // The swap happens under the middle of the wipe, so the cut is hidden.
+      tl.set(el, { opacity: 1 }, sc.start);
+      if (i < slides.length - 1) tl.set(el, { opacity: 0 }, sc.start + sc.dur);
+
+      // Slow push-in on the whole scene: nothing is ever static
+      tl.fromTo(el, { scale: 1 }, { scale: 1.06, duration: sc.dur + 0.3, ease: "none", transformOrigin: "50% 50%" }, sc.start);
+
+      // The cup "fills" as the reel goes on (same bar as the carousel)
+      const bar = el.querySelector(".level > i");
+      if (bar) tl.fromTo(bar, { height: (i / total * 100) + "%" }, { height: ((i + 1) / total * 100) + "%", duration: 0.5, ease: "power2.out" }, sc.start);
+
+      // Frame 0 is the hook: on the first scene the cup and the title are already
+      // on screen at t = 0 (an empty first frame is an instant swipe-away)
+      el.querySelectorAll(".cup").forEach(c => {
+        if (i === 0) tl.fromTo(c, { opacity: 1, scale: 1.08 }, { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0);
+        else tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power1.out" }, sc.start);
+      });
+
+      const items = [...el.querySelectorAll(REVEAL[type] || ".title")];
+      const hook = i === 0 ? (el.querySelector(".title") || items[0]) : null;
+      let j = 0;
+      items.forEach((it) => {
+        if (it === hook) {   // fully visible from the very first frame (the cup gives the motion)
+          tl.set(it, { opacity: 1 }, 0);
+          return;
+        }
+        const t0 = sc.start + sc.first + j * sc.step;
+        j += 1;
+        if (it.matches(POP)) {
+          tl.fromTo(it, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.9)", transformOrigin: "0% 60%" }, t0);
+        } else {
+          tl.fromTo(it, { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.32, ease: "power3.out" }, t0);
+        }
+      });
+
+      // Film grain: jumps to a new position 12 times a second, like real film
+      const grain = el.querySelector(".film .grain");
+      if (grain) {
+        const steps = Math.max(1, Math.round((sc.dur + 0.3) * 12));
+        let seed = (i + 1) * 9301;
+        const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+        for (let k = 0; k < steps; k++) {
+          tl.set(grain, { x: Math.round(rnd() * 80 - 40), y: Math.round(rnd() * 80 - 40) }, sc.start + k / 12);
+        }
+      }
+      // Wipe: starts 0.22s before the cut, covers the frame exactly at the cut
+      if (i > 0) {
+        const w = wipes[(i - 1) % wipes.length];
+        tl.fromTo(w, { y: 1920 }, { y: -1920, duration: 0.44, ease: "power2.inOut" }, sc.start - 0.22);
+      }
+    });
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["main"] = tl;
+    tl.seek(0);
+  }
+
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => {
+    fit();
+    buildTimeline();
+    window.__REPORT.timeline = true;
+  });
+})();
+</script>
+</body>
+</html>
