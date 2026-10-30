@@ -1,0 +1,583 @@
+{
+  "posts/2026-10-03-fill-moka-pot": {
+    "id": "1",
+    "idea": "Caricare bene la moka",
+    "series": "How-to",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-03 15:28",
+    "permalink": "https://www.instagram.com/p/DeCKt3LlTrM/",
+    "age_days": 27.18,
+    "post": {
+      "media_id": "18110709254611286",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 27.18,
+        "reach": 47,
+        "views": 73,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 6,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 27.18,
+        "reach": 47,
+        "views": 73,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 6,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-05-bitter-espresso": {
+    "id": "2",
+    "idea": "Perché l'espresso a volte esce amaro",
+    "series": "Inside the cup",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-06 01:47",
+    "permalink": "https://www.instagram.com/p/DeIbEDpkSnJ/",
+    "age_days": 24.75,
+    "post": {
+      "media_id": "18143057923598326",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 24.75,
+        "reach": 23,
+        "views": 45,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 3,
+        "follows": 0,
+        "profile_visits": 1
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 24.75,
+        "reach": 23,
+        "views": 45,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 3,
+        "follows": 0,
+        "profile_visits": 1
+      }
+    }
+  },
+  "posts/2026-10-07-dark-roast-myth": {
+    "id": "4",
+    "idea": "Il caffè scuro è più forte: mito o verità?",
+    "series": "Myth or fact",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-07 20:45",
+    "permalink": "https://www.instagram.com/p/DeNCKfVoPeU/",
+    "age_days": 22.96,
+    "reel": {
+      "duration": 30.0,
+      "media_id": "18078552317448737",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 22.96,
+        "reach": 123,
+        "views": 137,
+        "likes": 6,
+        "comments": 0,
+        "saved": 0,
+        "shares": 1,
+        "total_interactions": 8,
+        "ig_reels_avg_watch_time": 4879
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 22.96,
+        "reach": 123,
+        "views": 137,
+        "likes": 6,
+        "comments": 0,
+        "saved": 0,
+        "shares": 1,
+        "total_interactions": 8,
+        "ig_reels_avg_watch_time": 4879
+      }
+    },
+    "post": {
+      "media_id": "18116432891007734",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 22.96,
+        "reach": 16,
+        "views": 37,
+        "likes": 2,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 2,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 22.96,
+        "reach": 16,
+        "views": 37,
+        "likes": 2,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 2,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-08-espresso-crema": {
+    "id": "5",
+    "idea": "Cos'è la crema dell'espresso",
+    "series": "One word",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-09 20:40",
+    "permalink": "https://www.instagram.com/p/DeSLF2CoLnG/",
+    "age_days": 20.96,
+    "reel": {
+      "duration": 26.63,
+      "media_id": "18370263220246661",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 20.96,
+        "reach": 42,
+        "views": 45,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 5,
+        "ig_reels_avg_watch_time": 3684
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 20.96,
+        "reach": 42,
+        "views": 45,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 5,
+        "ig_reels_avg_watch_time": 3684
+      }
+    },
+    "post": {
+      "media_id": "18031072517681498",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 20.96,
+        "reach": 21,
+        "views": 45,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 3,
+        "follows": 0,
+        "profile_visits": 1
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 20.96,
+        "reach": 21,
+        "views": 45,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 3,
+        "follows": 0,
+        "profile_visits": 1
+      }
+    }
+  },
+  "posts/2026-10-14-store-ground-coffee": {
+    "id": "6",
+    "idea": "Come conservare il caffè macinato",
+    "series": "How-to",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-14 20:43",
+    "permalink": "https://www.instagram.com/p/DefDfrem38H/",
+    "age_days": 15.96,
+    "reel": {
+      "duration": 22.63,
+      "media_id": "17989290344882556",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 15.96,
+        "reach": 50,
+        "views": 52,
+        "likes": 4,
+        "comments": 2,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 7,
+        "ig_reels_avg_watch_time": 4094
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 15.96,
+        "reach": 50,
+        "views": 52,
+        "likes": 4,
+        "comments": 2,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 7,
+        "ig_reels_avg_watch_time": 4094
+      }
+    },
+    "post": {
+      "media_id": "18373050535214113",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 15.96,
+        "reach": 36,
+        "views": 60,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 8,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 15.96,
+        "reach": 36,
+        "views": 60,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 8,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-19-moka-off-the-heat": {
+    "id": "7",
+    "idea": "L'errore di lasciare la moka sul fuoco fino alla fine",
+    "series": "Common mistake",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-19 20:46",
+    "permalink": "https://www.instagram.com/p/Der7vVkm_Ku/",
+    "age_days": 10.96,
+    "reel": {
+      "duration": 24.7,
+      "media_id": "17938006833123332",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 10.96,
+        "reach": 89,
+        "views": 98,
+        "likes": 3,
+        "comments": 1,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 4,
+        "ig_reels_avg_watch_time": 3997
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 10.96,
+        "reach": 89,
+        "views": 98,
+        "likes": 3,
+        "comments": 1,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 4,
+        "ig_reels_avg_watch_time": 3997
+      }
+    },
+    "post": {
+      "media_id": "18096458657537153",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 10.96,
+        "reach": 19,
+        "views": 41,
+        "likes": 1,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 1,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 10.96,
+        "reach": 19,
+        "views": 41,
+        "likes": 1,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 1,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-21-beans-vs-ground": {
+    "id": "8",
+    "idea": "Caffè in grani o già macinato",
+    "series": "Side by side",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-21 20:44",
+    "permalink": "https://www.instagram.com/p/DexFHxzFNCp/",
+    "age_days": 8.96,
+    "reel": {
+      "duration": 26.03,
+      "media_id": "17994362085024251",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 8.96,
+        "reach": 94,
+        "views": 106,
+        "likes": 4,
+        "comments": 0,
+        "saved": 1,
+        "shares": 0,
+        "total_interactions": 8,
+        "ig_reels_avg_watch_time": 2830
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 8.96,
+        "reach": 94,
+        "views": 106,
+        "likes": 4,
+        "comments": 0,
+        "saved": 1,
+        "shares": 0,
+        "total_interactions": 8,
+        "ig_reels_avg_watch_time": 2830
+      }
+    },
+    "post": {
+      "media_id": "18151043056550353",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 8.96,
+        "reach": 26,
+        "views": 44,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 7,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 8.96,
+        "reach": 26,
+        "views": 44,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 7,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-23-what-is-roasting": {
+    "id": "9",
+    "idea": "Cos'è la tostatura",
+    "series": "One word",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-23 22:10",
+    "permalink": "https://www.instagram.com/p/De2Yhl2mS3v/",
+    "age_days": 6.9,
+    "reel": {
+      "duration": 27.0,
+      "media_id": "17914280427285094",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 6.9,
+        "reach": 40,
+        "views": 45,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 8,
+        "ig_reels_avg_watch_time": 2601
+      }
+    },
+    "post": {
+      "media_id": "18092259788213902",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 6.9,
+        "reach": 24,
+        "views": 51,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 6,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-26-ristretto-normale-lungo": {
+    "id": "10",
+    "idea": "Ristretto, normale, lungo: cosa cambia",
+    "series": "Side by side",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-26 19:43",
+    "permalink": "https://www.instagram.com/p/De99ABHG_PO/",
+    "age_days": 4.0,
+    "reel": {
+      "duration": 25.7,
+      "media_id": "18129202396889025",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 4.0,
+        "reach": 124,
+        "views": 151,
+        "likes": 6,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 10,
+        "ig_reels_avg_watch_time": 4237
+      }
+    },
+    "post": {
+      "media_id": "17902807977379161",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 4.0,
+        "reach": 26,
+        "views": 58,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 7,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-10-28-crema-quality-myth": {
+    "id": "11",
+    "idea": "Crema come indicatore di qualità",
+    "series": "Myth or fact",
+    "variant": "",
+    "in_test": false,
+    "published_at": "2026-10-28 19:47",
+    "permalink": "https://www.instagram.com/p/DfDHAeyIKWW/",
+    "age_days": 2.0,
+    "reel": {
+      "duration": 23.23,
+      "media_id": "18116688716330498",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 2.0,
+        "reach": 121,
+        "views": 150,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 6,
+        "ig_reels_avg_watch_time": 3807
+      }
+    },
+    "post": {
+      "media_id": "18158887543514563",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 2.0,
+        "reach": 19,
+        "views": 50,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 5,
+        "follows": 0,
+        "profile_visits": 4
+      }
+    }
+  },
+  "posts/2026-10-30-what-is-chicco": {
+    "id": "12",
+    "idea": "Cos'è il chicco",
+    "series": "One word",
+    "variant": "B",
+    "in_test": true,
+    "published_at": "2026-10-30 19:44",
+    "permalink": "https://www.instagram.com/p/DfIQUAfiVlp/",
+    "age_days": 0.0,
+    "reel": {
+      "duration": 46.57,
+      "media_id": "18146193661587716",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 0.0,
+        "reach": 0,
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 0,
+        "ig_reels_avg_watch_time": 0
+      }
+    },
+    "post": {
+      "media_id": "17921073897245518",
+      "latest": {
+        "fetched_at": "2026-10-30 19:46",
+        "age_days": 0.0,
+        "reach": 0,
+        "views": 0,
+        "likes": 0,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 0,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  }
+}
