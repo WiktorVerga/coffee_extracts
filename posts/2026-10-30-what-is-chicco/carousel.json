@@ -1,0 +1,12 @@
+{
+  "variant": "B",
+  "series": "One word",
+  "slides": [
+    { "type": "cover", "kicker": "One word", "title": "Chicco: your coffee bean is a seed", "subtitle": "It starts as a fruit. Follow its journey to your cup." },
+    { "type": "text", "title": "Chicco means coffee bean", "body": "Chicco is the Italian word for a coffee bean. Botanically, though, it's a seed: the one inside the fruit of the coffee tree, called the cherry.", "highlight": "A seed, not a bean." },
+    { "type": "steps", "title": "From cherry to cup", "steps": ["The coffee tree grows fruit: the cherry.", "The seed is freed from the fruit and dried.", "Hulling removes the last dry layers.", "Roasting makes it brown and aromatic."] },
+    { "type": "compare", "title": "Two ways to free the seed", "left": { "label": "Wet method", "points": ["Pulp removed first", "Seed dried in its parchment"] }, "right": { "label": "Dry method", "points": ["Whole fruit dried first", "Husk removed afterward"] } },
+    { "type": "text", "title": "A seed that could be a tree", "body": "If a coffee seed isn't processed, it can be planted and grow into a coffee tree. Drying, hulling and roasting turn it into the chicco you brew.", "highlight": "Roasting is the last step before brewing." },
+    { "type": "closing", "title": "Every chicco is a seed", "body": "Fruit, seed, roast: that's how a cherry becomes your coffee.", "cta": "Save this for later" }
+  ]
+}

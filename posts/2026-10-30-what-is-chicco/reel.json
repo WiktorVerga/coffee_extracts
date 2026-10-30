@@ -1,0 +1,8 @@
+{ "scenes": [
+ { "say": "Your coffee bean is not really a bean. It is the seed of a fruit." },
+ { "say": "In Italian, it is called a keek-koh. Botanically, it is the seed inside the fruit of the coffee tree, which is called the cherry." },
+ { "say": "The seed is freed from the fruit and dried. Hulling then removes the last dry layers, and roasting turns it brown and aromatic." },
+ { "say": "There are two ways to free the seed. With the wet method, the pulp comes off first. With the dry method, the whole fruit dries first, and the husk is removed afterward." },
+ { "say": "An unprocessed coffee seed can be planted and grow into a coffee tree. Drying, hulling and roasting are what turn it into the keek-koh you brew." },
+ { "say": "So every keek-koh is a seed, and every cup starts as a cherry. Save this for later." }
+] }
