@@ -1,6 +1,6 @@
 # Test A/B: variante A (originale) contro B (Film)
 
-Aggiornato: 2026-10-30 19:46 · test attivo dal 2026-10-29 · numeri congelati a 7 giorni dalla pubblicazione.
+Aggiornato: 2026-11-02 19:45 · test attivo dal 2026-10-29 · numeri congelati a 7 giorni dalla pubblicazione.
 
 Metriche principali: **visualizzazioni e like** del carosello e del reel, e per il reel il **tempo medio di visione**. Le altre metriche sono in fondo, solo come contesto.
 
@@ -14,49 +14,50 @@ Ancora nessun post congelato per entrambe le varianti.
 
 ### Carosello
 
-| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=7) |
+| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=9) |
 |---|---|---|---|
-| Visualizzazioni | – | – | 49.3 · 45 |
-| Like | – | – | 3.3 · 3 |
-| Like ogni 100 visualizzazioni | – | – | 6.6 · 6.7 |
+| Visualizzazioni | – | – | 52.9 · 45 |
+| Like | – | – | 3.6 · 4 |
+| Like ogni 100 visualizzazioni | – | – | 6.7 · 6.7 |
 
 ### Reel del post
 
-| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=5) |
+| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=7) |
 |---|---|---|---|
-| Visualizzazioni | – | – | 87.6 · 98 |
-| Like | – | – | 4.2 · 4 |
-| Visione media | – | – | 3.9 s · 4.0 s |
-| Visione media / durata del reel | – | – | 15.0% · 16.2% |
+| Visualizzazioni | – | – | 92 · 98 |
+| Like | – | – | 4.9 · 4 |
+| Visione media | – | – | 3.8 s · 4.0 s |
+| Visione media / durata del reel | – | – | 14.7% · 16.2% |
 
 ## Post del test
 
 | Data | ID | Variante | Serie | Carosello: visual. | Carosello: like | Reel: visual. | Reel: like | Reel: visione media | Stato |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-10-30 | 12 | B | One word | 0 | 0 | 0 | 0 | – | in corso (0 gg) |
+| 2026-11-02 | 13 | A | Common mistake | 0 | 0 | 0 | 0 | – | in corso (0 gg) |
+| 2026-10-30 | 12 | B | One word | 48 | 3 | 42 | 4 | 5.3 s | in corso (3 gg) |
 
-In attesa dei 7 giorni: ID 12 (B).
+In attesa dei 7 giorni: ID 12 (B), ID 13 (A).
 
 ## Altre metriche (contesto)
 
 ### Carosello: altre metriche
 
-| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=7) |
+| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=9) |
 |---|---|---|---|
-| Reach | – | – | 26.9 · 23 |
+| Reach | – | – | 27.8 · 26 |
 | Salvataggi | – | – | 0 · 0 |
 | Condivisioni | – | – | 0 · 0 |
-| Interazioni / reach | – | – | 15.3% · 13.0% |
+| Interazioni / reach | – | – | 17.3% · 14.3% |
 | Nuovi follower | – | – | 0 · 0 |
 
 ### Reel: altre metriche
 
-| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=5) |
+| Metrica (media · mediana) | A (originale) (n=0) | B (Film) (n=0) | A prima del test (n=7) |
 |---|---|---|---|
-| Reach | – | – | 79.6 · 89 |
-| Salvataggi | – | – | 0.2 · 0 |
-| Condivisioni | – | – | 0.2 · 0 |
-| Interazioni / reach | – | – | 9.1% · 8.5% |
+| Reach | – | – | 81.9 · 89 |
+| Salvataggi | – | – | 0.1 · 0 |
+| Condivisioni | – | – | 0.1 · 0 |
+| Interazioni / reach | – | – | 10.6% · 8.5% |
 
 ## Come leggerlo
 

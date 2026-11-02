@@ -7,7 +7,7 @@
     "in_test": false,
     "published_at": "2026-10-03 15:28",
     "permalink": "https://www.instagram.com/p/DeCKt3LlTrM/",
-    "age_days": 27.18,
+    "age_days": 30.18,
     "post": {
       "media_id": "18110709254611286",
       "latest": {
@@ -46,7 +46,7 @@
     "in_test": false,
     "published_at": "2026-10-06 01:47",
     "permalink": "https://www.instagram.com/p/DeIbEDpkSnJ/",
-    "age_days": 24.75,
+    "age_days": 27.75,
     "post": {
       "media_id": "18143057923598326",
       "latest": {
@@ -85,7 +85,7 @@
     "in_test": false,
     "published_at": "2026-10-07 20:45",
     "permalink": "https://www.instagram.com/p/DeNCKfVoPeU/",
-    "age_days": 22.96,
+    "age_days": 25.96,
     "reel": {
       "duration": 30.0,
       "media_id": "18078552317448737",
@@ -152,7 +152,7 @@
     "in_test": false,
     "published_at": "2026-10-09 20:40",
     "permalink": "https://www.instagram.com/p/DeSLF2CoLnG/",
-    "age_days": 20.96,
+    "age_days": 23.96,
     "reel": {
       "duration": 26.63,
       "media_id": "18370263220246661",
@@ -219,7 +219,7 @@
     "in_test": false,
     "published_at": "2026-10-14 20:43",
     "permalink": "https://www.instagram.com/p/DefDfrem38H/",
-    "age_days": 15.96,
+    "age_days": 18.96,
     "reel": {
       "duration": 22.63,
       "media_id": "17989290344882556",
@@ -286,7 +286,7 @@
     "in_test": false,
     "published_at": "2026-10-19 20:46",
     "permalink": "https://www.instagram.com/p/Der7vVkm_Ku/",
-    "age_days": 10.96,
+    "age_days": 13.96,
     "reel": {
       "duration": 24.7,
       "media_id": "17938006833123332",
@@ -353,7 +353,7 @@
     "in_test": false,
     "published_at": "2026-10-21 20:44",
     "permalink": "https://www.instagram.com/p/DexFHxzFNCp/",
-    "age_days": 8.96,
+    "age_days": 11.96,
     "reel": {
       "duration": 26.03,
       "media_id": "17994362085024251",
@@ -420,35 +420,60 @@
     "in_test": false,
     "published_at": "2026-10-23 22:10",
     "permalink": "https://www.instagram.com/p/De2Yhl2mS3v/",
-    "age_days": 6.9,
+    "age_days": 9.9,
     "reel": {
       "duration": 27.0,
       "media_id": "17914280427285094",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
-        "age_days": 6.9,
-        "reach": 40,
-        "views": 45,
-        "likes": 5,
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 9.9,
+        "reach": 45,
+        "views": 49,
+        "likes": 6,
         "comments": 0,
         "saved": 0,
         "shares": 0,
-        "total_interactions": 8,
-        "ig_reels_avg_watch_time": 2601
+        "total_interactions": 9,
+        "ig_reels_avg_watch_time": 2893
+      },
+      "frozen": {
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 9.9,
+        "reach": 45,
+        "views": 49,
+        "likes": 6,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 9,
+        "ig_reels_avg_watch_time": 2893
       }
     },
     "post": {
       "media_id": "18092259788213902",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
-        "age_days": 6.9,
-        "reach": 24,
-        "views": 51,
-        "likes": 4,
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 9.9,
+        "reach": 30,
+        "views": 64,
+        "likes": 5,
         "comments": 0,
         "saved": 0,
         "shares": 0,
-        "total_interactions": 6,
+        "total_interactions": 7,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 9.9,
+        "reach": 30,
+        "views": 64,
+        "likes": 5,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 7,
         "follows": 0,
         "profile_visits": 0
       }
@@ -462,35 +487,60 @@
     "in_test": false,
     "published_at": "2026-10-26 19:43",
     "permalink": "https://www.instagram.com/p/De99ABHG_PO/",
-    "age_days": 4.0,
+    "age_days": 7.0,
     "reel": {
       "duration": 25.7,
       "media_id": "18129202396889025",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
-        "age_days": 4.0,
-        "reach": 124,
-        "views": 151,
-        "likes": 6,
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 7.0,
+        "reach": 130,
+        "views": 157,
+        "likes": 7,
         "comments": 0,
         "saved": 0,
         "shares": 0,
-        "total_interactions": 10,
-        "ig_reels_avg_watch_time": 4237
+        "total_interactions": 11,
+        "ig_reels_avg_watch_time": 4337
+      },
+      "frozen": {
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 7.0,
+        "reach": 130,
+        "views": 157,
+        "likes": 7,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 11,
+        "ig_reels_avg_watch_time": 4337
       }
     },
     "post": {
       "media_id": "17902807977379161",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
-        "age_days": 4.0,
-        "reach": 26,
-        "views": 58,
-        "likes": 3,
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 7.0,
+        "reach": 32,
+        "views": 67,
+        "likes": 4,
         "comments": 0,
         "saved": 0,
         "shares": 0,
-        "total_interactions": 7,
+        "total_interactions": 8,
+        "follows": 0,
+        "profile_visits": 0
+      },
+      "frozen": {
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 7.0,
+        "reach": 32,
+        "views": 67,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 8,
         "follows": 0,
         "profile_visits": 0
       }
@@ -504,35 +554,35 @@
     "in_test": false,
     "published_at": "2026-10-28 19:47",
     "permalink": "https://www.instagram.com/p/DfDHAeyIKWW/",
-    "age_days": 2.0,
+    "age_days": 5.0,
     "reel": {
       "duration": 23.23,
       "media_id": "18116688716330498",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
-        "age_days": 2.0,
-        "reach": 121,
-        "views": 150,
-        "likes": 5,
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 5.0,
+        "reach": 126,
+        "views": 152,
+        "likes": 7,
         "comments": 0,
         "saved": 0,
         "shares": 0,
-        "total_interactions": 6,
-        "ig_reels_avg_watch_time": 3807
+        "total_interactions": 8,
+        "ig_reels_avg_watch_time": 3846
       }
     },
     "post": {
       "media_id": "18158887543514563",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
-        "age_days": 2.0,
-        "reach": 19,
-        "views": 50,
-        "likes": 3,
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 5.0,
+        "reach": 26,
+        "views": 63,
+        "likes": 5,
         "comments": 0,
         "saved": 0,
         "shares": 0,
-        "total_interactions": 5,
+        "total_interactions": 7,
         "follows": 0,
         "profile_visits": 4
       }
@@ -546,12 +596,54 @@
     "in_test": true,
     "published_at": "2026-10-30 19:44",
     "permalink": "https://www.instagram.com/p/DfIQUAfiVlp/",
-    "age_days": 0.0,
+    "age_days": 3.0,
     "reel": {
       "duration": 46.57,
       "media_id": "18146193661587716",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 3.0,
+        "reach": 31,
+        "views": 42,
+        "likes": 4,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 6,
+        "ig_reels_avg_watch_time": 5313
+      }
+    },
+    "post": {
+      "media_id": "17921073897245518",
+      "latest": {
+        "fetched_at": "2026-11-02 19:45",
+        "age_days": 3.0,
+        "reach": 18,
+        "views": 48,
+        "likes": 3,
+        "comments": 0,
+        "saved": 0,
+        "shares": 0,
+        "total_interactions": 5,
+        "follows": 0,
+        "profile_visits": 0
+      }
+    }
+  },
+  "posts/2026-11-02-roast-date-vs-expiry": {
+    "id": "13",
+    "idea": "Non guardare la data di scadenza!",
+    "series": "Common mistake",
+    "variant": "A",
+    "in_test": true,
+    "published_at": "2026-11-02 19:43",
+    "permalink": "https://www.instagram.com/p/DfP-nrWmydF/",
+    "age_days": 0.0,
+    "reel": {
+      "duration": 22.6,
+      "media_id": "18195605689401777",
+      "latest": {
+        "fetched_at": "2026-11-02 19:45",
         "age_days": 0.0,
         "reach": 0,
         "views": 0,
@@ -564,9 +656,9 @@
       }
     },
     "post": {
-      "media_id": "17921073897245518",
+      "media_id": "18119689697081399",
       "latest": {
-        "fetched_at": "2026-10-30 19:46",
+        "fetched_at": "2026-11-02 19:45",
         "age_days": 0.0,
         "reach": 0,
         "views": 0,
