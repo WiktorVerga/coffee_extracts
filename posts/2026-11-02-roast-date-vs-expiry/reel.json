@@ -1,0 +1,9 @@
+{ "scenes": [
+ { "say": "You're checking the wrong date." },
+ { "say": "Expiry dates are set months ahead. They say little about taste." },
+ { "say": "The roast date shows real age." },
+ { "say": "Coffee loses aroma with time. Fresh beans need days to rest." },
+ { "title": "At the shelf.", "say": "Pick the latest roast date." },
+ { "title": "The tip.", "say": "No roast date? Small warning sign." },
+ { "say": "Roast date, not expiry. Send this to a coffee friend." }
+] }

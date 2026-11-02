@@ -1,0 +1,65 @@
+{
+  "variant": "A",
+  "series": "Common mistake",
+  "slides": [
+    {
+      "type": "cover",
+      "kicker": "Common mistake",
+      "title": "Stop checking coffee's expiry date",
+      "subtitle": "A different date says far more. Most people skip it."
+    },
+    {
+      "type": "myth",
+      "myth": "A later expiry date means fresher coffee.",
+      "verdict": "false",
+      "truth": "That date is often set months ahead. It tells you how long the bag is considered safe to sell, not when the beans were roasted."
+    },
+    {
+      "type": "compare",
+      "title": "Two dates, two stories",
+      "left": {
+        "label": "Expiry date",
+        "points": [
+          "Set far in advance",
+          "Says little about taste",
+          "Easy to find"
+        ]
+      },
+      "right": {
+        "label": "Roast date",
+        "points": [
+          "The day beans were roasted",
+          "Shows real age",
+          "Not on every bag"
+        ]
+      }
+    },
+    {
+      "type": "text",
+      "title": "Why age changes the cup",
+      "body": "Roasted coffee slowly loses aroma over time. Fresh beans also release CO2 for the first days, which is why many roasters let them rest before selling.",
+      "highlight": "Not too old, not too fresh."
+    },
+    {
+      "type": "steps",
+      "title": "At the shelf",
+      "steps": [
+        "Look for a roast date, not just an expiry date.",
+        "Pick the most recent one you can find.",
+        "Prefer small bags you will finish soon.",
+        "Grind whole beans just before brewing."
+      ]
+    },
+    {
+      "type": "tip",
+      "label": "The tip",
+      "body": "No roast date on the bag? That is a small warning sign. Ask where it was roasted, or try another bag."
+    },
+    {
+      "type": "closing",
+      "title": "Look for the roast date, not the expiry",
+      "body": "The roast date shows how old your coffee really is.",
+      "cta": "Send it to a coffee friend"
+    }
+  ]
+}

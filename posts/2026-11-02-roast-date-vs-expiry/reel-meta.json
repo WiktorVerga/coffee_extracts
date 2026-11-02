@@ -1,0 +1,78 @@
+{
+  "duration": 22.6,
+  "size_mb": 11.24,
+  "voice": "af_heart",
+  "voice_speed": 1.1,
+  "music": {
+    "file": "Satie - Gymnopédie No1.mp3",
+    "start": 5,
+    "gain_db": -6
+  },
+  "scenes": [
+    {
+      "start": 0.0,
+      "dur": 1.827,
+      "first": 0.0,
+      "step": 0.32,
+      "items": 3,
+      "voice_start": 0.12,
+      "voice_dur": 1.387
+    },
+    {
+      "start": 1.827,
+      "dur": 3.811,
+      "first": 0.06,
+      "step": 0.32,
+      "items": 4,
+      "voice_start": 1.947,
+      "voice_dur": 3.371
+    },
+    {
+      "start": 5.637,
+      "dur": 2.083,
+      "first": 0.06,
+      "step": 0.32,
+      "items": 3,
+      "voice_start": 5.757,
+      "voice_dur": 1.643
+    },
+    {
+      "start": 7.72,
+      "dur": 4.195,
+      "first": 0.06,
+      "step": 0.32,
+      "items": 3,
+      "voice_start": 7.84,
+      "voice_dur": 3.755
+    },
+    {
+      "start": 11.915,
+      "dur": 2.99,
+      "first": 0.06,
+      "step": 0.32,
+      "items": 5,
+      "voice_start": 12.035,
+      "voice_dur": 2.55
+    },
+    {
+      "start": 14.905,
+      "dur": 3.43,
+      "first": 0.06,
+      "step": 0.32,
+      "items": 2,
+      "voice_start": 15.025,
+      "voice_dur": 2.99
+    },
+    {
+      "start": 18.335,
+      "dur": 4.249,
+      "first": 0.06,
+      "step": 0.32,
+      "items": 3,
+      "voice_start": 18.455,
+      "voice_dur": 3.029
+    }
+  ],
+  "hyperframes": "0.8.137",
+  "variant": "A"
+}
