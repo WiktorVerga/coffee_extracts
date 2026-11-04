@@ -201,5 +201,41 @@
     "media_id": "",
     "permalink": "",
     "variant": ""
+  },
+  {
+    "date": "2026-11-04 19:39",
+    "id": "17",
+    "idea": "Gli effetti della caffeina sul corpo",
+    "series": "",
+    "status": "skipped",
+    "folder": "",
+    "reason": "Guide section 4 rule 6: body/health effects of caffeine",
+    "media_id": "",
+    "permalink": "",
+    "variant": ""
+  },
+  {
+    "date": "2026-11-04 19:39",
+    "id": "18",
+    "idea": "Quando bere il caffè: i momenti migliori (e peggiori)",
+    "series": "",
+    "status": "skipped",
+    "folder": "",
+    "reason": "Guide section 4 rule 6: health advice on when to drink coffee",
+    "media_id": "",
+    "permalink": "",
+    "variant": ""
+  },
+  {
+    "date": "2026-11-04 19:50",
+    "id": "19",
+    "idea": "Come si fa il caffè decaffeinato",
+    "series": "Inside the cup",
+    "status": "published",
+    "folder": "posts/2026-11-04-how-decaf-is-made",
+    "reason": "",
+    "media_id": "18004061924809116",
+    "permalink": "https://www.instagram.com/p/DfVI_3_mnQx/",
+    "variant": "B"
   }
 ]
