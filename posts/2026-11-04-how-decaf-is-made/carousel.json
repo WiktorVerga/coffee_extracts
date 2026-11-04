@@ -1,0 +1,13 @@
+{
+  "variant": "B",
+  "series": "Inside the cup",
+  "slides": [
+    { "type": "cover", "kicker": "Inside the cup", "title": "How coffee loses its caffeine", "subtitle": "Three methods, and one step they all share." },
+    { "type": "text", "title": "It happens before roasting", "body": "Decaf starts as green coffee: the raw, unroasted beans. The caffeine comes out first. The roasting comes after.", "highlight": "Raw beans first, roast second." },
+    { "type": "text", "title": "Method one: water and a filter", "body": "The beans soak in hot water. That water then passes through a carbon filter that catches the caffeine. The same water can be reused on the next batch." },
+    { "type": "text", "title": "Method two: a solvent", "body": "Many decaf coffees are made this way. A solvent, such as ethyl acetate, picks up the caffeine. It is then steamed or evaporated off the beans." },
+    { "type": "text", "title": "Method three: carbon dioxide", "body": "Moistened beans go into a pressurized vessel. Carbon dioxide draws out the caffeine and usually leaves most other compounds behind." },
+    { "type": "steps", "title": "Every decaf, in three moves", "steps": ["Start with green, unroasted beans.", "Pull the caffeine out with water, a solvent or CO2.", "Roast the beans as usual."] },
+    { "type": "closing", "title": "Same goal, three different routes", "body": "Decaf is made on green beans, using water, a solvent or carbon dioxide.", "cta": "Save this for later" }
+  ]
+}
