@@ -1,0 +1,9 @@
+{ "scenes": [
+ { "say": "How does coffee lose its caffeine? There are three ways, and they all share one step." },
+ { "say": "Decaf starts as green coffee, which means raw, unroasted beans. The caffeine comes out first, and only then are the beans roasted." },
+ { "say": "The first method uses water. The beans soak in hot water, and a carbon filter catches the caffeine from that water. The same water can be reused on the next batch." },
+ { "say": "The second method uses a solvent, such as ethyl acetate. It picks up the caffeine, and then it is steamed or evaporated off the beans." },
+ { "say": "The third method uses carbon dioxide. Moistened beans go into a pressurized vessel, where the carbon dioxide draws out the caffeine and usually leaves most other compounds behind." },
+ { "say": "So every decaf follows the same three moves: green beans, caffeine pulled out, then a normal roast." },
+ { "say": "Decaf is made on green beans, using water, a solvent or carbon dioxide. Save this for later." }
+] }
