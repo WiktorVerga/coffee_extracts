@@ -1,6 +1,6 @@
 # Test A/B: variante A (originale) contro B (Film)
 
-Aggiornato: 2026-11-02 19:45 · test attivo dal 2026-10-29 · numeri congelati a 7 giorni dalla pubblicazione.
+Aggiornato: 2026-11-04 19:38 · test attivo dal 2026-10-29 · numeri congelati a 7 giorni dalla pubblicazione.
 
 Metriche principali: **visualizzazioni e like** del carosello e del reel, e per il reel il **tempo medio di visione**. Le altre metriche sono in fondo, solo come contesto.
 
@@ -33,8 +33,8 @@ Ancora nessun post congelato per entrambe le varianti.
 
 | Data | ID | Variante | Serie | Carosello: visual. | Carosello: like | Reel: visual. | Reel: like | Reel: visione media | Stato |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-11-02 | 13 | A | Common mistake | 0 | 0 | 0 | 0 | – | in corso (0 gg) |
-| 2026-10-30 | 12 | B | One word | 48 | 3 | 42 | 4 | 5.3 s | in corso (3 gg) |
+| 2026-11-02 | 13 | A | Common mistake | 51 | 3 | 53 | 5 | 4.8 s | in corso (2 gg) |
+| 2026-10-30 | 12 | B | One word | 61 | 3 | 51 | 4 | 5.4 s | in corso (5 gg) |
 
 In attesa dei 7 giorni: ID 12 (B), ID 13 (A).
 
