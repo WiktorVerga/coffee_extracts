@@ -165,5 +165,41 @@
     "media_id": "18119689697081399",
     "permalink": "https://www.instagram.com/p/DfP-nrWmydF/",
     "variant": "A"
+  },
+  {
+    "date": "2026-11-04 19:38",
+    "id": "14",
+    "idea": "Il caffè a fine pasto aiuta a digerire?",
+    "series": "",
+    "status": "skipped",
+    "folder": "",
+    "reason": "Guide section 4 rule 6: digestive/health claims about stomach acid and digestion",
+    "media_id": "",
+    "permalink": "",
+    "variant": ""
+  },
+  {
+    "date": "2026-11-04 19:38",
+    "id": "15",
+    "idea": "Perché il caffè ti manda in bagno (così in fretta)",
+    "series": "",
+    "status": "skipped",
+    "folder": "",
+    "reason": "Guide section 4 rule 6: bodily/health effect claims (gut physiology)",
+    "media_id": "",
+    "permalink": "",
+    "variant": ""
+  },
+  {
+    "date": "2026-11-04 19:38",
+    "id": "16",
+    "idea": "È la caffeina che ti manda in bagno: mito o verità?",
+    "series": "",
+    "status": "skipped",
+    "folder": "",
+    "reason": "Guide section 4 rule 6: bodily/health effect claims about caffeine and the gut",
+    "media_id": "",
+    "permalink": "",
+    "variant": ""
   }
 ]
