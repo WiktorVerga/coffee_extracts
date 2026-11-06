@@ -1,0 +1,12 @@
+{
+  "variant": "A",
+  "series": "Side by side",
+  "slides": [
+    { "type": "cover", "kicker": "Side by side", "title": "3 milky coffees that look alike", "subtitle": "Same espresso, different milk. Can you tell which is which?" },
+    { "type": "text", "title": "Macchiato: a mark of milk", "body": "Macchiato means \"marked\" or \"stained\" in Italian. It is espresso with just a small dollop of milk foam on top, so it is the most espresso-forward of the three.", "highlight": "A dollop of foam, not a cup of milk." },
+    { "type": "text", "title": "Cortado: espresso, cut with milk", "body": "Cortado comes from the Spanish for \"cut\". Steamed milk cuts the espresso at roughly equal parts, with no thick foam layer on top." },
+    { "type": "text", "title": "Cappuccino: the milkiest one", "body": "Espresso, steamed milk and a thick layer of foam. The extra milk makes it sweeter, thicker and creamier than the other two." },
+    { "type": "steps", "title": "Least to most milk", "steps": ["Macchiato: espresso with a dollop of foam", "Cortado: about half milk, no thick foam", "Cappuccino: steamed milk and thick foam"] },
+    { "type": "closing", "title": "Foam, half, or full milk", "body": "Macchiato gets a dollop, cortado half, cappuccino the most milk.", "cta": "Save this for your next order" }
+  ]
+}
