@@ -1,0 +1,8 @@
+{ "scenes": [
+ { "say": "Does mak-kee-ah-toh mean coffee with milk? Not quite, and the real meaning explains the drink." },
+ { "title": "It means stained.", "say": "In Italian, mak-kee-ah-toh means stained or marked. So a caf-feh mak-kee-ah-toh is literally a stained coffee." },
+ { "say": "What gets stained? The espresso. A small spot of milk leaves a mark on top, which is why the drink stays mostly coffee." },
+ { "title": "Same word, flipped.", "say": "A latte mak-kee-ah-toh is the reverse. It is mostly steamed milk with a little espresso, so the coffee is the mark this time." },
+ { "title": "At the bar.", "say": "If you ask for a mak-kee-ah-toh, you will usually get espresso with a spot of milk. For the milky glass, say latte mak-kee-ah-toh." },
+ { "say": "So mak-kee-ah-toh means marked, not milky. Coffee marked with milk, or milk marked with coffee. Save this for your next order." }
+] }

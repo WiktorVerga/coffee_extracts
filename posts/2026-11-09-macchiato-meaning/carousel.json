@@ -1,0 +1,12 @@
+{
+  "variant": "B",
+  "series": "One word",
+  "slides": [
+    { "type": "cover", "kicker": "One word", "title": "Macchiato doesn't mean \"with milk\"", "subtitle": "The word describes what the espresso looks like." },
+    { "type": "text", "title": "It means stained", "body": "In Italian, macchiato means stained or marked. It comes from the verb macchiare, to stain, which traces back to a Latin word for spotted.", "highlight": "Caffè macchiato = stained coffee" },
+    { "type": "text", "title": "So what gets stained?", "body": "The espresso. A small spot of milk leaves a mark on top, so the drink stays mostly coffee. The milk is the stain, not the main event." },
+    { "type": "compare", "title": "Same word, flipped", "left": { "label": "Caffè macchiato", "points": ["Mostly espresso", "A spot of milk", "Milk marks the coffee"] }, "right": { "label": "Latte macchiato", "points": ["Mostly steamed milk", "A little espresso", "Coffee marks the milk"] } },
+    { "type": "tip", "label": "At the bar", "body": "Ask for a macchiato and you'll usually get espresso with a spot of milk. Say latte macchiato for the milky glass." },
+    { "type": "closing", "title": "Macchiato means marked, not milky", "body": "Caffè macchiato: coffee marked with milk. Latte macchiato: milk marked with coffee.", "cta": "Save it for your next order" }
+  ]
+}
