@@ -1,0 +1,12 @@
+{
+  "variant": "A",
+  "series": "Common mistake",
+  "slides": [
+    { "type": "cover", "kicker": "Common mistake", "title": "An americano is not a lungo", "subtitle": "They look alike. The water takes a different route." },
+    { "type": "myth", "myth": "An americano and a lungo are the same drink.", "verdict": "false", "truth": "They look alike, but they're made differently. In a lungo, the extra water runs through the coffee. In an americano, it's added afterward." },
+    { "type": "compare", "title": "Where the water goes", "left": { "label": "Lungo", "points": ["Means \"long\" in Italian", "More water through the grounds", "Extra water is part of the brew"] }, "right": { "label": "Americano", "points": ["A regular espresso shot", "Hot water added afterward", "Water only dilutes the shot"] } },
+    { "type": "text", "title": "Why the taste changes", "body": "Coffee's flavor components dissolve at different rates. Running more water through the grounds changes what ends up in your cup. Adding water afterward only thins what's already there.", "highlight": "Same look, different flavor." },
+    { "type": "tip", "label": "At home", "body": "Want an americano? Pull your usual shot, then add hot water. Letting the shot run longer gives you a lungo instead." },
+    { "type": "closing", "title": "Same look, different route for the water", "body": "Lungo: extra water through the coffee. Americano: extra water added after the shot.", "cta": "Send this to an americano drinker" }
+  ]
+}

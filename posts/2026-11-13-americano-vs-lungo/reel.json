@@ -1,0 +1,8 @@
+{ "scenes": [
+  { "say": "Americano and loon-go are not the same coffee." },
+  { "say": "They look alike. But the water takes different routes." },
+  { "say": "Loon-go means long. Extra water runs through the grounds. An americano gets hot water afterward." },
+  { "say": "Flavors dissolve at different rates. More water through the coffee changes the taste." },
+  { "title": "At home.", "say": "Pull your usual shot. Add hot water after." },
+  { "say": "Same look, different route. Send this to an americano drinker." }
+] }
