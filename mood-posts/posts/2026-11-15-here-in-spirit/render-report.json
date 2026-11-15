@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "problems": [],
+  "file": "post.jpg",
+  "width": 1080,
+  "height": 1350,
+  "theme": "paper",
+  "layout": "hero",
+  "format": "portrait",
+  "art": "ghost-mug",
+  "font_size": 71,
+  "lines": 1,
+  "art_box": [
+    186,
+    225,
+    709,
+    770
+  ]
+}

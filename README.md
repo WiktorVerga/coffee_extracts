@@ -235,6 +235,34 @@ Options: `run-reels.bat --dry-run` (no push), `--only 3`, `--retry` (retry rejec
 
 **Watch out:** if the original video has music, Instagram may mute or block the reel even with a CC BY license. Prefer clips with speech only. Downloading from YouTube with external tools is against YouTube's terms of service (a contractual rule, not copyright).
 
+## Mood posts (single image, Saturday and Sunday)
+
+One image, one cute drawing, one short line: motivational, relatable, or a small thought about the day. No sheet to fill in: **the routine writes the line itself**, following `mood-posts/STYLE.md`, and never repeats one. A third routine publishes them on **Saturday and Sunday**, so they never overlap with the carousels (Mon, Wed, Fri) or the YouTube reels (Tue, Thu).
+
+```
+Mood routine (Sat · Sun, morning)
+   │  1. a post that failed last time?  → publishes it again
+   │  2. a ready-made post in the queue? → publishes the oldest one
+   │  3. otherwise writes a new line, picks theme, layout and drawing
+   │  renders it (HTML template + SVG drawing → post.jpg, 1080 × 1350)
+   │  saves it to GitHub
+   └► Instagram API ──► single-image post published
+```
+
+| Path | Contents |
+|---|---|
+| `MOOD-POSTS.md` | The mood routine procedure (like `CLAUDE.md` for carousels). |
+| `ROUTINE-MOOD-PROMPT.txt` | The text to paste into the mood routine. |
+| `mood-posts/` | Everything else: moodboard, style rules, themes, drawings, template, scripts, posts and log. See `mood-posts/README.md`. |
+| `config.json` → `mood_posts` | `mode` (`preview` / `publish`), separate from the carousels' `mode`. |
+
+**Setup (once):** create a third routine on claude.ai/code/routines: prompt = `ROUTINE-MOOD-PROMPT.txt`, environment `autopost` (nothing new to install), schedule Saturday and Sunday at 9:07 AM (cron `7 9 * * 6,0`).
+
+**How it goes:**
+- `mood_posts.mode` starts as `preview`: the routine creates the post in `mood-posts/posts/…` on GitHub but doesn't publish. Look at the `post.jpg` files; when you like them, change it to `"publish"`. Posts that were only previewed are then published first, oldest first.
+- **Your own posts:** make one with `python mood-posts/scripts/generate.py --text "…" --caption "…"`, look at it, commit and push the folder. It goes into the queue and the routine publishes it before writing new ones. Delete a folder you don't want published.
+- To change the tone of the lines, edit `mood-posts/STYLE.md`. To change colors, `mood-posts/themes.json`.
+
 ## Limits and things to watch
 - Routines are in *research preview*: behavior and limits may change.
 - Rendering needs Chromium. If the download in the setup script fails, the script tries a system Chrome; if that fails too, the run stops with a clear error.

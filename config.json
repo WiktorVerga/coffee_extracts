@@ -20,6 +20,9 @@
     "whisper_model": "large-v3-turbo",
     "license_label": "CC BY 3.0"
   },
+  "mood_posts": {
+    "mode": "preview"
+  },
   "reel_animated": {
     "mode": "publish",
     "voice": "af_heart",

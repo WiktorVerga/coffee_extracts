@@ -1,0 +1,135 @@
+{
+  "ghost-mug": {
+    "title": "Small ghost hugging an oversized mug, eyes closed",
+    "tags": [
+      "cozy",
+      "comfort",
+      "love",
+      "morning",
+      "calm"
+    ],
+    "ratio": 0.921
+  },
+  "sleepy-mug": {
+    "title": "Mug with a sleepy half-asleep face and a trail of z steam",
+    "tags": [
+      "tired",
+      "monday",
+      "morning",
+      "sleepy",
+      "humor"
+    ],
+    "ratio": 0.744
+  },
+  "moka": {
+    "title": "Octagonal moka pot with a small steam puff",
+    "tags": [
+      "morning",
+      "ritual",
+      "home",
+      "italian",
+      "slow"
+    ],
+    "ratio": 0.905
+  },
+  "beans": {
+    "title": "Three coffee beans loosely scattered",
+    "tags": [
+      "minimal",
+      "ritual",
+      "simple",
+      "roast",
+      "everyday"
+    ],
+    "ratio": 1.133
+  },
+  "takeaway-cup": {
+    "title": "Paper takeaway cup with lid and a smiling sleeve",
+    "tags": [
+      "on the go",
+      "commute",
+      "monday",
+      "busy",
+      "cheerful"
+    ],
+    "ratio": 0.548
+  },
+  "drip-bag": {
+    "title": "IV-style drip bag half full of coffee, tube running into a small cup",
+    "tags": [
+      "tired",
+      "monday",
+      "humor",
+      "survival",
+      "need coffee"
+    ],
+    "ratio": 0.814
+  },
+  "steam-cup": {
+    "title": "Espresso cup on a saucer with three lines of steam",
+    "tags": [
+      "morning",
+      "calm",
+      "ritual",
+      "break",
+      "warm"
+    ],
+    "ratio": 0.971
+  },
+  "croissant": {
+    "title": "Croissant leaning on a small cup",
+    "tags": [
+      "breakfast",
+      "morning",
+      "weekend",
+      "treat",
+      "slow"
+    ],
+    "ratio": 1.589
+  },
+  "heart-cup": {
+    "title": "Cup seen from above with a latte-art heart",
+    "tags": [
+      "love",
+      "comfort",
+      "cozy",
+      "self-care",
+      "calm"
+    ],
+    "ratio": 1.015
+  },
+  "cat-cup": {
+    "title": "Cat curled up asleep inside an oversized cup, tail over the rim",
+    "tags": [
+      "cozy",
+      "sleepy",
+      "sunday",
+      "comfort",
+      "calm",
+      "humor"
+    ],
+    "ratio": 1.047
+  },
+  "spilled-cup": {
+    "title": "Tipped-over cup with a sad little coffee puddle",
+    "tags": [
+      "monday",
+      "humor",
+      "oops",
+      "bad day",
+      "relatable"
+    ],
+    "ratio": 1.466
+  },
+  "alarm-clock": {
+    "title": "Grumpy twin-bell alarm clock with a tiny cup beside it",
+    "tags": [
+      "morning",
+      "monday",
+      "tired",
+      "humor",
+      "early"
+    ],
+    "ratio": 1.188
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "problems": [],
+  "file": "post.jpg",
+  "width": 1080,
+  "height": 1350,
+  "theme": "latte",
+  "layout": "center",
+  "format": "portrait",
+  "art": "cat-cup",
+  "font_size": 108,
+  "lines": 2,
+  "art_box": [
+    321,
+    320,
+    438,
+    419
+  ]
+}

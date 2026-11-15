@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "problems": [],
+  "file": "post.jpg",
+  "width": 1080,
+  "height": 1350,
+  "theme": "espresso",
+  "layout": "stack",
+  "format": "portrait",
+  "art": "beans",
+  "font_size": 154,
+  "lines": 3,
+  "art_box": [
+    688,
+    742,
+    193,
+    170
+  ]
+}

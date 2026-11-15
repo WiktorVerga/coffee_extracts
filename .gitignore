@@ -10,3 +10,7 @@ __pycache__/
 .reel-build/
 variant-b/.render-temp.html
 variant-b/.render-*.html
+
+# mood posts: temp render file and third-party reference images (never committed)
+mood-posts/template/.render-*.html
+mood-posts/moodboard/refs/

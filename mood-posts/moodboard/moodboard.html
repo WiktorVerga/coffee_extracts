@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mood posts: moodboard</title>
+<style>
+@font-face{font-family:"Fraunces";src:url("../template/fonts/Fraunces-VariableFont.ttf") format("truetype");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Fraunces";src:url("../template/fonts/Fraunces-Italic-VariableFont.ttf") format("truetype");font-weight:100 900;font-style:italic;font-display:swap}
+@font-face{font-family:"Archivo Black";src:url("../template/fonts/ArchivoBlack-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Archivo Narrow";src:url("../template/fonts/ArchivoNarrow-VariableFont_wght.ttf") format("truetype");font-weight:400 700;font-style:normal;font-display:swap}
+
+:root{
+  --page:#f3ebdf;--card:#fbf7f0;--rule:#dccfbd;--text:#2b1d17;--muted:#7b675a;--brand:#8a4b2a;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --narrow:"Archivo Narrow","Arial Narrow",Arial,sans-serif;
+  --display:"Archivo Black","Arial Black",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--page);color:var(--text);font-family:var(--narrow);font-size:17px;line-height:1.5}
+.wrap{max-width:1200px;margin:0 auto;padding:0 32px 96px}
+header.top{padding:72px 0 40px;border-bottom:1px solid var(--rule)}
+.eyebrow{font-family:var(--narrow);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:var(--brand)}
+h1{font-family:var(--serif);font-weight:300;font-variation-settings:"SOFT" 0,"WONK" 0,"opsz" 144;font-size:clamp(40px,7vw,84px);line-height:1;margin:14px 0 20px;letter-spacing:-.01em}
+h1 em{font-style:italic;color:var(--brand)}
+.lede{max-width:62ch;font-size:19px;color:var(--muted);margin:0}
+section{padding:64px 0 8px}
+.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px}
+.num{font-family:var(--display);font-size:14px;color:var(--brand);letter-spacing:.04em}
+h2{font-family:var(--serif);font-weight:400;font-variation-settings:"SOFT" 0,"WONK" 0,"opsz" 144;font-size:clamp(28px,4vw,42px);line-height:1.1;margin:0}
+.intro{max-width:68ch;color:var(--muted);margin:6px 0 28px}
+h3{font-family:var(--narrow);font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-size:13px;margin:0 0 6px;color:var(--brand)}
+p{margin:0 0 10px}
+code{font-family:Consolas,"Courier New",monospace;font-size:.86em;background:#eadfce;padding:1px 5px;border-radius:4px}
+.grid{display:grid;gap:16px}
+
+/* 1 references */
+.refs{grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.refs figure{margin:0;background:var(--card);border:1px solid var(--rule);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.refs .ph{aspect-ratio:1/1;background:#e9dece;position:relative}
+.refs img{width:100%;height:100%;object-fit:cover;display:block}
+.refs figure.missing img{display:none}
+.refs figure.missing .ph::after{content:"reference not on this machine";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;color:var(--muted);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.refs figcaption{padding:12px 14px 14px;font-size:15px;line-height:1.4}
+.refs figcaption b{display:block;font-family:var(--display);font-weight:400;font-size:12px;color:var(--brand);letter-spacing:.06em;margin-bottom:4px}
+.note{font-size:14px;color:var(--muted);margin-top:14px}
+
+/* 2 principles */
+.principles{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));counter-reset:p}
+.principles div{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:20px 20px 16px;counter-increment:p}
+.principles div::before{content:counter(p);font-family:var(--serif);font-style:italic;font-size:34px;line-height:1;color:var(--brand);display:block;margin-bottom:8px}
+.principles b{font-family:var(--serif);font-weight:600;font-size:20px;display:block;margin-bottom:4px;line-height:1.2}
+.principles span{color:var(--muted);font-size:16px}
+
+/* themes */
+.t-espresso{--bg:#3a2a25;--ink:#efe2d0;--accent:#d9b98c;--art-line:#efe2d0;--art-fill:#b98a55;--art-paper:#3a2a25;--ff:var(--serif);--fw:400;--fvs:"SOFT" 0,"WONK" 0,"opsz" 144;--tt:lowercase;--ls:0em}
+.t-mocha{--bg:#4f2d18;--ink:#c9a876;--accent:#ead3ab;--art-line:#c9a876;--art-fill:#8a5a30;--art-paper:#4f2d18;--ff:var(--serif);--fw:900;--fvs:"SOFT" 100,"WONK" 1,"opsz" 144;--tt:lowercase;--ls:-.01em}
+.t-latte{--bg:#dfc8b2;--ink:#8a4b2a;--accent:#7a3f20;--art-line:#8a4b2a;--art-fill:#c08a5a;--art-paper:#f3e6d6;--ff:var(--serif);--fw:300;--fvs:"SOFT" 0,"WONK" 0,"opsz" 144;--tt:lowercase;--ls:0em}
+.t-oat{--bg:#e1d5bf;--ink:#15110e;--accent:#8a4b2a;--art-line:#15110e;--art-fill:#c08a5a;--art-paper:#f6efe2;--ff:var(--narrow);--fw:700;--fvs:normal;--tt:uppercase;--ls:.04em}
+.t-paper{--bg:#fbf8f3;--ink:#15110e;--accent:#b9793f;--art-line:#15110e;--art-fill:#d2a369;--art-paper:#ffffff;--ff:var(--serif);--fw:500;--fvs:"SOFT" 0,"WONK" 0,"opsz" 144;--tt:lowercase;--ls:0em}
+.t-caramel{--bg:#cf9f66;--ink:#35221a;--accent:#fbf1df;--art-line:#35221a;--art-fill:#8a5a30;--art-paper:#fbf1df;--ff:var(--serif);--fw:600;--fvs:"SOFT" 100,"WONK" 1,"opsz" 144;--tt:lowercase;--ls:0em}
+.themed{background:var(--bg);color:var(--ink)}
+.line{font-family:var(--ff);font-weight:var(--fw);font-variation-settings:var(--fvs);text-transform:var(--tt);letter-spacing:var(--ls);line-height:1.08;margin:0}
+.line em{font-style:normal;color:var(--accent)}
+.t-espresso .line em,.t-caramel .line em{font-style:italic}
+.t-latte .line em{text-transform:uppercase;font-weight:900}
+
+/* art */
+.art{display:block;overflow:visible}
+.ln{fill:none;stroke:var(--art-line);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.fl{fill:var(--art-fill);stroke:var(--art-line);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.pp{fill:var(--art-paper);stroke:var(--art-line);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.dot{fill:var(--art-line);stroke:none}
+.blush{fill:var(--art-fill);stroke:none;opacity:.55}
+
+/* 3 palette */
+.palette{grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+.theme{border-radius:12px;padding:24px 24px 20px;border:1px solid rgba(0,0,0,.08);display:flex;flex-direction:column;gap:16px;min-height:300px}
+.theme .name{font-family:var(--narrow);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.theme .line{font-size:40px}
+.theme .desc{font-family:var(--narrow);font-size:15px;opacity:.8;margin:0}
+.sw{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:auto}
+.sw div{font-family:Consolas,"Courier New",monospace;font-size:11.5px;line-height:1.35}
+.sw i{display:block;height:34px;border-radius:6px;border:1px solid color-mix(in srgb,var(--ink) 35%,transparent);margin-bottom:5px}
+.sw b{display:block;font-family:var(--narrow);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:10.5px;opacity:.75}
+.theme .row{display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.theme .row .art{width:84px;height:84px;flex:none}
+
+/* 4 type */
+.type{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.spec{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:22px 20px 18px;display:flex;flex-direction:column;gap:10px}
+.spec .big{font-size:46px;line-height:1.02;min-height:98px;display:flex;align-items:flex-end}
+.spec small{color:var(--muted);font-size:15px;line-height:1.4}
+.emph{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin-top:16px}
+.emph .box{border-radius:10px;padding:26px 22px;border:1px solid rgba(0,0,0,.08)}
+.emph .line{font-size:34px;margin-bottom:14px}
+.emph .cap{font-family:var(--narrow);font-size:15px;opacity:.85;margin:0}
+.emph .cap b{text-transform:uppercase;letter-spacing:.1em;font-size:12px;display:block;margin-bottom:2px}
+
+/* 5 motifs */
+.motifs{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.motif{background:#fbf8f3;border:1px solid var(--rule);border-radius:10px;padding:18px 16px 14px;text-align:center}
+.motif .art{width:132px;height:132px;margin:0 auto 10px}
+.motif code{background:none;font-weight:700;color:var(--brand);font-size:14px}
+.motif span{display:block;color:var(--muted);font-size:14.5px;line-height:1.35;margin-top:2px}
+.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:20px}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:22px 22px 14px}
+.panel ul{margin:0;padding-left:18px}
+.panel li{margin-bottom:7px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.chips code{background:#eadfce;padding:3px 8px;border-radius:99px}
+
+/* 6 layouts */
+.layouts{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.lay{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px}
+.lay svg{width:112px;height:140px;display:block;margin-bottom:12px;border-radius:4px}
+.lay code{font-weight:700;color:var(--brand);background:none;font-size:15px;padding:0}
+.lay p{color:var(--muted);font-size:15px;line-height:1.4;margin:4px 0 0}
+
+/* 7 mocks */
+.mocks{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));justify-items:center;gap:28px 16px}
+.mock{width:270px}
+.post{width:270px;aspect-ratio:4/5;position:relative;padding:26px 24px 30px;display:flex;border-radius:3px;box-shadow:0 1px 2px rgba(43,29,23,.12),0 14px 30px -14px rgba(43,29,23,.35);overflow:hidden}
+.post .handle{position:absolute;left:0;right:0;bottom:11px;text-align:center;font-family:var(--narrow);font-size:7.5px;letter-spacing:.12em;opacity:.42;text-transform:none}
+.post .line{font-size:var(--fs,28px)}
+.l-center{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:18px}
+.l-center .art{width:118px;height:118px}
+.l-stack{flex-direction:column;justify-content:center;align-items:flex-start;text-align:left}
+.l-stack .art{position:absolute;right:22px;top:30px;width:66px;height:66px}
+.l-hero{flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px}
+.l-hero .art{width:176px;height:190px}
+.l-side{flex-direction:row;align-items:center;gap:12px;text-align:left}
+.l-side .art{width:98px;height:130px;flex:none}
+.l-quiet{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:26px 44px}
+.mock .meta{font-size:13.5px;color:var(--muted);margin-top:10px;display:flex;gap:6px;flex-wrap:wrap}
+.mock .meta code{background:#eadfce}
+
+/* 8 voice */
+.voice{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.do h3{color:#4d6b3c}.dont h3{color:#a0402b}
+.q{font-family:var(--serif);font-style:italic;font-size:17px}
+footer{margin-top:72px;padding-top:24px;border-top:1px solid var(--rule);color:var(--muted);font-size:14px}
+
+@media (max-width:640px){
+  .wrap{padding:0 16px 64px}
+  header.top{padding:44px 0 28px}
+  section{padding:44px 0 4px}
+  .palette{grid-template-columns:1fr}
+  .refs{grid-template-columns:repeat(2,1fr)}
+  .sec-head{gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- drawing library sketches: original drawings, colors come from the theme variables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="a-sleepy-mug" viewBox="0 0 400 400">
+    <path class="ln" d="M178 100q-20-20 0-40t0-40"/><path class="ln" d="M228 96q-16-16 0-32"/>
+    <path class="ln" d="M306 196q62-4 62 46t-70 50"/>
+    <path class="pp" d="M92 152v118q0 92 92 92h32q92 0 92-92V152z"/>
+    <ellipse class="fl" cx="200" cy="152" rx="108" ry="24"/>
+    <path class="ln" d="M148 250q15 13 30 0M222 250q15 13 30 0M191 280q9 9 18 0"/>
+    <circle class="blush" cx="134" cy="278" r="12"/><circle class="blush" cx="266" cy="278" r="12"/>
+    <path class="ln" style="stroke-width:6" d="M300 52h26l-26 30h26M344 16h16l-16 19h16"/>
+  </symbol>
+  <symbol id="a-ghost-mug" viewBox="76 64 260 322">
+    <path class="pp" d="M108 196a92 92 0 0 1 184 0v152q-15 26-31 0q-15-24-30 0q-16 26-31 0q-15-24-30 0q-16 26-31 0q-15-24-31 0z"/>
+    <ellipse class="dot" cx="172" cy="176" rx="9" ry="13"/><ellipse class="dot" cx="222" cy="176" rx="9" ry="13"/>
+    <circle class="blush" cx="146" cy="206" r="12"/><circle class="blush" cx="250" cy="206" r="12"/>
+    <path class="ln" style="stroke-width:6" d="M190 206q8 7 16 0"/>
+    <path class="ln" d="M246 262q30-2 30 20t-32 22"/>
+    <path class="pp" d="M160 244h88v52q0 22-22 22h-44q-22 0-22-22z"/>
+    <ellipse class="fl" cx="204" cy="244" rx="44" ry="10"/>
+    <path class="pp" d="M110 262q26 30 52 14M290 254q-8 20-36 24"/>
+    <path class="ln" style="stroke-width:6" d="M300 110q-12-12 0-24t0-22"/>
+  </symbol>
+  <symbol id="a-moka" viewBox="60 20 300 356">
+    <path class="ln" d="M96 108q-14-17 0-34t0-32"/>
+    <path class="fl" d="M268 136h52q14 0 12 14l-12 68q-2 10-12 10h-14l10-66h-40z"/>
+    <path class="pp" d="M132 126l-34 8l36 24z"/>
+    <path class="pp" d="M128 124q72-48 144 0z"/>
+    <circle class="fl" cx="200" cy="82" r="13"/>
+    <path class="pp" d="M128 124h144l-22 96H150z"/>
+    <path class="ln" style="stroke-width:6" d="M176 126l8 92M224 126l-8 92"/>
+    <rect class="fl" x="142" y="218" width="116" height="20" rx="7"/>
+    <path class="pp" d="M150 238h100l28 112q2 10-8 10H130q-10 0-8-10z"/>
+    <circle class="dot" cx="180" cy="290" r="7"/><circle class="dot" cx="220" cy="290" r="7"/>
+    <path class="ln" style="stroke-width:6" d="M190 308q10 10 20 0"/>
+    <circle class="blush" cx="160" cy="310" r="10"/><circle class="blush" cx="240" cy="310" r="10"/>
+  </symbol>
+  <symbol id="a-beans" viewBox="30 30 340 340">
+    <g transform="translate(140 138) rotate(-28)"><ellipse class="fl" rx="60" ry="86"/><path class="ln" style="stroke-width:6" d="M-4-82q30 42 4 82t4 82"/></g>
+    <g transform="translate(268 190) rotate(24)"><ellipse class="pp" rx="54" ry="78"/><path class="ln" style="stroke-width:6" d="M4-74q-28 38-4 74t-4 74"/></g>
+    <g transform="translate(156 292) rotate(74)"><ellipse class="fl" rx="46" ry="68"/><path class="ln" style="stroke-width:6" d="M-3-64q24 32 3 64t3 64"/></g>
+  </symbol>
+  <symbol id="a-cat-cup" viewBox="50 60 340 320">
+    <path class="fl" d="M126 172l-8-84l66 40zM274 172l8-84l-66 40z"/>
+    <ellipse class="fl" cx="200" cy="196" rx="90" ry="74"/>
+    <path class="ln" d="M156 190q13 11 26 0M218 190q13 11 26 0"/>
+    <path class="dot" d="M192 204h16l-8 9z"/>
+    <path class="ln" d="M316 244q58-2 54 38t-70 40"/>
+    <path class="pp" d="M82 226h236q0 130-118 130T82 226z"/>
+    <ellipse class="fl" cx="148" cy="228" rx="20" ry="13"/><ellipse class="fl" cx="252" cy="228" rx="20" ry="13"/>
+    <path class="ln" d="M96 368h208"/>
+  </symbol>
+  <symbol id="a-takeaway-cup" viewBox="84 60 232 320">
+    <path class="pp" d="M134 84h132l8 30H126z"/>
+    <path class="pp" d="M112 114h176l6 32H106z"/>
+    <path class="pp" d="M120 146h160l-22 212q-1 10-11 10h-94q-10 0-11-10z"/>
+    <path class="fl" d="M126 204h148l-11 106H137z"/>
+    <circle class="dot" cx="178" cy="248" r="7"/><circle class="dot" cx="222" cy="248" r="7"/>
+    <path class="ln" style="stroke-width:6" d="M189 268q11 10 22 0"/>
+  </symbol>
+  <symbol id="a-heart-cup" viewBox="50 30 340 350">
+    <path class="fl" d="M200 96c-24-36-74-6-48 32l48 44l48-44c26-38-24-68-48-32z"/>
+    <path class="ln" style="stroke-width:6" d="M290 70c-10-15-31-3-20 13l20 18l20-18c11-16-10-28-20-13z"/>
+    <path class="ln" d="M298 250q60-4 58 34t-68 40"/>
+    <path class="pp" d="M100 226v36q0 92 92 92h16q92 0 92-92v-36z"/>
+    <ellipse class="fl" cx="200" cy="226" rx="100" ry="22"/>
+    <circle class="dot" cx="176" cy="290" r="7"/><circle class="dot" cx="224" cy="290" r="7"/>
+    <path class="ln" style="stroke-width:6" d="M190 306q10 9 20 0"/>
+    <path class="ln" d="M84 368h232"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">@coffee_extracts / mood posts</div>
+  <h1>one cup, one drawing,<br>one <em>small line</em></h1>
+  <p class="lede">A moodboard for the single-image posts: one cute element that catches the eye and one short line that motivates, feels familiar, or makes the reader look at a small part of their day. Coffee is the thread that ties them together.</p>
+</header>
+
+<section id="references">
+  <div class="sec-head"><span class="num">01</span><h2>References</h2></div>
+  <p class="intro">Six images the owner collected. They set the direction. Nothing here is copied, traced or reused: we take the ideas listed under each one and draw and write our own.</p>
+  <div class="grid refs">
+    <figure><div class="ph"><img src="refs/1.png" alt="Reference 1" onerror="this.closest('figure').classList.add('missing')"></div><figcaption><b>REF 1</b>A character can carry the whole post. Black line, white body, one coffee-colored fill, no words needed.</figcaption></figure>
+    <figure><div class="ph"><img src="refs/2.png" alt="Reference 2" onerror="this.closest('figure').classList.add('missing')"></div><figcaption><b>REF 2</b>The joke is in the drawing; two tiny labels do the rest. A naive stick-figure line is enough.</figcaption></figure>
+    <figure><div class="ph"><img src="refs/3.png" alt="Reference 3" onerror="this.closest('figure').classList.add('missing')"></div><figcaption><b>REF 3</b>Big lowercase serif, left-aligned, one word per line. A small outlined drawing sits beside the text, not under it.</figcaption></figure>
+    <figure><div class="ph"><img src="refs/4.png" alt="Reference 4" onerror="this.closest('figure').classList.add('missing')"></div><figcaption><b>REF 4</b>Fat, soft serif in caramel on brown. Two tones only. The moka is a thin outline at the size of one word.</figcaption></figure>
+    <figure><div class="ph"><img src="refs/5.png" alt="Reference 5" onerror="this.closest('figure').classList.add('missing')"></div><figcaption><b>REF 5</b>Small text in a lot of empty beige. Light serif, then one heavy word in caps that the eye lands on.</figcaption></figure>
+    <figure><div class="ph"><img src="refs/6.png" alt="Reference 6" onerror="this.closest('figure').classList.add('missing')"></div><figcaption><b>REF 6</b>Black caps on sand, no drawing. Deadpan tone: the flat delivery is the joke.</figcaption></figure>
+  </div>
+  <p class="note">The <code>refs/</code> folder is local only and not committed. If the images are missing, the notes above still describe what each one contributes.</p>
+</section>
+
+<section id="principles">
+  <div class="sec-head"><span class="num">02</span><h2>What makes them work</h2></div>
+  <p class="intro">Seven things the six references have in common. Every mood post should pass all of them.</p>
+  <div class="grid principles">
+    <div><b>One idea</b><span>One line or one drawing gag. The reader gets it in under two seconds, without a second sentence explaining the first.</span></div>
+    <div><b>Mostly empty</b><span>Text and art together cover a third of the canvas at most. The empty space is what makes it look calm and "aesthetic".</span></div>
+    <div><b>Two or three colors</b><span>A background, an ink, and at most one accent. All of them come from the coffee range: cream, sand, caramel, brown, near-black.</span></div>
+    <div><b>One small drawing</b><span>A single object or character, never a scene. It is either tiny next to the text or the star of the post. Never in between.</span></div>
+    <div><b>Type has a personality</b><span>Lowercase serif reads warm and intimate. Condensed caps read deadpan. The same line changes meaning with the typeface, so pick on purpose.</span></div>
+    <div><b>One word carries it</b><span>Most lines have a word that lands: a switch to italic, to caps, or to the accent color. One word, not three.</span></div>
+    <div><b>Flat and hand-made</b><span>No gradients, shadows, photos or textures. Slightly imperfect lines. It should look drawn by a person in ten minutes.</span></div>
+  </div>
+</section>
+
+<section id="palette">
+  <div class="sec-head"><span class="num">03</span><h2>Palette</h2></div>
+  <p class="intro">The six fixed themes of <code>themes.json</code>. Each card is set in its own colors and type. The three art colors drive the drawings: <code>line</code> for outlines, <code>fill</code> for the single coffee fill, <code>paper</code> for bodies and cups.</p>
+  <div class="grid palette">
+
+    <div class="theme themed t-espresso">
+      <div class="name">espresso</div>
+      <div class="row"><p class="line">quiet and <em>slow</em></p><svg class="art"><use href="#a-beans"/></svg></div>
+      <p class="desc">Dark brown, cream serif, quiet. Fraunces 400, lowercase, emphasis in italic.</p>
+      <div class="sw">
+        <div><i style="background:#3a2a25"></i><b>bg</b>#3a2a25</div><div><i style="background:#efe2d0"></i><b>ink</b>#efe2d0</div><div><i style="background:#d9b98c"></i><b>accent</b>#d9b98c</div>
+        <div><i style="background:#efe2d0"></i><b>art line</b>#efe2d0</div><div><i style="background:#b98a55"></i><b>art fill</b>#b98a55</div><div><i style="background:#3a2a25"></i><b>art paper</b>#3a2a25</div>
+      </div>
+    </div>
+
+    <div class="theme themed t-mocha">
+      <div class="name">mocha</div>
+      <div class="row"><p class="line">loud and <em>round</em></p><svg class="art"><use href="#a-moka"/></svg></div>
+      <p class="desc">Warm brown, fat caramel serif, loud. Fraunces soft 900, lowercase, emphasis in the accent color.</p>
+      <div class="sw">
+        <div><i style="background:#4f2d18"></i><b>bg</b>#4f2d18</div><div><i style="background:#c9a876"></i><b>ink</b>#c9a876</div><div><i style="background:#ead3ab"></i><b>accent</b>#ead3ab</div>
+        <div><i style="background:#c9a876"></i><b>art line</b>#c9a876</div><div><i style="background:#8a5a30"></i><b>art fill</b>#8a5a30</div><div><i style="background:#4f2d18"></i><b>art paper</b>#4f2d18</div>
+      </div>
+    </div>
+
+    <div class="theme themed t-latte">
+      <div class="name">latte</div>
+      <div class="row"><p class="line">light, then <em>heavy</em></p><svg class="art"><use href="#a-cat-cup"/></svg></div>
+      <p class="desc">Beige, light terracotta serif, heavy caps on the key word. Fraunces 300, lowercase, emphasis in bold caps.</p>
+      <div class="sw">
+        <div><i style="background:#dfc8b2"></i><b>bg</b>#dfc8b2</div><div><i style="background:#8a4b2a"></i><b>ink</b>#8a4b2a</div><div><i style="background:#7a3f20"></i><b>accent</b>#7a3f20</div>
+        <div><i style="background:#8a4b2a"></i><b>art line</b>#8a4b2a</div><div><i style="background:#c08a5a"></i><b>art fill</b>#c08a5a</div><div><i style="background:#f3e6d6"></i><b>art paper</b>#f3e6d6</div>
+      </div>
+    </div>
+
+    <div class="theme themed t-oat">
+      <div class="name">oat</div>
+      <div class="row"><p class="line">flat and <em>deadpan</em></p><svg class="art"><use href="#a-takeaway-cup"/></svg></div>
+      <p class="desc">Sand, black condensed caps, deadpan. Archivo Narrow 700, uppercase, tracking 0.04em, emphasis in the accent color.</p>
+      <div class="sw">
+        <div><i style="background:#e1d5bf"></i><b>bg</b>#e1d5bf</div><div><i style="background:#15110e"></i><b>ink</b>#15110e</div><div><i style="background:#8a4b2a"></i><b>accent</b>#8a4b2a</div>
+        <div><i style="background:#15110e"></i><b>art line</b>#15110e</div><div><i style="background:#c08a5a"></i><b>art fill</b>#c08a5a</div><div><i style="background:#f6efe2"></i><b>art paper</b>#f6efe2</div>
+      </div>
+    </div>
+
+    <div class="theme themed t-paper">
+      <div class="name">paper</div>
+      <div class="row"><p class="line">the drawing <em>leads</em></p><svg class="art"><use href="#a-ghost-mug"/></svg></div>
+      <p class="desc">Off-white, black line art with a coffee fill. Fraunces 500, lowercase, emphasis in the accent color.</p>
+      <div class="sw">
+        <div><i style="background:#fbf8f3"></i><b>bg</b>#fbf8f3</div><div><i style="background:#15110e"></i><b>ink</b>#15110e</div><div><i style="background:#b9793f"></i><b>accent</b>#b9793f</div>
+        <div><i style="background:#15110e"></i><b>art line</b>#15110e</div><div><i style="background:#d2a369"></i><b>art fill</b>#d2a369</div><div><i style="background:#ffffff"></i><b>art paper</b>#ffffff</div>
+      </div>
+    </div>
+
+    <div class="theme themed t-caramel">
+      <div class="name">caramel</div>
+      <div class="row"><p class="line">golden and <em>warm</em></p><svg class="art"><use href="#a-heart-cup"/></svg></div>
+      <p class="desc">Golden tan, dark espresso serif, warm. Fraunces soft 600, lowercase, emphasis in italic.</p>
+      <div class="sw">
+        <div><i style="background:#cf9f66"></i><b>bg</b>#cf9f66</div><div><i style="background:#35221a"></i><b>ink</b>#35221a</div><div><i style="background:#fbf1df"></i><b>accent</b>#fbf1df</div>
+        <div><i style="background:#35221a"></i><b>art line</b>#35221a</div><div><i style="background:#8a5a30"></i><b>art fill</b>#8a5a30</div><div><i style="background:#fbf1df"></i><b>art paper</b>#fbf1df</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="type">
+  <div class="sec-head"><span class="num">04</span><h2>Typography</h2></div>
+  <p class="intro">Four font keys and three ways to mark the key word. The theme decides both, so the writer only marks the word with <code>*asterisks*</code>.</p>
+  <div class="grid type">
+    <div class="spec">
+      <h3>serif</h3>
+      <div class="big" style="font-family:var(--serif);font-weight:400;font-variation-settings:'SOFT' 0,'WONK' 0,'opsz' 144">slow morning</div>
+      <small>Fraunces, crisp (SOFT 0), high optical size. Weights 300 to 500. Used by espresso, latte, paper. Echoes ref 3 (cream serif on dark) and ref 5 (light serif on beige).</small>
+    </div>
+    <div class="spec">
+      <h3>serif-soft</h3>
+      <div class="big" style="font-family:var(--serif);font-weight:900;font-variation-settings:'SOFT' 100,'WONK' 1,'opsz' 144;letter-spacing:-.01em">second cup</div>
+      <small>Fraunces with SOFT 100 and WONK 1: round, friendly, fat at 900. Used by mocha (900) and caramel (600). Echoes the fat serif of ref 4.</small>
+    </div>
+    <div class="spec">
+      <h3>narrow</h3>
+      <div class="big" style="font-family:var(--narrow);font-weight:700;text-transform:uppercase;letter-spacing:.04em">not yet</div>
+      <small>Archivo Narrow 700, uppercase, slightly open tracking. Used by oat. Echoes the deadpan caps of ref 6, with a cleaner face in place of the hand lettering.</small>
+    </div>
+    <div class="spec">
+      <h3>display</h3>
+      <div class="big" style="font-family:var(--display);font-weight:400;text-transform:uppercase;font-size:40px">refill</div>
+      <small>Archivo Black. No theme uses it today: it is kept in reserve for a future loud theme or a one-word post. Closest echo is the heavy last word of ref 5.</small>
+    </div>
+  </div>
+  <div class="grid emph">
+    <div class="box themed t-espresso"><p class="line">slow mornings are still <em>mornings</em></p><p class="cap"><b>italic</b>Fraunces Italic in the accent color. Soft, like lowering your voice. Espresso and caramel. Our own addition to ref 3.</p></div>
+    <div class="box themed t-mocha"><p class="line">small pot, <em>big</em> plans</p><p class="cap"><b>accent</b>Same face, accent color only. A change of tone, not of volume. Mocha, oat and paper. Echoes the two-tone look of ref 4.</p></div>
+    <div class="box themed t-latte"><p class="line">rest is also on the <em>menu</em></p><p class="cap"><b>bold-caps</b>Uppercase, weight 900, accent color. The loudest switch, so it takes one word only. Latte. Echoes ref 5.</p></div>
+  </div>
+</section>
+
+<section id="motifs">
+  <div class="sec-head"><span class="num">05</span><h2>Cute elements</h2></div>
+  <p class="intro">The drawing library. Seven motifs are sketched here to fix the line style. All are original drawings, colored only through the three art variables, so each one works on every theme.</p>
+  <div class="grid motifs t-paper">
+    <div class="motif"><svg class="art"><use href="#a-ghost-mug"/></svg><code>ghost-mug</code><span>A small ghost hugging its mug. The mascot for "not here yet" lines.</span></div>
+    <div class="motif"><svg class="art"><use href="#a-sleepy-mug"/></svg><code>sleepy-mug</code><span>Mug with closed eyes and a little "z". Tired, cozy, slow.</span></div>
+    <div class="motif"><svg class="art"><use href="#a-moka"/></svg><code>moka</code><span>The Italian anchor. Faceted top, a face on the boiler.</span></div>
+    <div class="motif"><svg class="art"><use href="#a-beans"/></svg><code>beans</code><span>Three beans, one left empty. The quiet option next to big text.</span></div>
+    <div class="motif"><svg class="art"><use href="#a-cat-cup"/></svg><code>cat-cup</code><span>A cat asleep in a cup. For rest, comfort, staying in.</span></div>
+    <div class="motif"><svg class="art"><use href="#a-takeaway-cup"/></svg><code>takeaway-cup</code><span>Paper cup with a face on the sleeve. Commutes, errands, busy days.</span></div>
+    <div class="motif"><svg class="art"><use href="#a-heart-cup"/></svg><code>heart-cup</code><span>A cup with a heart rising from it. Affection, small rituals.</span></div>
+  </div>
+  <div class="grid two">
+    <div class="panel">
+      <h3>Still to draw</h3>
+      <div class="chips"><code>steam-cup</code><code>drip-bag</code><code>croissant</code><code>spilled-cup</code><code>alarm-clock</code><code>espresso-cup</code><code>sugar-cube</code><code>spoon</code><code>milk-jug</code><code>cookie</code><code>sun-cup</code><code>moon-cup</code></div>
+      <p style="margin-top:14px;color:var(--muted);font-size:15.5px">Objects from a kitchen counter or a cafe table. No people, no hands, no logos, no cup that looks like a known chain's cup.</p>
+    </div>
+    <div class="panel">
+      <h3>Drawing rules</h3>
+      <ul>
+        <li><b>Line:</b> one weight, 6 to 9 units on a 400 box, round caps and joins, slightly wobbly curves. Small details may drop to the thin end.</li>
+        <li><b>Fill:</b> one coffee-colored fill per drawing (the coffee, a sleeve, a handle). Bodies and cups use the paper color. Blush is the same fill at half opacity.</li>
+        <li><b>Flat:</b> no gradients, no shadows, no texture, no background shape.</li>
+        <li><b>Readable small:</b> the drawing must still read at 250 px wide. If a detail disappears, remove it.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>What makes it cute</h3>
+      <ul>
+        <li><b>Big head, tiny limbs.</b> The body is mostly one round shape. Arms are stubs, legs are optional.</li>
+        <li><b>Dot eyes, set low and wide apart.</b> Closed eyes are two small arcs. The mouth is tiny or missing.</li>
+        <li><b>One feeling per drawing:</b> sleepy, content, or mildly overwhelmed. Never angry, never winking.</li>
+        <li><b>One small extra:</b> a curl of steam, a "z", a heart. Stop there.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="layouts">
+  <div class="sec-head"><span class="num">06</span><h2>Layouts</h2></div>
+  <p class="intro">Five compositions, all 4:5. The circle is the drawing, the bars are the line, the short dark bar is the emphasized word.</p>
+  <div class="grid layouts">
+    <div class="lay">
+      <svg viewBox="0 0 80 100"><rect width="80" height="100" fill="#e1d5bf"/><circle cx="40" cy="36" r="14" fill="#c08a5a"/><rect x="18" y="60" width="44" height="5" rx="2.5" fill="#8a7460"/><rect x="26" y="69" width="28" height="5" rx="2.5" fill="#35221a"/><rect x="34" y="92" width="12" height="1.6" rx=".8" fill="#b7a58d"/></svg>
+      <code>center</code><p>The default. Art on top, text centered under it. Use for 5 to 12 words when the drawing and the line matter equally.</p>
+    </div>
+    <div class="lay">
+      <svg viewBox="0 0 80 100"><rect width="80" height="100" fill="#3a2a25"/><rect x="10" y="26" width="34" height="11" rx="2" fill="#bfae99"/><rect x="10" y="43" width="46" height="11" rx="2" fill="#bfae99"/><rect x="10" y="60" width="40" height="11" rx="2" fill="#d9b98c"/><circle cx="62" cy="26" r="8" fill="#b98a55"/><rect x="34" y="92" width="12" height="1.6" rx=".8" fill="#6d5a50"/></svg>
+      <code>stack</code><p>Big left-aligned text, one or two words per line, small art tucked beside it. Use for 3 to 7 punchy words with natural line breaks.</p>
+    </div>
+    <div class="lay">
+      <svg viewBox="0 0 80 100"><rect width="80" height="100" fill="#fbf8f3" stroke="#dccfbd"/><circle cx="40" cy="40" r="26" fill="#d2a369"/><rect x="20" y="76" width="40" height="4" rx="2" fill="#8a7460"/><rect x="29" y="83" width="22" height="4" rx="2" fill="#35221a"/><rect x="34" y="93" width="12" height="1.6" rx=".8" fill="#cbbda8"/></svg>
+      <code>hero</code><p>The drawing is the post, about 60% of the canvas, with a short caption under it. Use when the line only works with the character.</p>
+    </div>
+    <div class="lay">
+      <svg viewBox="0 0 80 100"><rect width="80" height="100" fill="#4f2d18"/><ellipse cx="22" cy="50" rx="12" ry="17" fill="#8a5a30"/><rect x="40" y="38" width="28" height="7" rx="2" fill="#c9a876"/><rect x="40" y="49" width="22" height="7" rx="2" fill="#ead3ab"/><rect x="40" y="60" width="30" height="7" rx="2" fill="#c9a876"/><rect x="34" y="92" width="12" height="1.6" rx=".8" fill="#7d5b40"/></svg>
+      <code>side</code><p>Art on the left, text on the right, centered together. Use for two or three short lines next to a tall drawing such as the moka or a paper cup.</p>
+    </div>
+    <div class="lay">
+      <svg viewBox="0 0 80 100"><rect width="80" height="100" fill="#dfc8b2"/><rect x="24" y="45" width="32" height="3.4" rx="1.7" fill="#a67a5c"/><rect x="27" y="51" width="26" height="3.4" rx="1.7" fill="#a67a5c"/><rect x="30" y="57" width="20" height="4.4" rx="2" fill="#7a3f20"/><rect x="34" y="92" width="12" height="1.6" rx=".8" fill="#bfa58c"/></svg>
+      <code>quiet</code><p>Small text in a lot of empty space, no art or a tiny one above. Use for reflective lines that should feel like a whisper. At most one in every four posts.</p>
+    </div>
+  </div>
+</section>
+
+<section id="mocks">
+  <div class="sec-head"><span class="num">07</span><h2>Mock posts</h2></div>
+  <p class="intro">Eight mini posts built in HTML to show the target look. The lines are original. The final images come from <code>scripts/render.py</code> and will differ in small details.</p>
+  <div class="grid mocks">
+
+    <div class="mock">
+      <div class="post themed t-espresso l-stack"><svg class="art"><use href="#a-beans"/></svg><p class="line" style="--fs:46px">slow<br>mornings<br>are still<br><em>mornings</em></p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>espresso</code><code>stack</code><code>beans</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-mocha l-side"><svg class="art"><use href="#a-moka"/></svg><p class="line" style="--fs:36px">small<br>pot,<br><em>big</em><br>plans</p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>mocha</code><code>side</code><code>moka</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-latte l-center"><svg class="art"><use href="#a-cat-cup"/></svg><p class="line" style="--fs:27px">rest is also<br>on the <em>menu</em></p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>latte</code><code>center</code><code>cat-cup</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-oat l-center"><svg class="art"><use href="#a-sleepy-mug"/></svg><p class="line" style="--fs:25px">my personality<br>is still <em>brewing</em></p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>oat</code><code>center</code><code>sleepy-mug</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-paper l-hero"><svg class="art"><use href="#a-ghost-mug"/></svg><p class="line" style="--fs:21px">here in spirit<br>until the <em>first sip</em></p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>paper</code><code>hero</code><code>ghost-mug</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-caramel l-center"><svg class="art"><use href="#a-heart-cup"/></svg><p class="line" style="--fs:23px">drink it while it's <em>warm</em>.<br>that goes for<br>most things.</p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>caramel</code><code>center</code><code>heart-cup</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-espresso l-quiet"><p class="line" style="--fs:19px;line-height:1.25">nothing is urgent<br>before the <em>first cup</em></p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>espresso</code><code>quiet</code><code>no art</code></div>
+    </div>
+
+    <div class="mock">
+      <div class="post themed t-oat l-stack"><svg class="art" style="width:56px;height:78px;top:34px"><use href="#a-takeaway-cup"/></svg><p class="line" style="--fs:44px;margin-top:44px">to go.<br>not in<br>a <em>hurry</em>.</p><span class="handle">@coffee_extracts</span></div>
+      <div class="meta"><code>oat</code><code>stack</code><code>takeaway-cup</code></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="voice">
+  <div class="sec-head"><span class="num">08</span><h2>Voice of the lines</h2></div>
+  <p class="intro">The line sounds like a friend talking across a small table: warm, a little dry, never selling anything. It is about the person and their day. Coffee is the excuse.</p>
+  <div class="grid voice">
+    <div class="panel">
+      <h3>Three kinds of line</h3>
+      <ul>
+        <li><b>Motivational.</b> Permission to start small or start again. The reader should feel lighter, not pushed. <span class="q">"the first cup doesn't have to be perfect. neither do you."</span></li>
+        <li><b>Relatable.</b> A small true thing people recognize and send to a friend. The reader should think "that's me". <span class="q">"made coffee. forgot coffee. reheated coffee."</span></li>
+        <li><b>Small reflection.</b> One moment of the day, looked at closely. The reader should pause for a second. <span class="q">"who taught you how to make your coffee?"</span></li>
+      </ul>
+    </div>
+    <div class="panel do">
+      <h3>Do</h3>
+      <ul>
+        <li>Keep it between 1 and 14 words. Six is a good number.</li>
+        <li>Write in lowercase, first person or "you", present tense.</li>
+        <li>Use concrete things: the cup, the moka, the kitchen, the first sip, the walk to work.</li>
+        <li>Let one word carry the line and mark only that one.</li>
+        <li>Be kind. The joke is on the morning, never on the reader.</li>
+        <li>Leave something unsaid. The caption can add one thought.</li>
+      </ul>
+    </div>
+    <div class="panel dont">
+      <h3>Don't</h3>
+      <ul>
+        <li>No hustle talk: grind, rise and shine, crush the day, no days off.</li>
+        <li>No health or energy claims, no caffeine doses, no "coffee makes you...".</li>
+        <li>No well-known quotes or slogans, and none of the six reference lines.</li>
+        <li>No "addicted", no "can't function", no jokes at other people's expense.</li>
+        <li>No emoji, hashtags, brand names or exclamation marks in the image.</li>
+        <li>No puns that need explaining, and no second sentence that explains the first.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>Mood posts moodboard for @coffee_extracts. Working rules live in <code>mood-posts/STYLE.md</code>, the technical spec in <code>mood-posts/CONTRACT.md</code>.</footer>
+
+</div>
+</body>
+</html>

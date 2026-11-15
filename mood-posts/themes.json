@@ -1,0 +1,74 @@
+{
+  "espresso": {
+    "label": "Espresso: dark brown, cream serif, quiet",
+    "bg": "#3a2a25",
+    "ink": "#efe2d0",
+    "accent": "#d9b98c",
+    "art": { "line": "#efe2d0", "fill": "#b98a55", "paper": "#3a2a25" },
+    "font": "serif",
+    "weight": 400,
+    "case": "lower",
+    "tracking": "0em",
+    "emphasis": "italic"
+  },
+  "mocha": {
+    "label": "Mocha: warm brown, fat caramel serif, loud",
+    "bg": "#4f2d18",
+    "ink": "#c9a876",
+    "accent": "#ead3ab",
+    "art": { "line": "#c9a876", "fill": "#8a5a30", "paper": "#4f2d18" },
+    "font": "serif-soft",
+    "weight": 900,
+    "case": "lower",
+    "tracking": "-0.01em",
+    "emphasis": "accent"
+  },
+  "latte": {
+    "label": "Latte: beige, light terracotta serif, heavy caps on the key word",
+    "bg": "#dfc8b2",
+    "ink": "#8a4b2a",
+    "accent": "#7a3f20",
+    "art": { "line": "#8a4b2a", "fill": "#c08a5a", "paper": "#f3e6d6" },
+    "font": "serif",
+    "weight": 300,
+    "case": "lower",
+    "tracking": "0em",
+    "emphasis": "bold-caps"
+  },
+  "oat": {
+    "label": "Oat: sand, black condensed caps, deadpan",
+    "bg": "#e1d5bf",
+    "ink": "#15110e",
+    "accent": "#8a4b2a",
+    "art": { "line": "#15110e", "fill": "#c08a5a", "paper": "#f6efe2" },
+    "font": "narrow",
+    "weight": 700,
+    "case": "upper",
+    "tracking": "0.04em",
+    "emphasis": "accent"
+  },
+  "paper": {
+    "label": "Paper: off-white, black line art with a coffee fill, the drawing leads",
+    "bg": "#fbf8f3",
+    "ink": "#15110e",
+    "accent": "#b9793f",
+    "art": { "line": "#15110e", "fill": "#d2a369", "paper": "#ffffff" },
+    "font": "serif",
+    "weight": 500,
+    "case": "lower",
+    "tracking": "0em",
+    "emphasis": "accent"
+  },
+  "caramel": {
+    "label": "Caramel: golden tan, dark espresso serif, warm",
+    "bg": "#cf9f66",
+    "ink": "#35221a",
+    "accent": "#fbf1df",
+    "art": { "line": "#35221a", "fill": "#8a5a30", "paper": "#fbf1df" },
+    "font": "serif-soft",
+    "weight": 600,
+    "case": "lower",
+    "tracking": "0em",
+    "emphasis": "italic"
+  }
+}

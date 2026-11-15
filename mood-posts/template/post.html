@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en" data-mode="preview">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mood post template</title>
+<!--
+  MOOD POST TEMPLATE (single image, 1080 × 1350 portrait or 1080 × 1080 square)
+  ------------------------------------------------------------------
+  How to edit it by hand:
+  1. Margins, handle, grain, small line: the variables in ":root" below.
+  2. Size of text and drawing in one layout: its ".l-<layout>" block.
+  3. How a font key behaves: its ".f-<font>" block.
+  4. Colors are NOT here: they come from mood-posts/themes.json.
+  5. Preview: open this file in a browser (double-click). You'll see the
+     example posts of the <script id="data"> block, scaled down in a grid.
+  6. Content is NOT written here: it comes from each post's post.json.
+     scripts/render.py replaces the <script id="data"> block.
+-->
+<style>
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-VariableFont.ttf") format("truetype");
+  font-weight: 100 900; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("fonts/Fraunces-Italic-VariableFont.ttf") format("truetype");
+  font-weight: 100 900; font-style: italic; font-display: block;
+}
+@font-face {
+  font-family: "Archivo Black";
+  src: url("fonts/ArchivoBlack-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: block;
+}
+@font-face {
+  font-family: "Archivo Narrow";
+  src: url("fonts/ArchivoNarrow-VariableFont_wght.ttf") format("truetype");
+  font-weight: 400 700; font-style: normal; font-display: block;
+}
+
+:root {
+  /* ── Canvas and margins ─────────────────────────────────── */
+  --margin-x:        108px;  /* left and right margin                 */
+  --margin-y:        124px;  /* top and bottom margin (handle inside) */
+  --gap:              60px;  /* space between drawing and text        */
+
+  /* ── Handle (bottom center) ─────────────────────────────── */
+  --handle-size:      25px;
+  --handle-bottom:    58px;  /* distance from the bottom edge         */
+  --handle-opacity:   .45;
+  --handle-tracking:  .22em;
+
+  /* ── Small second line ("sub") ──────────────────────────── */
+  --sub-size:         29px;
+  --sub-gap:          30px;  /* space above it                        */
+  --sub-opacity:      .72;
+  --sub-tracking:     .18em;
+
+  /* ── Finish ─────────────────────────────────────────────── */
+  --grain-opacity:    .10;   /* paper grain, 0 turns it off           */
+}
+
+/* ── Layouts ──────────────────────────────────────────────────
+   --fs-max / --fs-min : largest and smallest text size (px). The text
+                         starts at max and shrinks until it fits.
+   --art-w             : widest the drawing can be (share of the text area width)
+   --art-h             : tallest the drawing can be (share of the canvas height)
+   --measure           : widest the text block can be (px)
+   --leading           : line height                                         */
+.l-quiet  { --fs-max:  74; --fs-min: 44; --art-w: .22; --art-h: .12; --measure: 700; --leading: 1.16; }
+.l-center { --fs-max: 112; --fs-min: 50; --art-w: .56; --art-h: .31; --measure: 840; --leading: 1.07; }
+.l-hero   { --fs-max:  80; --fs-min: 42; --art-w: 1;   --art-h: .57; --measure: 800; --leading: 1.10; }
+.l-side   { --fs-max: 100; --fs-min: 44; --art-w: .40; --art-h: .46; --measure: 864; --leading: 1.06; }
+.l-stack  { --fs-max: 208; --fs-min: 88; --measure: 864; --leading: 1.02;
+            --art-em: 1.5;       /* drawing height, in text sizes       */
+            --art-min: 170;      /* never smaller than this (px)        */
+            --art-max: 310; }    /* never bigger than this (px)         */
+/* square canvas: a little less air top and bottom */
+.fmt-square { --margin-y: 112px; }
+.fmt-square.l-hero { --art-h: .55; }
+
+/* ── Font keys of themes.json ─────────────────────────────────
+   --font-scale : multiplies the layout's text sizes (narrow faces can go bigger)
+   --lead-adj   : added to the layout's line height                           */
+.f-serif      { --font-scale: 1;    --lead-adj: 0;
+                font-family: "Fraunces", Georgia, serif;
+                font-variation-settings: "opsz" 144, "SOFT" 0, "WONK" 0; }
+.f-serif-soft { --font-scale: .96;  --lead-adj: 0;
+                font-family: "Fraunces", Georgia, serif;
+                font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1; }
+.f-narrow     { --font-scale: 1.16; --lead-adj: -.04;
+                font-family: "Archivo Narrow", "Arial Narrow", Arial, sans-serif; }
+.f-display    { --font-scale: .84;  --lead-adj: .02;
+                font-family: "Archivo Black", "Helvetica Neue", Arial, sans-serif; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #1b1512; }
+body { -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+
+/* Preview mode (opened in a browser): scaled-down grid with labels */
+html[data-mode="preview"] body {
+  display: flex; flex-wrap: wrap; gap: 28px; padding: 28px; align-items: flex-start;
+}
+html[data-mode="preview"] figure figcaption {
+  font: 500 13px/1.4 "Archivo Narrow", Arial, sans-serif; letter-spacing: .12em;
+  text-transform: uppercase; color: #a8998a; margin-top: 8px;
+}
+html[data-mode="preview"][data-ready="1"] .post { zoom: .3; }
+html[data-mode="render"] body { display: block; }
+
+/* ── The post ──────────────────────────────────────────────── */
+.post {
+  position: relative;
+  width: 1080px; height: 1350px;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+}
+.post.fmt-square { height: 1080px; }
+
+.grain {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+.stage {
+  position: absolute;
+  left: var(--margin-x); right: var(--margin-x);
+  top: var(--margin-y); bottom: var(--margin-y);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: var(--gap);
+}
+
+.art { flex: none; line-height: 0; }
+.art svg { display: block; width: 100%; height: 100%; overflow: visible; }
+
+.copy { flex: none; max-width: 100%; text-align: center; }
+.text {
+  font-weight: var(--weight, 400);
+  letter-spacing: var(--tracking, 0);
+  line-height: calc(var(--leading) + var(--lead-adj, 0));
+  text-wrap: balance;
+  overflow-wrap: normal; word-break: normal; hyphens: manual;
+  font-kerning: normal;
+}
+.text .line { display: block; }
+.text.manual .line { white-space: nowrap; }
+.text.manual.wrap-ok .line { white-space: normal; text-wrap: balance; }
+.case-lower .text { text-transform: lowercase; }
+.case-upper .text { text-transform: uppercase; }
+.f-display .text { font-weight: 400; }
+
+/* emphasis: *word* in the text */
+.text .em { color: var(--accent); }
+.em-italic .text .em {
+  font-family: "Fraunces", Georgia, serif; font-style: italic;
+}
+.em-bold-caps .text .em { text-transform: uppercase; font-weight: 900; letter-spacing: .01em; }
+
+.sub {
+  margin-top: var(--sub-gap);
+  font-family: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  font-variation-settings: normal;
+  font-size: var(--sub-size); font-weight: 500; line-height: 1.3;
+  letter-spacing: var(--sub-tracking); text-transform: uppercase;
+  opacity: var(--sub-opacity);
+  text-wrap: balance;
+}
+
+.handle {
+  position: absolute; left: 0; right: 0; bottom: var(--handle-bottom);
+  text-align: center;
+  font-family: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  font-size: var(--handle-size); font-weight: 500; line-height: 1.2;
+  letter-spacing: var(--handle-tracking);
+  padding-left: var(--handle-tracking);   /* keeps the tracked text optically centered */
+  color: var(--ink); opacity: var(--handle-opacity);
+}
+
+/* ── layout: quiet ── small text, dead center, lots of air */
+.l-quiet .stage { gap: 44px; }
+
+/* ── layout: hero ── the drawing is the post, caption under it */
+.l-hero .stage { gap: 52px; }
+
+/* ── layout: side ── drawing left, text right */
+.l-side .stage { flex-direction: row; gap: 56px; }
+.l-side .copy { text-align: left; }
+
+/* ── layout: stack ── very large left-aligned text, small drawing tucked in */
+.l-stack .stage { align-items: flex-start; gap: 36px; }
+.l-stack .copy { text-align: left; }
+.l-stack .art.tucked { position: absolute; }
+</style>
+</head>
+<body>
+
+<!--
+  EXAMPLE DATA. scripts/render.py replaces the content of this block with
+  { "posts": [ one post ], "themes": themes.json, "handle": "@..." }.
+  Each post is a post.json object plus "art_svg" (the SVG markup, or null).
+  Only for this preview, "art_library" lets several examples share one drawing.
+-->
+<script id="data" type="application/json">
+{
+  "handle": "@coffee_extracts",
+  "themes": {
+    "espresso": { "bg": "#3a2a25", "ink": "#efe2d0", "accent": "#d9b98c", "art": { "line": "#efe2d0", "fill": "#b98a55", "paper": "#3a2a25" }, "font": "serif", "weight": 400, "case": "lower", "tracking": "0em", "emphasis": "italic" },
+    "mocha": { "bg": "#4f2d18", "ink": "#c9a876", "accent": "#ead3ab", "art": { "line": "#c9a876", "fill": "#8a5a30", "paper": "#4f2d18" }, "font": "serif-soft", "weight": 900, "case": "lower", "tracking": "-0.01em", "emphasis": "accent" },
+    "latte": { "bg": "#dfc8b2", "ink": "#8a4b2a", "accent": "#7a3f20", "art": { "line": "#8a4b2a", "fill": "#c08a5a", "paper": "#f3e6d6" }, "font": "serif", "weight": 300, "case": "lower", "tracking": "0em", "emphasis": "bold-caps" },
+    "oat": { "bg": "#e1d5bf", "ink": "#15110e", "accent": "#8a4b2a", "art": { "line": "#15110e", "fill": "#c08a5a", "paper": "#f6efe2" }, "font": "narrow", "weight": 700, "case": "upper", "tracking": "0.04em", "emphasis": "accent" },
+    "paper": { "bg": "#fbf8f3", "ink": "#15110e", "accent": "#b9793f", "art": { "line": "#15110e", "fill": "#d2a369", "paper": "#ffffff" }, "font": "serif", "weight": 500, "case": "lower", "tracking": "0em", "emphasis": "accent" },
+    "caramel": { "bg": "#cf9f66", "ink": "#35221a", "accent": "#fbf1df", "art": { "line": "#35221a", "fill": "#8a5a30", "paper": "#fbf1df" }, "font": "serif-soft", "weight": 600, "case": "lower", "tracking": "0em", "emphasis": "italic" }
+  },
+  "art_library": {
+    "placeholder-cup": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 400\"><path d=\"M150 96c-16-20 14-34 0-58\" fill=\"none\" stroke=\"var(--art-line, #15110e)\" stroke-width=\"8\" stroke-linecap=\"round\"/><path d=\"M214 104c-18-24 16-40 0-68\" fill=\"none\" stroke=\"var(--art-line, #15110e)\" stroke-width=\"8\" stroke-linecap=\"round\"/><path d=\"M300 196h22c30 0 46 18 46 42s-18 44-48 44h-28\" fill=\"none\" stroke=\"var(--art-line, #15110e)\" stroke-width=\"8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M62 150h242v118c0 62-44 108-104 108h-34c-60 0-104-46-104-108z\" fill=\"var(--art-paper, #ffffff)\" stroke=\"var(--art-line, #15110e)\" stroke-width=\"8\" stroke-linejoin=\"round\"/><path d=\"M66 258c40-16 78 14 120 2s76-22 114-4v12c0 60-42 104-100 104h-34c-58 0-100-44-100-104z\" fill=\"var(--art-fill, #d2a369)\"/><path d=\"M62 150h242v118c0 62-44 108-104 108h-34c-60 0-104-46-104-108z\" fill=\"none\" stroke=\"var(--art-line, #15110e)\" stroke-width=\"8\" stroke-linejoin=\"round\"/><circle cx=\"146\" cy=\"212\" r=\"9\" fill=\"var(--art-line, #15110e)\"/><circle cx=\"222\" cy=\"212\" r=\"9\" fill=\"var(--art-line, #15110e)\"/><path d=\"M168 226c8 10 24 10 32 0\" fill=\"none\" stroke=\"var(--art-line, #15110e)\" stroke-width=\"7\" stroke-linecap=\"round\"/></svg>"
+  },
+  "posts": [
+    { "text": "but\nfirst,\n*coffee*", "theme": "espresso", "layout": "stack", "art": "placeholder-cup", "format": "portrait" },
+    { "text": "coffee\nis my\nmorning\n*ritual*", "theme": "mocha", "layout": "stack", "art": "placeholder-cup", "format": "square" },
+    { "text": "great ideas\nstart with\n*coffee*", "theme": "latte", "layout": "quiet", "art": null, "format": "square" },
+    { "text": "I need a coffee\nnot your *opinion*", "theme": "oat", "layout": "quiet", "art": null, "format": "portrait" },
+    { "text": "me, before the *first* sip", "theme": "paper", "layout": "hero", "art": "placeholder-cup", "format": "portrait" },
+    { "text": "still warm. still *mine*.", "theme": "caramel", "layout": "hero", "art": "placeholder-cup", "format": "square", "sub": "do not disturb" },
+    { "text": "slow mornings\nare a *skill*", "theme": "caramel", "layout": "center", "art": "placeholder-cup", "format": "portrait" },
+    { "text": "one more cup and then I will *definitely* start", "theme": "paper", "layout": "center", "art": "placeholder-cup", "format": "square" },
+    { "text": "today's plan:\n*coffee*,\nthen we see", "theme": "latte", "layout": "side", "art": "placeholder-cup", "format": "square" },
+    { "text": "small cup.\n*big* day.", "theme": "espresso", "layout": "side", "art": "placeholder-cup", "format": "portrait", "sub": "take the first sip slowly" },
+    { "text": "not a morning person. a *coffee* person.", "theme": "oat", "layout": "stack", "art": "placeholder-cup", "format": "portrait" },
+    { "text": "the cup is small on purpose", "theme": "mocha", "layout": "quiet", "art": "placeholder-cup", "format": "portrait" },
+    { "text": "drink it while it's *hot*", "theme": "oat", "layout": "center", "art": "placeholder-cup", "format": "portrait" },
+    { "text": "be the *crema*", "theme": "mocha", "layout": "hero", "art": "placeholder-cup", "format": "portrait" }
+  ]
+}
+</script>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  const data = JSON.parse(document.getElementById("data").textContent);
+  const mode = root.dataset.mode;
+  const themes = data.themes || {};
+  const library = data.art_library || {};
+  const posts = mode === "render" ? (data.posts || []).slice(0, 1) : (data.posts || []);
+
+  const LAYOUTS = ["center", "stack", "hero", "side", "quiet"];
+  const FORMATS = { portrait: 1350, square: 1080 };
+  const FONTS = ["serif", "serif-soft", "narrow", "display"];
+  const EMPHASIS = ["italic", "accent", "bold-caps"];
+  const MAX_WORDS = 14, MAX_SUB_WORDS = 8;
+  const SAFE_EDGE = 44;          // nothing may come closer than this to the canvas edge (px)
+  const ART_SHRINK = [1, .94, .88, .82, .76];  // the drawing gives way before the text is refused
+
+  const problems = [];
+  const built = [];
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const countWords = (s) => String(s ?? "").replace(/\*/g, "").split(/\s+/).filter(Boolean).length;
+  const num = (el, name, fallback) => {
+    const v = parseFloat(getComputedStyle(el).getPropertyValue(name));
+    return Number.isFinite(v) ? v : fallback;
+  };
+
+  // "a *b c* d" -> word spans; words inside *...* get the "em" class
+  function lineHTML(line) {
+    const wordsOf = (s, cls) => s.replace(/\*/g, "").split(/(\s+)/)
+      .map(t => !t ? "" : (/^\s+$/.test(t) ? " " : `<span class="${cls}">${esc(t)}</span>`)).join("");
+    let out = "", last = 0, m;
+    const re = /\*([^*]+)\*/g;
+    while ((m = re.exec(line))) {
+      out += wordsOf(line.slice(last, m.index), "w") + wordsOf(m[1], "w em");
+      last = m.index + m[0].length;
+    }
+    return out + wordsOf(line.slice(last), "w");
+  }
+
+  function build(post, i) {
+    const tag = mode === "render" ? "" : `Post ${i + 1}: `;
+    const say = (msg) => problems.push(tag + msg);
+
+    let theme = themes[post.theme];
+    if (!theme) {
+      say(post.theme ? `unknown theme "${post.theme}".` : "missing theme.");
+      theme = Object.values(themes)[0] || { bg: "#fbf8f3", ink: "#15110e", accent: "#b9793f", art: {} };
+    }
+    let layout = post.layout || "center";
+    if (!LAYOUTS.includes(layout)) { say(`unknown layout "${post.layout}".`); layout = "center"; }
+    let format = post.format || "portrait";
+    if (!FORMATS[format]) { say(`unknown format "${post.format}".`); format = "portrait"; }
+    const font = FONTS.includes(theme.font) ? theme.font : "serif";
+    if (theme.font && font !== theme.font) say(`theme font "${theme.font}" is not a known font key.`);
+    const emphasis = EMPHASIS.includes(theme.emphasis) ? theme.emphasis : "accent";
+    const kase = ["lower", "upper"].includes(theme.case) ? theme.case : "as-is";
+
+    const text = String(post.text ?? "").replace(/\r/g, "").trim();
+    if (!text.replace(/\*/g, "").trim()) say("missing text.");
+    if (countWords(text) > MAX_WORDS) say(`the text has ${countWords(text)} words, max ${MAX_WORDS}.`);
+    if (post.sub && countWords(post.sub) > MAX_SUB_WORDS) say(`"sub" has ${countWords(post.sub)} words, max ${MAX_SUB_WORDS}.`);
+
+    const lines = text.split("\n").map(s => s.trim()).filter(Boolean);
+    const manual = lines.length > 1;
+
+    const el = document.createElement("section");
+    el.className = `post l-${layout} fmt-${format} f-${font} em-${emphasis} case-${kase}`;
+    el.dataset.index = i + 1;
+    const art = theme.art || {};
+    const vars = {
+      "--bg": theme.bg, "--ink": theme.ink, "--accent": theme.accent || theme.ink,
+      "--art-line": art.line || theme.ink, "--art-fill": art.fill || theme.accent, "--art-paper": art.paper || theme.bg,
+      "--weight": theme.weight, "--tracking": theme.tracking
+    };
+    for (const [k, v] of Object.entries(vars)) if (v !== undefined && v !== null && v !== "") el.style.setProperty(k, String(v));
+
+    const svg = post.art_svg || (post.art ? library[post.art] : null) || "";
+    if (post.art && !svg.trim()) say(`art "${post.art}" was requested but no drawing was provided.`);
+    if (layout === "hero" && !svg.trim()) say('layout "hero" needs a drawing ("art").');
+
+    const showHandle = post.handle !== false && !!data.handle;
+    el.innerHTML = `
+      <svg class="grain" aria-hidden="true">
+        <filter id="grain-${i}" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="7" stitchTiles="stitch"/>
+          <feColorMatrix type="matrix" values=".33 .33 .33 0 0  .33 .33 .33 0 0  .33 .33 .33 0 0  0 0 0 0 1"/>
+        </filter>
+        <rect width="100%" height="100%" filter="url(#grain-${i})"/>
+      </svg>
+      <div class="stage">
+        ${svg.trim() ? `<div class="art"></div>` : ""}
+        <div class="copy">
+          <p class="text${manual ? " manual" : ""}">${lines.map(l => `<span class="line">${lineHTML(l)}</span>`).join("")}</p>
+          ${post.sub ? `<p class="sub">${esc(post.sub)}</p>` : ""}
+        </div>
+      </div>
+      ${showHandle ? `<div class="handle">${esc(data.handle)}</div>` : ""}`;
+
+    let ratio = 1;
+    const artEl = el.querySelector(".art");
+    if (artEl) {
+      artEl.innerHTML = svg;                       // sanitized by render.py
+      const s = artEl.querySelector("svg");
+      if (!s) { say("the drawing is not a valid SVG."); artEl.remove(); }
+      else {
+        s.removeAttribute("width"); s.removeAttribute("height");
+        s.setAttribute("aria-hidden", "true");
+        const vb = (s.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(Number);
+        if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) ratio = vb[2] / vb[3];
+        else say("the drawing has no viewBox: its proportions are unknown.");
+      }
+    }
+
+    if (mode === "preview") {
+      const fig = document.createElement("figure");
+      fig.appendChild(el);
+      const cap = document.createElement("figcaption");
+      cap.textContent = `${post.theme} · ${layout} · ${format}`;
+      fig.appendChild(cap);
+      document.body.appendChild(fig);
+    } else {
+      document.body.appendChild(el);
+    }
+    built.push({ el, post, layout, format, ratio, say });
+  }
+
+  // ── measuring helpers (all in canvas px, relative to the post) ──
+  const rel = (r, o) => ({ left: r.left - o.left, top: r.top - o.top, right: r.right - o.left, bottom: r.bottom - o.top });
+
+  // Ink boxes of the words: the font's content area is taller than the
+  // letters, so the box is trimmed to the line (keeps the checks honest).
+  function wordBoxes(b, size) {
+    const o = b.el.getBoundingClientRect();
+    return [...b.el.querySelectorAll(".text .w")].map(w => {
+      const r = rel(w.getBoundingClientRect(), o);
+      const mid = (r.top + r.bottom) / 2;
+      return { left: r.left, right: r.right, top: mid - size * .46, bottom: mid + size * .40, mid, text: w.textContent };
+    });
+  }
+  function renderedLines(boxes, size) {
+    const lines = [];
+    for (const w of boxes) {
+      const line = lines.find(l => Math.abs(l.mid - w.mid) < size * .4);
+      if (line) { line.left = Math.min(line.left, w.left); line.right = Math.max(line.right, w.right); }
+      else lines.push({ mid: w.mid, left: w.left, right: w.right });
+    }
+    return lines.sort((a, c) => a.mid - c.mid);
+  }
+
+  // Shrinks the text from `start` to `min` until it fits the box. Returns the size or null.
+  function fitText(b, boxW, boxH, start, min) {
+    const text = b.el.querySelector(".text"), copy = b.el.querySelector(".copy");
+    copy.style.width = boxW + "px";
+    const fits = () => {
+      const c = copy.getBoundingClientRect();
+      if (c.height > boxH + 1) return false;
+      for (const w of text.querySelectorAll(".w")) {
+        const r = w.getBoundingClientRect();
+        if (r.right > c.right + 1 || r.left < c.left - 1) return false;   // a word (or a no-wrap line) sticks out
+        if (w.getClientRects().length > 1) return false;                   // a word broken across lines
+      }
+      return true;
+    };
+    for (let size = Math.round(start); size >= min; size -= 2) {
+      text.style.fontSize = size + "px";
+      if (fits()) return size;
+    }
+    text.style.fontSize = min + "px";
+    return fits() ? min : null;
+  }
+  // Manual lines stay on one line each if they can; only if that fails may they wrap.
+  function fitAny(b, boxW, boxH, start, min) {
+    const text = b.el.querySelector(".text");
+    text.classList.remove("wrap-ok");
+    let size = fitText(b, boxW, boxH, start, min);
+    if (size === null && text.classList.contains("manual")) {
+      text.classList.add("wrap-ok");
+      size = fitText(b, boxW, boxH, start, min);
+      if (size === null) text.classList.remove("wrap-ok");
+    }
+    return size;
+  }
+
+  function layoutPost(b) {
+    const { el, layout, ratio } = b;
+    const stage = el.querySelector(".stage"), art = el.querySelector(".art");
+    const copy = el.querySelector(".copy"), text = el.querySelector(".text");
+    const canvasH = el.offsetHeight;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    const gap = parseFloat(getComputedStyle(stage).rowGap) || 0;
+    const scale = num(el, "--font-scale", 1);
+    const max = num(el, "--fs-max", 100) * scale, min = Math.round(num(el, "--fs-min", 48) * scale);
+    const measure = Math.min(num(el, "--measure", W), W);
+
+    // longer lines start smaller, so a 14-word line doesn't shout like a 2-word one
+    const chars = text.textContent.replace(/\s+/g, " ").trim().length;
+    const floor = layout === "stack" ? .7 : .6;
+    const lenScale = Math.max(floor, Math.min(1, 1 - (chars - 18) / 60 * (1 - floor)));
+    const start = Math.max(min, max * lenScale);
+
+    let size = null;
+    const setArt = (w) => { art.style.width = w + "px"; art.style.height = (w / ratio) + "px"; };
+
+    if (layout === "stack") {
+      if (art) art.classList.add("tucked");
+      size = fitAny(b, measure, H, start, min);
+      if (art) {
+        const used = size ?? min;
+        if (!tuck(b, used, W, H)) {
+          // no room beside a line: the drawing sits above the text, on the left
+          art.classList.remove("tucked");
+          art.style.left = art.style.top = "";
+          for (const k of ART_SHRINK) {
+            const h = Math.max(num(el, "--art-min", 170), Math.min(num(el, "--art-max", 310), used * 1.25)) * k;
+            setArt(Math.min(h * ratio, W * .5));
+            size = fitAny(b, measure, H - art.offsetHeight - gap, start, min);
+            if (size !== null) break;
+          }
+        }
+      }
+    } else {
+      const steps = art ? ART_SHRINK : [1];
+      for (const k of steps) {
+        let aw = 0, ah = 0;
+        if (art) {
+          aw = Math.min(W * num(el, "--art-w", .5), canvasH * num(el, "--art-h", .3) * ratio) * k;
+          ah = aw / ratio;
+          setArt(aw);
+        }
+        const boxW = layout === "side" && art ? W - aw - gap : measure;
+        const boxH = layout === "side" || !art ? H : H - ah - gap;
+        size = fitAny(b, Math.max(boxW, 120), Math.max(boxH, 40), start, min);
+        if (size !== null) break;
+      }
+      // side: shrink the text column to its real width, so drawing + text sit centered as a pair
+      if (layout === "side" && size !== null) {
+        const before = renderedLines(wordBoxes(b, size), size);
+        const widest = Math.max(...before.map(l => l.right - l.left));
+        const old = copy.style.width;
+        copy.style.width = Math.ceil(widest + 3) + "px";
+        const after = renderedLines(wordBoxes(b, size), size);
+        if (after.length !== before.length) copy.style.width = old;
+      }
+    }
+
+    if (size === null) {
+      size = min;
+      text.style.fontSize = min + "px";
+      const tooWide = [...text.querySelectorAll(".w")].some(w => w.getBoundingClientRect().width > copy.getBoundingClientRect().width + 1);
+      b.say(tooWide
+        ? `a word is too long for the "${layout}" layout even at the smallest size (${min}px). Use a shorter word or another layout.`
+        : `the text doesn't fit the "${layout}" layout even at the smallest size (${min}px). Shorten it or use another layout.`);
+    }
+    b.size = size;
+    check(b);
+  }
+
+  // stack: put the drawing to the right of the first line (as in a poster),
+  // or of the last one. Returns false when no line leaves enough room.
+  function tuck(b, size, W, H) {
+    const { el, ratio } = b;
+    const art = el.querySelector(".art"), stage = el.querySelector(".stage");
+    const o = el.getBoundingClientRect(), s = rel(stage.getBoundingClientRect(), o);
+    const lines = renderedLines(wordBoxes(b, size), size);
+    if (!lines.length) return false;
+    const lh = size * (num(el, "--leading", 1) + num(el, "--lead-adj", 0));
+    const pad = Math.max(40, size * .26);
+    const lo = num(el, "--art-min", 170), hi = num(el, "--art-max", 310);
+    const tall = Math.max(lo, Math.min(hi, size * num(el, "--art-em", 1.5)));
+    const tries = [];
+    // 1. beside the first line, hanging into the second
+    tries.push({ h: tall, top: lines[0].mid - size * .34 });
+    // 2. beside the first line only
+    tries.push({ h: Math.max(lo, Math.min(tall, lh * .96)), top: null, line: 0 });
+    // 3. beside the last line only
+    if (lines.length > 1) tries.push({ h: Math.max(lo, Math.min(tall, lh * .96)), top: null, line: lines.length - 1 });
+    for (const t of tries) {
+      const h = t.h, w = h * ratio;
+      const top = t.top !== null ? t.top : lines[t.line].mid - h / 2 - size * .03;
+      const bottom = top + h;
+      if (top < s.top - 1 || bottom > s.bottom + 1) continue;
+      const touched = lines.filter(l => l.mid + size * .42 > top - pad * .3 && l.mid - size * .48 < bottom + pad * .3);
+      const edge = Math.max(...touched.map(l => l.right), s.left);
+      if (edge + pad + w > s.right + 1) continue;
+      // not glued to the text, not flung to the far margin either
+      const left = Math.min(edge + pad, s.right - w);
+      art.style.width = w + "px"; art.style.height = h + "px";
+      art.style.left = (left - s.left) + "px"; art.style.top = (top - s.top) + "px";
+      return true;
+    }
+    return false;
+  }
+
+  function check(b) {
+    const { el } = b;
+    const o = el.getBoundingClientRect();
+    const size = b.size;
+    const words = wordBoxes(b, size);
+    const items = words.map(w => ({ ...w, name: `the word "${w.text}"` }));
+    const art = el.querySelector(".art"), sub = el.querySelector(".sub"), handle = el.querySelector(".handle");
+    let artBox = null;
+    if (art) { artBox = rel(art.getBoundingClientRect(), o); items.push({ ...artBox, name: "the drawing" }); }
+    if (sub) {
+      const range = document.createRange(); range.selectNodeContents(sub);
+      items.push({ ...rel(range.getBoundingClientRect(), o), name: 'the "sub" line' });
+    }
+    const hit = (a, c, t = 0) => a.left < c.right - t && a.right > c.left + t && a.top < c.bottom - t && a.bottom > c.top + t;
+
+    const Wc = el.offsetWidth, Hc = el.offsetHeight;
+    const out = items.find(r => r.left < SAFE_EDGE || r.top < SAFE_EDGE || r.right > Wc - SAFE_EDGE || r.bottom > Hc - SAFE_EDGE);
+    if (out) b.say(`${out.name} runs past the safe area of the canvas.`);
+
+    if (handle) {
+      const range = document.createRange(); range.selectNodeContents(handle);
+      const h = rel(range.getBoundingClientRect(), o);
+      const grown = { left: h.left - 20, right: h.right + 20, top: h.top - 16, bottom: h.bottom + 10 };
+      const over = items.find(r => hit(r, grown));
+      if (over) b.say(`${over.name} overlaps the handle.`);
+    }
+    if (artBox) {
+      const over = words.find(w => hit(w, artBox, 2));
+      if (over) b.say(`the drawing touches the text (at "${over.text}").`);
+      if (sub && hit(items[items.length - 1], artBox, 2)) b.say('the drawing touches the "sub" line.');
+    }
+    b.detail = {
+      layout: b.layout, format: b.format, theme: b.post.theme ?? null, art: b.post.art ?? null,
+      font_size: size, lines: renderedLines(words, size).length,
+      art_box: artBox ? [artBox.left, artBox.top, artBox.right - artBox.left, artBox.bottom - artBox.top].map(Math.round) : null
+    };
+  }
+
+  function finish() {
+    for (const b of built) {
+      try { layoutPost(b); }
+      catch (e) { b.say("layout failed: " + (e && e.message ? e.message : e)); }
+    }
+    const details = built.map(b => b.detail || null);
+    window.__REPORT = {
+      ok: problems.length === 0, problems,
+      width: built[0] ? built[0].el.offsetWidth : 0,
+      height: built[0] ? built[0].el.offsetHeight : 0,
+      posts: details
+    };
+    root.dataset.ready = "1";
+  }
+
+  if (!posts.length) problems.push("no post in the data block.");
+  posts.forEach(build);
+
+  // Fonts must be in before anything is measured.
+  const wanted = ['400 40px "Fraunces"', 'italic 400 40px "Fraunces"', '400 40px "Archivo Black"', '500 40px "Archivo Narrow"'];
+  const loads = document.fonts && document.fonts.load ? wanted.map(f => document.fonts.load(f).catch(() => [])) : [];
+  Promise.all(loads)
+    .then(() => (document.fonts && document.fonts.ready) ? document.fonts.ready : null)
+    .then(() => {
+      if (document.fonts && document.fonts.check) {
+        const missing = wanted.filter(f => !document.fonts.check(f)).map(f => f.replace(/^.*"(.+)"$/, "$1"));
+        if (missing.length) problems.push(`fonts not loaded: ${[...new Set(missing)].join(", ")} (check template/fonts/).`);
+      }
+      finish();
+    });
+})();
+</script>
+</body>
+</html>

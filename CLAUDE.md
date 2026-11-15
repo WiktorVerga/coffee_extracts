@@ -4,6 +4,8 @@ This repository publishes Instagram carousels about Italian coffee, in US Englis
 Every routine run follows the procedure below **exactly** and produces **at most one post and its animated reel** (see `REEL-ANIMATED.md`).
 
 > **Reels:** the reels routine (Tuesday and Thursday) follows `REELS.md` instead of this procedure. The carousel routine described here never touches `reels/`, `reels-log.json` or the reels scripts.
+>
+> **Mood posts:** the mood posts routine (Saturday and Sunday) follows `MOOD-POSTS.md` instead of this procedure. The carousel routine never touches `mood-posts/`.
 
 ## Files to know
 
@@ -20,6 +22,7 @@ Every routine run follows the procedure below **exactly** and produces **at most
 | `REEL-ANIMATED.md`, `scripts/reel_animated/`, `scripts/publish_post_reel.py`, `template/reel/`, `sfx/`, `music/` | the animated reel of each post (voice, sound effects, music) | **No**, except `posts/<folder>/reel.json` and `reel-caption.txt`, which you write |
 | `reel-skill/viral-reel-generator/` | copy of the `viral-reel-generator` skill (instructions and references) used to write the reel script | **No** |
 | `highlights/`, `template/story.html`, `template/highlight-cover.html`, `scripts/render_highlights.py` | evergreen highlight stories, made and uploaded by hand by the owner | **No: the routine never touches them** |
+| `MOOD-POSTS.md`, `mood-posts/`, `ROUTINE-MOOD-PROMPT.txt` | single-image "mood" posts (own template, drawings, scripts and log), handled by the mood posts routine (Saturday and Sunday) | **No: the carousel routine never touches them** |
 | `REELS.md`, `reels/`, `reels-log.json`, `scripts/prepare_reels.py`, `scripts/publish_reel.py`, `scripts/reels_log.py`, `*.bat` | reels (clips from YouTube), handled by the reels routine and the owner's PC | **No: the carousel routine never touches them** |
 
 Full example of a valid post: `posts/example-moka/`.
