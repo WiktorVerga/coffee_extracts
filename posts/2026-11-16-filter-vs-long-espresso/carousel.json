@@ -1,0 +1,12 @@
+{
+  "variant": "B",
+  "series": "Myth or fact",
+  "slides": [
+    { "type": "cover", "kicker": "Myth or fact", "title": "Filter coffee is not a long espresso", "subtitle": "More water doesn't turn one into the other. The method does." },
+    { "type": "myth", "myth": "Filter coffee is just an espresso with more water.", "verdict": "false", "truth": "The amount of water isn't the difference. The method is. Espresso is pushed through the coffee under pressure. Filter coffee drips through by gravity alone." },
+    { "type": "compare", "title": "Pressure or gravity", "left": { "label": "Espresso", "points": ["Water forced through under pressure", "Finely ground coffee", "Small, concentrated cup"] }, "right": { "label": "Filter", "points": ["Water drips through by gravity", "Coarser ground coffee", "Clear, light-bodied cup"] } },
+    { "type": "text", "title": "A lungo is still espresso", "body": "Lungo means \"long\" in Italian. It gets more water, but that water is still pushed through fine coffee under pressure. Filter coffee skips the pressure, and a paper filter holds back some of the coffee's oils.", "highlight": "More water doesn't change the method." },
+    { "type": "tip", "label": "The tip", "body": "Want a filter-style cup at home? Running your espresso longer won't get you there. You need a filter and a coarser grind." },
+    { "type": "closing", "title": "Different method, not just more water", "body": "Espresso: pressure and a fine grind. Filter: gravity and a coarser grind.", "cta": "Send this to a filter fan" }
+  ]
+}

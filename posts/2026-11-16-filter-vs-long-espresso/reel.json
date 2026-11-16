@@ -1,0 +1,8 @@
+{ "scenes": [
+ { "say": "Is filter coffee just an espresso with more water? No, and the reason is how the water moves." },
+ { "say": "The amount of water is not the difference, because the method is. Espresso is pushed through the coffee under pressure, while filter coffee drips through by gravity alone." },
+ { "title": "Pressure or gravity.", "say": "Espresso forces water through finely ground coffee, so you get a small, concentrated cup. Filter coffee lets water drip through coarser grounds, which gives a clear, light-bodied cup." },
+ { "title": "A long espresso is still espresso.", "say": "It gets more water, but that water is still pushed through fine coffee under pressure. Filter coffee skips the pressure, and a paper filter holds back some of the coffee's oils." },
+ { "title": "The tip.", "say": "If you want a filter-style cup at home, running your espresso longer will not get you there. You need a filter and a coarser grind." },
+ { "say": "So the difference is the method, not just more water. Send this to a friend who loves filter coffee." }
+] }
