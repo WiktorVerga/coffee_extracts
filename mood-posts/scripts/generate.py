@@ -7,7 +7,7 @@ Usage:
     python mood-posts/scripts/generate.py --text "but first,|*coffee*"
     python mood-posts/scripts/generate.py --text "..." --theme espresso \
         --layout stack --art beans --format portrait --sub "small second line" \
-        --kind motivational|relatable|reflection \
+        --kind motivational|relatable|reflection --notion-page <row URL> \
         --caption "Caption text for Instagram" --slug but-first-coffee
     python mood-posts/scripts/generate.py --batch ideas.json
     python mood-posts/scripts/generate.py --list
@@ -203,6 +203,8 @@ def build(spec, past):
     post = {"text": text, "theme": theme, "layout": layout, "art": art, "format": fmt}
     if kind:
         post["kind"] = kind
+    if spec.get("notion_page"):
+        post["notion_page"] = str(spec["notion_page"]).strip()
     if sub:
         post["sub"] = sub
     return post, (spec.get("caption") or "").strip(), spec.get("slug") or slugify(text)
@@ -254,6 +256,8 @@ def main():
     ap.add_argument("--format", dest="format")
     ap.add_argument("--sub")
     ap.add_argument("--kind", choices=KINDS, help="type of line (STYLE.md, section 1); kept in post.json and in the log")
+    ap.add_argument("--notion-page", dest="notion_page",
+                    help="URL or ID of the Notion row the line comes from; kept in post.json and in the log")
     ap.add_argument("--caption")
     ap.add_argument("--slug")
     ap.add_argument("--date", default=date.today().isoformat())
@@ -272,7 +276,7 @@ def main():
             print("ERROR: the batch file must contain a JSON list")
             sys.exit(2)
     elif args.text:
-        specs = [{k: getattr(args, k) for k in ("text", "theme", "layout", "art", "format", "sub", "kind", "caption", "slug")}]
+        specs = [{k: getattr(args, k) for k in ("text", "theme", "layout", "art", "format", "sub", "kind", "notion_page", "caption", "slug")}]
     else:
         ap.print_usage()
         sys.exit(3)

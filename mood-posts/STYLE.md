@@ -86,7 +86,7 @@ Art:
 
 ## 6. Line bank
 
-Thirty original lines. Use them as written or as a model for new ones. Each: theme, layout, art.
+Thirty original lines, as models of the voice and for the owner to copy into the Notion database. The routine does not pick lines from here: it only uses rows of the database. Each: theme, layout, art.
 
 ### Motivational
 

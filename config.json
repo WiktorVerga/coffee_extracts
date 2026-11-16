@@ -21,7 +21,9 @@
     "license_label": "CC BY 3.0"
   },
   "mood_posts": {
-    "mode": "preview"
+    "mode": "preview",
+    "notion_database_url": "https://app.notion.com/p/41a3c1a71de3819aaa39dd25acda2b21",
+    "notion_data_source": "collection://41a3c1a7-1de3-8149-a0ce-000b1dce8a92"
   },
   "reel_animated": {
     "mode": "publish",

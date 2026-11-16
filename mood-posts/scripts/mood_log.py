@@ -27,7 +27,11 @@ Usage:
     python mood-posts/scripts/mood_log.py add --folder mood-posts/posts/<folder> \
         --status preview|published|skipped|error [--reason "..."] \
         [--media-id 123] [--permalink https://...]
-        -> adds an entry; line, kind, theme, layout and art come from post.json
+        -> adds an entry; line, kind, theme, layout, art and the Notion row
+           (notion_page) come from post.json
+
+    python mood-posts/scripts/mood_log.py notion <folder>
+        -> the Notion row of that post (URL or ID), or nothing if it has none
 """
 import argparse
 import json
@@ -86,6 +90,7 @@ def add(folder, status, reason="", media_id="", permalink=""):
         "theme": post.get("theme", ""),
         "layout": post.get("layout", ""),
         "art": post.get("art") or "",
+        "notion_page": post.get("notion_page", ""),
         "status": status,
         "reason": reason,
         "media_id": media_id,
@@ -161,6 +166,8 @@ def main():
     a.add_argument("--reason", default="")
     a.add_argument("--media-id", default="")
     a.add_argument("--permalink", default="")
+    n = sub.add_parser("notion")
+    n.add_argument("folder")
     args = ap.parse_args()
 
     if hasattr(sys.stdout, "reconfigure"):
@@ -175,6 +182,8 @@ def main():
         print("\n".join(retry_list()))
     elif args.cmd == "queue":
         print("\n".join(queue_list(args.include_previews)))
+    elif args.cmd == "notion":
+        print(post_of(rel(args.folder)).get("notion_page", ""))
     elif args.cmd == "add":
         add(args.folder, args.status, args.reason, args.media_id, args.permalink)
         print("Logged.")

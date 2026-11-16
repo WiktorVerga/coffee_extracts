@@ -237,16 +237,17 @@ Options: `run-reels.bat --dry-run` (no push), `--only 3`, `--retry` (retry rejec
 
 ## Mood posts (single image, Saturday and Sunday)
 
-One image, one cute drawing, one short line: motivational, relatable, or a small thought about the day. No sheet to fill in: **the routine writes the line itself**, following `mood-posts/STYLE.md`, and never repeats one. A third routine publishes them on **Saturday and Sunday**, so they never overlap with the carousels (Mon, Wed, Fri) or the YouTube reels (Tue, Thu).
+One image, one cute drawing, one short line: motivational, relatable, or a small thought about the day. **You write the lines in a Notion database** ([Mood post – Frasi](https://app.notion.com/p/41a3c1a71de3819aaa39dd25acda2b21), inside the `coffee_extracts` page), in Italian or English; the routine takes the oldest one still to do, adapts it to US English and to the rules in `mood-posts/STYLE.md`, and never invents a line of its own. A third routine publishes them on **Saturday and Sunday**, so they never overlap with the carousels (Mon, Wed, Fri) or the YouTube reels (Tue, Thu).
 
 ```
 Mood routine (Sat · Sun, morning)
    │  1. a post that failed last time?  → publishes it again
    │  2. a ready-made post in the queue? → publishes the oldest one
-   │  3. otherwise writes a new line, picks theme, layout and drawing
+   │  3. otherwise takes the next line from Notion; picks theme, layout and drawing if you left them empty
    │  renders it (HTML template + SVG drawing → post.jpg, 1080 × 1350)
    │  saves it to GitHub
-   └► Instagram API ──► single-image post published
+   ├► Instagram API ──► single-image post published
+   └► Notion ──► the row gets its status, the English line and the link
 ```
 
 | Path | Contents |
@@ -254,14 +255,16 @@ Mood routine (Sat · Sun, morning)
 | `MOOD-POSTS.md` | The mood routine procedure (like `CLAUDE.md` for carousels). |
 | `ROUTINE-MOOD-PROMPT.txt` | The text to paste into the mood routine. |
 | `mood-posts/` | Everything else: moodboard, style rules, themes, drawings, template, scripts, posts and log. See `mood-posts/README.md`. |
-| `config.json` → `mood_posts` | `mode` (`preview` / `publish`), separate from the carousels' `mode`. |
+| `config.json` → `mood_posts` | `mode` (`preview` / `publish`), separate from the carousels' `mode`, and the Notion database of the lines. |
 
-**Setup (once):** create a third routine on claude.ai/code/routines: prompt = `ROUTINE-MOOD-PROMPT.txt`, environment `autopost` (nothing new to install), schedule Saturday and Sunday at 9:07 AM (cron `7 9 * * 6,0`).
+**Setup (once):** create a third routine on claude.ai/code/routines: prompt = `ROUTINE-MOOD-PROMPT.txt`, environment `autopost` (nothing new to install), connector **Notion**, schedule Saturday and Sunday at 9:07 AM (cron `7 9 * * 6,0`).
+
+**The Notion database:** one row per line. Only `Frase` is required. `Stato` empty or `Da fare` = to do, `Salta` = don't use it; the routine then sets `Anteprima`, `Pubblicata`, `Scartata` (with the reason in `Motivo`) or `Errore`. `Tipo`, `Tema`, `Layout`, `Disegno` and `Note` are optional: what you leave empty, the routine chooses. When no rows are left the routine does nothing and tells you in its summary.
 
 **How it goes:**
 - `mood_posts.mode` starts as `preview`: the routine creates the post in `mood-posts/posts/…` on GitHub but doesn't publish. Look at the `post.jpg` files; when you like them, change it to `"publish"`. Posts that were only previewed are then published first, oldest first.
 - **Your own posts:** make one with `python mood-posts/scripts/generate.py --text "…" --caption "…"`, look at it, commit and push the folder. It goes into the queue and the routine publishes it before writing new ones. Delete a folder you don't want published.
-- To change the tone of the lines, edit `mood-posts/STYLE.md`. To change colors, `mood-posts/themes.json`.
+- The rules a line must follow (length, no brands, no health claims and so on) are in `mood-posts/STYLE.md`, which also has a bank of 30 lines you can copy into Notion. To change colors, `mood-posts/themes.json`.
 
 ## Limits and things to watch
 - Routines are in *research preview*: behavior and limits may change.

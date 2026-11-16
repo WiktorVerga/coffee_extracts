@@ -33,7 +33,8 @@ one line of text ──► generate.py ──► post.json ──► render.py �
 
 A cloud routine publishes one mood post on Saturday and one on Sunday, following
 `MOOD-POSTS.md` in the repository root (prompt: `ROUTINE-MOOD-PROMPT.txt`).
-It writes the line itself. `config.json` → `mood_posts.mode` decides whether it
+The lines come from the Notion database "Mood post – Frasi" (one row per line,
+oldest first); the routine never invents one. `config.json` → `mood_posts.mode` decides whether it
 only creates the post (`preview`) or also publishes it (`publish`).
 
 A folder you make by hand and push (with `post.jpg` and `caption.txt`) goes
