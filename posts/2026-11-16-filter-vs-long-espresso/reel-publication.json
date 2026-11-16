@@ -1,0 +1,16 @@
+{
+  "media_id": "17913121320571372",
+  "permalink": "https://www.instagram.com/reel/Df0DBQ7Gc0K/",
+  "video": "https://raw.githubusercontent.com/WiktorVerga/coffee_extracts/cf5b106120ce845a488323e429f2bd179fafc315/posts/2026-11-16-filter-vs-long-espresso/reel.mp4",
+  "sha": "cf5b106120ce845a488323e429f2bd179fafc315",
+  "attempts": [
+    {
+      "host": "jsdelivr",
+      "result": "not served correctly"
+    },
+    {
+      "host": "raw",
+      "result": "ok"
+    }
+  ]
+}
