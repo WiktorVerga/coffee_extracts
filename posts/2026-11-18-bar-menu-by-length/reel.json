@@ -1,0 +1,9 @@
+{ "scenes": [
+  { "say": "Italian bar coffee follows one rule." },
+  { "say": "Order a caf-feh. You get one espresso." },
+  { "say": "Ris-tret-toh gets less water. Loon-go gets more." },
+  { "say": "A longer cup isn't more coffee. Only the water grows." },
+  { "say": "The americano breaks the rule. Its water goes in after." },
+  { "title": "The tip.", "say": "Unsure? Start with a caf-feh." },
+  { "say": "Short to long, same coffee. Save this for your next order." }
+] }

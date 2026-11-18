@@ -1,0 +1,13 @@
+{
+  "variant": "A",
+  "series": "How-to",
+  "slides": [
+    { "type": "cover", "kicker": "How-to", "title": "Read an Italian bar menu by length", "subtitle": "Four black coffees, one rule. The longest one breaks it." },
+    { "type": "text", "title": "Start from un caffè", "body": "At an Italian bar, asking for un caffè (a coffee) usually gets you a single espresso. It's the reference point. Every other black coffee on the menu is shorter or longer than this one.", "highlight": "Caffè at the bar means espresso." },
+    { "type": "steps", "title": "Shortest to longest", "steps": ["Ristretto: \"restricted\" in Italian. Same coffee, less water.", "Caffè: the standard espresso, also called normale.", "Lungo: \"long\" in Italian. More water runs through the coffee.", "Americano: a regular espresso with hot water added afterward."] },
+    { "type": "myth", "myth": "A longer coffee has more coffee in it.", "verdict": "false", "truth": "Ristretto, caffè and lungo usually start from the same dose of ground coffee. What grows is the water, not the coffee." },
+    { "type": "text", "title": "Why the americano is different", "body": "The first three get longer as more water runs through the coffee. An americano skips that: the shot is pulled as usual, then hot water goes in the cup.", "highlight": "Through the coffee, or on top of it." },
+    { "type": "tip", "label": "The tip", "body": "Not sure what to order? Start with un caffè. It sits in the middle, so next time you can go one step shorter or longer." },
+    { "type": "closing", "title": "The menu, from short to long", "body": "Ristretto, caffè, lungo, americano. Less water to more water, same coffee.", "cta": "Save it for your next order" }
+  ]
+}
