@@ -1,6 +1,6 @@
 # Test A/B: variante A (originale) contro B (Film)
 
-Aggiornato: 2026-11-16 19:55 · test attivo dal 2026-10-29 · numeri congelati a 7 giorni dalla pubblicazione.
+Aggiornato: 2026-11-18 19:48 · test attivo dal 2026-10-29 · numeri congelati a 7 giorni dalla pubblicazione.
 
 Metriche principali: **visualizzazioni e like** del carosello e del reel, e per il reel il **tempo medio di visione**. Le altre metriche sono in fondo, solo come contesto.
 
@@ -38,15 +38,16 @@ Tendenze (medie dei post congelati):
 
 | Data | ID | Variante | Serie | Carosello: visual. | Carosello: like | Reel: visual. | Reel: like | Reel: visione media | Stato |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-11-16 | 24 | B | Myth or fact | 10 | 0 | 0 | 0 | – | in corso (0 gg) |
-| 2026-11-13 | 23 | A | Common mistake | 83 | 5 | 144 | 3 | 5.8 s | in corso (3 gg) |
+| 2026-11-18 | 25 | A | How-to | 0 | 0 | 0 | 0 | – | in corso (0 gg) |
+| 2026-11-16 | 24 | B | Myth or fact | 58 | 5 | 150 | 5 | 5.9 s | in corso (2 gg) |
+| 2026-11-13 | 23 | A | Common mistake | 90 | 5 | 148 | 3 | 5.8 s | in corso (5 gg) |
 | 2026-11-09 | 22 | B | One word | 107 | 7 | 667 | 21 | 11.0 s | congelato |
 | 2026-11-06 | 21 | A | Side by side | 115 | 5 | 257 | 10 | 4.7 s | congelato |
 | 2026-11-04 | 19 | B | Inside the cup | 118 | 5 | 164 | 4 | 5.9 s | congelato |
 | 2026-11-02 | 13 | A | Common mistake | 57 | 3 | 66 | 9 | 4.8 s | congelato |
 | 2026-10-30 | 12 | B | One word | 62 | 3 | 53 | 4 | 5.2 s | congelato |
 
-In attesa dei 7 giorni: ID 23 (A), ID 24 (B).
+In attesa dei 7 giorni: ID 23 (A), ID 24 (B), ID 25 (A).
 
 ## Altre metriche (contesto)
 
