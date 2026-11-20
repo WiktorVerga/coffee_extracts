@@ -1,0 +1,12 @@
+{
+  "variant": "B",
+  "series": "Inside the cup",
+  "slides": [
+    { "type": "cover", "kicker": "Inside the cup", "title": "Fresh beans: great for filter, tricky for espresso", "subtitle": "The same bag acts differently in each method. Blame a gas." },
+    { "type": "myth", "myth": "Fresher coffee always makes a better espresso.", "verdict": "false", "truth": "Right after roasting, beans are still full of carbon dioxide (CO2). That gas gets in the way of an espresso. In filter coffee, it's much less of a problem." },
+    { "type": "text", "title": "Why espresso struggles", "body": "Beans release their gas slowly in the days after roasting. In espresso, water is pushed through fine coffee in seconds. Trapped gas fights back: the flow turns uneven and the shot can taste sour.", "highlight": "A sign: bubbly crema (the foam on top) that fades fast." },
+    { "type": "text", "title": "Why filter copes better", "body": "In filter coffee, water drips through the grounds slowly, with no pressure. Most of the gas escapes during the bloom, the first small pour that makes the grounds puff up and bubble.", "highlight": "Filter gives the gas time to leave." },
+    { "type": "tip", "label": "The tip", "body": "Very fresh bag? Brew it as filter first, and give it a few more days before you use it for espresso. Taste and adjust." },
+    { "type": "closing", "title": "Fresh coffee needs patience for espresso", "body": "Espresso wants rested beans. Filter handles fresh ones better, thanks to the bloom.", "cta": "Save it for your next bag" }
+  ]
+}

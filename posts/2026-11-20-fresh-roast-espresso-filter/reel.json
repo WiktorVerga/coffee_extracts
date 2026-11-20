@@ -1,0 +1,8 @@
+{ "scenes": [
+  { "say": "Fresh beans can make great filter coffee and a difficult espresso. The reason is a gas left behind by roasting." },
+  { "say": "Fresher coffee doesn't always make a better espresso. Right after roasting, beans are still full of carbon dioxide, and that gas gets in the way of the shot." },
+  { "title": "The espresso problem.", "say": "Beans release this gas slowly after roasting. In espresso, water is pushed through fine coffee in seconds, so the trapped gas fights back and the shot can taste sour." },
+  { "title": "Filter is gentler.", "say": "In filter coffee, water drips through slowly with no pressure. Most of the gas escapes during the bloom, the first small pour that makes the grounds bubble." },
+  { "title": "The tip.", "say": "With a very fresh bag, brew filter first. Wait a few more days before espresso, because the gas needs time to leave." },
+  { "say": "Espresso wants rested beans, while filter handles fresh ones better thanks to the bloom. Save this for your next bag." }
+] }
