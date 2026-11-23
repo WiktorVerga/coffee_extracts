@@ -1,0 +1,8 @@
+{ "scenes": [
+  { "say": "Your coffee has a season, like fruit." },
+  { "say": "Coffee beans are cherry seeds. Most countries pick them once a year." },
+  { "say": "Brazil picks around mid-year. Central America picks late fall to early spring." },
+  { "say": "Someone is always harvesting. Roasters rotate their lineup." },
+  { "title": "The tip.", "say": "Check the bag for a harvest year." },
+  { "say": "Coffee is a crop, not a constant. Send this to a coffee friend." }
+] }

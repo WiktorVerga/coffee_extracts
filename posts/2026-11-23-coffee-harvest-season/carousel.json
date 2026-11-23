@@ -1,0 +1,12 @@
+{
+  "variant": "A",
+  "series": "Myth or fact",
+  "slides": [
+    { "type": "cover", "kicker": "Myth or fact", "title": "Coffee has a season, like fruit", "subtitle": "So why does the shelf look the same all year?" },
+    { "type": "myth", "myth": "Coffee is a pantry staple with no season.", "verdict": "false", "truth": "Coffee beans are the seeds of a fruit, the coffee cherry. In most growing countries, the cherries are picked once a year, when they ripen. Some places get a smaller second harvest." },
+    { "type": "compare", "title": "Two sides of the equator", "left": { "label": "Brazil", "points": ["South of the equator", "Main harvest around mid-year"] }, "right": { "label": "Central America", "points": ["North of the equator", "Harvest from late fall to early spring"] } },
+    { "type": "text", "title": "Why the shelf never looks empty", "body": "Different countries pick at different times, so there is always a recent harvest somewhere. Roasters buy from several origins and change their lineup through the year. Green coffee, the raw unroasted bean, keeps for months, but not forever.", "highlight": "Seasonal coffees come and go, like fruit." },
+    { "type": "tip", "label": "The tip", "body": "Some bags print the harvest year next to the roast date. If yours does, a recent harvest is a good sign. If not, ask the roaster." },
+    { "type": "closing", "title": "Coffee is a crop, not a constant", "body": "Picked once a year in most places, so harvests come and go like fruit.", "cta": "Send this to a coffee friend" }
+  ]
+}
