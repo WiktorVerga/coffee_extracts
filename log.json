@@ -321,5 +321,17 @@
     "media_id": "17961346206255655",
     "permalink": "https://www.instagram.com/p/Df-VYEeILi3/",
     "variant": "B"
+  },
+  {
+    "date": "2026-11-23 19:45",
+    "id": "27",
+    "idea": "Il caffè ha una stagione di raccolta, come la frutta",
+    "series": "Myth or fact",
+    "status": "error",
+    "folder": "posts/2026-11-23-coffee-harvest-season",
+    "reason": "POST me/media_publish → HTTP 400: {\"error\":{\"message\":\"Media ID is not available\",\"type\":\"OAuthException\",\"code\":9007,\"error_subcode\":2207027,\"is_transient\":false,\"error_user_title\":\"Cannot Publish\",\"error_user_msg\":\"The media is not ready for publishing, please wait for a moment\",\"fbtrace_id\":\"AakX",
+    "media_id": "",
+    "permalink": "",
+    "variant": "A"
   }
 ]
