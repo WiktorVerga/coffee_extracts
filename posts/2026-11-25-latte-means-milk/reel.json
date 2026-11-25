@@ -1,0 +1,8 @@
+{ "scenes": [
+ { "say": "Order a latte in Italy, and you may get a glass of milk. The reason is one small word." },
+ { "say": "In Italian, latte simply means milk. The drink you know comes from caf-feh-lah-teh, short for coffee and milk, so dropping the coffee leaves only the milk." },
+ { "say": "So what should you order? Ask for a caf-feh-lah-teh, coffee with hot milk, which in Italy is usually a breakfast drink made at home. Or ask for a latte mak-kee-ah-toh, steamed milk marked with espresso." },
+ { "title": "Same word, two drinks.", "say": "Abroad, a latte is espresso and steamed milk, often topped with foam, because the coffee is implied. In Italy, the same word has no coffee in it at all." },
+ { "title": "At the bar.", "say": "That is why one extra word matters. Say caf-feh-lah-teh or latte mak-kee-ah-toh, and the barista knows you want coffee in the cup." },
+ { "say": "In Italy, latte is milk, and coffee needs its own word. Send this to a friend who is heading to Italy." }
+] }

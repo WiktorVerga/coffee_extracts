@@ -1,0 +1,12 @@
+{
+  "variant": "B",
+  "series": "One word",
+  "slides": [
+    { "type": "cover", "kicker": "One word", "title": "In Italy, a latte is just milk", "subtitle": "Order one at a bar and you may get a glass of milk." },
+    { "type": "text", "title": "Latte means milk", "body": "In Italian, latte is simply the word for milk. The drink you know from home comes from caffellatte, short for caffè e latte: coffee and milk.", "highlight": "Latte = milk. Caffellatte = coffee and milk." },
+    { "type": "text", "title": "So what should you order?", "body": "Ask for a caffellatte: coffee with hot milk, in Italy usually a breakfast drink made at home. Or ask for a latte macchiato: steamed milk marked with espresso." },
+    { "type": "compare", "title": "Same word, two drinks", "left": { "label": "Latte abroad", "points": ["Espresso and steamed milk", "The coffee is implied", "Often topped with foam"] }, "right": { "label": "Latte in Italy", "points": ["Just milk", "No coffee in it", "Add caffè to get coffee"] } },
+    { "type": "tip", "label": "At the bar", "body": "Add one word. Say caffellatte or latte macchiato. Say only latte and the barista may hand you a glass of milk, no joke intended." },
+    { "type": "closing", "title": "Latte is milk. Coffee needs its word.", "body": "Caffellatte for coffee and milk, latte macchiato for milk marked with espresso.", "cta": "Send this to an Italy traveler" }
+  ]
+}
