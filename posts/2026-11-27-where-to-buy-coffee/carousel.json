@@ -1,0 +1,12 @@
+{
+  "variant": "A",
+  "series": "Side by side",
+  "slides": [
+    { "type": "cover", "kicker": "Side by side", "title": "Grocery store, café or online?", "subtitle": "Each wins at something. One label shows how fresh the bag is." },
+    { "type": "compare", "title": "1. The grocery store", "left": { "label": "Pros", "points": ["Easy to find, any day", "Fits the weekly shopping trip"] }, "right": { "label": "Cons", "points": ["Often only a best-before date", "Can take weeks to reach shelves"] } },
+    { "type": "compare", "title": "2. Your local café", "left": { "label": "Pros", "points": ["Taste it in a cup first", "Ask the staff about it", "Many will grind it for you"] }, "right": { "label": "Cons", "points": ["Only a few coffees at once", "Bags can linger: check the date"] } },
+    { "type": "compare", "title": "3. An online roaster", "left": { "label": "Pros", "points": ["The widest choice of beans", "Some roast to order"] }, "right": { "label": "Cons", "points": ["You wait for shipping", "No tasting before you buy", "Favorites come and go with seasons"] } },
+    { "type": "number", "title": "The label that matters", "number": "3 wk", "caption": "Whole beans can reasonably count as fresh for about three weeks after roasting. Wherever you shop, look for a roast date." },
+    { "type": "closing", "title": "Buy where you can see the roast date", "body": "Grocery store for ease, café for advice, online roaster for choice. Check the date every time.", "cta": "Save this for your next bag" }
+  ]
+}

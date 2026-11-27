@@ -1,0 +1,8 @@
+{ "scenes": [
+  { "say": "Grocery store, café or online? One label decides." },
+  { "title": "The grocery store.", "say": "Easy to find. Often just a best-before date." },
+  { "title": "Your local café.", "say": "Taste it first. Ask the staff. Check the date." },
+  { "title": "Online roasters.", "say": "The widest choice. But you wait for shipping." },
+  { "say": "Whole beans count as fresh about three weeks. Find the roast date." },
+  { "say": "Check the roast date every time. Save this for your next bag." }
+] }
